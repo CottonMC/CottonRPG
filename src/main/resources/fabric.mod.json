@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "cottonrpg",
+  "version": "${version}",
+
+  "name": "Cotton RPG",
+  "description": "Utilities for RPG mod development",
+  "authors": [
+    "Nickolay (handicraftsman{,_}) Ilyushin <nickolay02@inbox.ru>",
+    "CottonMC Developers"
+  ],
+  "contact": {
+    "homepage": "https://github.com/CottonMC/RPG",
+    "sources": "https://github.com/CottonMC/RPG"
+  },
+
+  "license": "MIT",
+  "icon": "assets/cottonrpg/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.cottonmc.cottonrpg.CottonRPGMod"
+    ]
+  },
+  "mixins": [
+    "cottonrpg.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}
