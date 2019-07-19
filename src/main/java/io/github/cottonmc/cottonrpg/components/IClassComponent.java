@@ -11,4 +11,6 @@ public interface IClassComponent extends Component, EntitySyncedComponent {
    * @return Class level
    */  
   int getLevel();
+  
+  void setLevel(int level);
 }

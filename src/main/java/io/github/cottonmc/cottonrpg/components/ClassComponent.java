@@ -26,6 +26,11 @@ public abstract class ClassComponent implements IClassComponent {
   }
   
   @Override
+  public void setLevel(int level) {
+    this.level = level;
+  }
+  
+  @Override
   public CompoundTag toTag(CompoundTag tag) {
     tag.putInt(KEY_LEVEL, level);
     return tag;
