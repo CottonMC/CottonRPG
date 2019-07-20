@@ -1,6 +1,7 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -106,8 +107,18 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
   }
   
   @Override
+  public void forEachRPGClass(BiConsumer<Identifier, ClassComponent> cons) {
+    cottonRPGClasses.forEach(cons);
+  }
+  
+  @Override
   public ResourceBarComponent getRPGResourceBar(Identifier id) {
     return cottonRPGResourceBars.get(id);
+  }
+  
+  @Override
+  public void forEachRPGResourceBar(BiConsumer<Identifier, ResourceBarComponent> cons) {
+    cottonRPGResourceBars.forEach(cons);
   }
 
 }

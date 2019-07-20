@@ -2,6 +2,7 @@ package io.github.cottonmc.cottonrpg.components;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,19 +16,31 @@ public abstract class ClassComponentType {
   public abstract ClassComponent construct(PlayerEntity player);
   public abstract Identifier getID();
   
+  protected static ConcurrentHashMap<Identifier, Text> names =
+      new ConcurrentHashMap<>();
+  protected static ConcurrentHashMap<Identifier, List<Text>> descriptions =
+      new ConcurrentHashMap<>();
+  
   public Text getName() {
     Identifier id = getID();
+    if (names.contains(id))
+      return names.get(id);
     String key = "name.rpgclass." + id.getNamespace() + "." + id.getPath();
+    Text t = null;
     if (I18n.hasTranslation(key)) {
-      return new TranslatableText(key);
+      t = new TranslatableText(key);
     } else {
-      return new LiteralText(key);
+      t = new LiteralText(key);
     }
+    names.put(id, t);
+    return t;
   }
   
   public List<Text> getDescription() {
-    List<Text> lines = new ArrayList<>();
     Identifier id = getID();
+    if (descriptions.contains(id))
+      return descriptions.get(id);
+    List<Text> lines = new ArrayList<>();
     if (id != null) {
       int i = 0;
       while (true) {
@@ -37,6 +50,7 @@ public abstract class ClassComponentType {
         i++;
       }
     }
+    descriptions.put(id, lines);
     return lines;
   }
   
