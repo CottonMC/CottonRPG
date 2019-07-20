@@ -78,7 +78,7 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
   }
   
   @Inject(at = @At(value = "INVOKE"), method = "writeCustomDataToTag(Lnet/minecraft/nbt/CompoundTag;)V")
-  private void toTag(CompoundTag tag, CallbackInfo ci) {
+  private void toTag(CompoundTag tag, CallbackInfo ci) {    
     CompoundTag crpg = new CompoundTag();
     
     CompoundTag cclasses = new CompoundTag();
