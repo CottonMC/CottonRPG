@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 
 public abstract class ClassComponentType {
 
-  public abstract SimpleClassComponent construct(PlayerEntity player);
+  public abstract ClassComponent construct(PlayerEntity player);
   public abstract Identifier getID();
   
   public Text getName() {

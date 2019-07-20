@@ -8,6 +8,7 @@ import io.github.cottonmc.cottonrpg.commands.ClassSetCommand;
 import io.github.cottonmc.cottonrpg.commands.MainCommand;
 import io.github.cottonmc.cottonrpg.demo.DemoClass;
 import io.github.cottonmc.cottonrpg.demo.DemoResourceBar;
+import io.github.cottonmc.cottonrpg.mixin.PlayerEntityRPGMixin;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.minecraft.command.arguments.IdentifierArgumentType;
@@ -45,6 +46,7 @@ public class CottonRPGMod implements ModInitializer {
     });
     
     ClassRegistry.register(DemoClass.CLASS_ID, new DemoClass.DemoClassType());
-    //ResourceBarRegistry.register(DemoResourceBar.RESOURCE_ID, (PlayerEntity p) -> new DemoResourceBar(p));
+    
+    ResourceBarRegistry.register(DemoResourceBar.RESOURCE_ID, new DemoResourceBar.DemoResourceBarType());
   }
 }

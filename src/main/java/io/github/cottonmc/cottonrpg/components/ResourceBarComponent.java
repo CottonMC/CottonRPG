@@ -1,7 +1,5 @@
 package io.github.cottonmc.cottonrpg.components;
 
-import java.awt.Color;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
@@ -10,13 +8,8 @@ import net.minecraft.util.Identifier;
  * Describes a resource like a health bar or a mana bar
  */
 public interface ResourceBarComponent {
-
-  public enum ResourceVisibility {
-    INVISIBLE,
-    MENU,
-    HUD
-  }
   
+  ResourceBarComponentType getType();
   PlayerEntity getPlayer();
   public void fromTag(CompoundTag tag);
   public CompoundTag toTag(CompoundTag tag);
@@ -26,11 +19,9 @@ public interface ResourceBarComponent {
   
   long getValue();
   void setValue(long value);
-  
-  void tick();
-  
+  void updateValue(long upd);
+    
   Identifier getID();
   
-  Color getColor();
-  ResourceVisibility getVisibility();
+  void tick();
 }
