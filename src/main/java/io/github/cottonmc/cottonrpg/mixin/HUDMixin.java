@@ -35,7 +35,7 @@ public class HUDMixin {
   private TextRenderer getFontRenderer() { return null; }
   
   
-  @Inject(at = @At("TAIL"), method = "render(F)V")
+  @Inject(at = @At("RETURN"), method = "renderHotbar(F)V")
   void render(float f, CallbackInfo ci) {
     if (client.options.hudHidden) return;
     GlStateManager.enableBlend();
