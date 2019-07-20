@@ -1,9 +1,13 @@
 package io.github.cottonmc.cottonrpg.components;
 
-import nerdhub.cardinal.components.api.component.Component;
-import nerdhub.cardinal.components.api.util.sync.EntitySyncedComponent;
+import net.minecraft.util.Identifier;
 
-public interface IClassComponent extends Component, EntitySyncedComponent {
+/**
+ * Just a regular RPG class.
+ * 
+ * @see ClassComponent
+ */
+public interface IClassComponent {
   /**
    * Invisible if <0
    * Unlockable if =0
@@ -13,4 +17,6 @@ public interface IClassComponent extends Component, EntitySyncedComponent {
   int getLevel();
   
   void setLevel(int level);
+  
+  Identifier getID();
 }

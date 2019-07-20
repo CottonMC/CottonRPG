@@ -1,8 +1,6 @@
 package io.github.cottonmc.cottonrpg.components;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
 
 public abstract class ClassComponent implements IClassComponent {
   public static String KEY_LEVEL = "level";
@@ -15,10 +13,12 @@ public abstract class ClassComponent implements IClassComponent {
     this.owner = owner;
   }
   
+  /*
   @Override
   public Entity getEntity() {
     return owner;
   }
+  */
   
   @Override
   public int getLevel() {
@@ -30,6 +30,7 @@ public abstract class ClassComponent implements IClassComponent {
     this.level = level;
   }
   
+  /*
   @Override
   public CompoundTag toTag(CompoundTag tag) {
     tag.putInt(KEY_LEVEL, level);
@@ -42,4 +43,5 @@ public abstract class ClassComponent implements IClassComponent {
       level = tag.getInt(KEY_LEVEL);
     }
   }
+  */
 }

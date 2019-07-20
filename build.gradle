@@ -26,8 +26,8 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-	modApi 'com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-base:2.0.0-SNAPSHOT'
-	modApi 'com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-entity:2.0.0-SNAPSHOT'
+	//modApi 'com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-base:2.0.0-SNAPSHOT'
+	//modApi 'com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-entity:2.0.0-SNAPSHOT'
 	
 	modCompile('io.github.prospector.modmenu:ModMenu:1.6.3-95') { transitive = false }
 }
