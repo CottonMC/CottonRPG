@@ -10,7 +10,9 @@ import net.minecraft.util.Identifier;
  * @see SimpleClassComponent
  */
 public interface ClassComponent {
+  ClassComponentType getType();
   PlayerEntity getPlayer();
+  
   public void fromTag(CompoundTag tag);
   public CompoundTag toTag(CompoundTag tag);
   
@@ -21,7 +23,6 @@ public interface ClassComponent {
    * @return Class level
    */  
   int getLevel();
-  
   void setLevel(int level);
   
   Identifier getID();

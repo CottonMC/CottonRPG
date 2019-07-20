@@ -8,10 +8,16 @@ public abstract class SimpleClassComponent implements ClassComponent {
 
   protected int level = 0;
   
+  protected ClassComponentType type;
   protected PlayerEntity owner;
   
-  public SimpleClassComponent(PlayerEntity owner) {
+  public SimpleClassComponent(ClassComponentType type, PlayerEntity owner) {
     this.owner = owner;
+  }
+  
+  @Override
+  public ClassComponentType getType() {
+    return type;
   }
   
   @Override

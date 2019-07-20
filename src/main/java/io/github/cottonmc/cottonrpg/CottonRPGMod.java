@@ -44,7 +44,7 @@ public class CottonRPGMod implements ModInitializer {
       );
     });
     
-    ClassRegistry.register(DemoClass.CLASS_ID, (PlayerEntity p) -> new DemoClass(p));
-    ResourceBarRegistry.register(DemoResourceBar.RESOURCE_ID, (PlayerEntity p) -> new DemoResourceBar(p));
+    ClassRegistry.register(DemoClass.CLASS_ID, new DemoClass.DemoClassType());
+    //ResourceBarRegistry.register(DemoResourceBar.RESOURCE_ID, (PlayerEntity p) -> new DemoResourceBar(p));
   }
 }
