@@ -1,8 +1,10 @@
 package io.github.cottonmc.cottonrpg.components;
 
+import net.minecraft.entity.player.PlayerEntity;
+
 @FunctionalInterface
 public interface ResourceBarComponentType {
 
-  IResourceBarComponent construct();
+  ResourceBarComponent construct(PlayerEntity player);
 
 }

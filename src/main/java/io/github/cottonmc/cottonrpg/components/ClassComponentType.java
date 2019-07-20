@@ -2,12 +2,8 @@ package io.github.cottonmc.cottonrpg.components;
 
 import net.minecraft.entity.player.PlayerEntity;
 
-@FunctionalInterface
-public interface ClassComponentType {
+public abstract class ClassComponentType {
 
-  /*
-   * Constructs a new class component instance.
-   */
-  IClassComponent construct(PlayerEntity player);
+  public abstract SimpleClassComponent construct(PlayerEntity player);
   
 }

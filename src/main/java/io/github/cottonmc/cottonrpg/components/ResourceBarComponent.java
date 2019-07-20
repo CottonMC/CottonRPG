@@ -1,69 +1,36 @@
 package io.github.cottonmc.cottonrpg.components;
 
-import net.minecraft.entity.Entity;
+import java.awt.Color;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Identifier;
 
-public abstract class ResourceBarComponent implements IResourceBarComponent {
+/**
+ * Describes a resource like a health bar or a mana bar
+ */
+public interface ResourceBarComponent {
 
-  public static final String KEY_MAX = "max";
-  public static final String KEY_VALUE = "value";
-  
-  protected long max = getDefaultMax();
-  protected long value = getDefaultValue();
-  
-  protected PlayerEntity owner;
-  
-  public ResourceBarComponent(PlayerEntity owner) {
-    this.owner = owner;
-  }
-
-  /*
-  @Override
-  public void fromTag(CompoundTag tag) {
-    if (tag.containsKey(KEY_MAX))
-      max = tag.getLong(KEY_MAX);
-    if (tag.containsKey(KEY_VALUE))
-      value = tag.getLong(KEY_VALUE);
-  }
-
-  @Override
-  public CompoundTag toTag(CompoundTag tag) {
-    tag.putLong(KEY_MAX, max);
-    tag.putLong(KEY_VALUE, value);
-    return tag;
-  }
-
-  @Override
-  public Entity getEntity() {
-    return owner;
-  }
-  */
-  
-  @Override
-  public long getMax() {
-    return max;
-  }
-
-  @Override
-  public void setMax(long max) {
-    this.max = max;
-  }
-
-  @Override
-  public long getValue() {
-    return value;
-  }
-
-  @Override
-  public void setValue(long value) {
-    if (value > max) {
-      value = max;
-    }
-    this.value = value;
+  public enum ResourceVisibility {
+    INVISIBLE,
+    MENU,
+    HUD
   }
   
-  protected abstract long getDefaultMax();
-  protected abstract long getDefaultValue();
-
+  PlayerEntity getPlayer();
+  public void fromTag(CompoundTag tag);
+  public CompoundTag toTag(CompoundTag tag);
+  
+  long getMax();
+  void setMax(long max);
+  
+  long getValue();
+  void setValue(long value);
+  
+  void tick();
+  
+  Identifier getID();
+  
+  Color getColor();
+  ResourceVisibility getVisibility();
 }

@@ -2,11 +2,11 @@ package io.github.cottonmc.cottonrpg.demo;
 
 import java.awt.Color;
 
-import io.github.cottonmc.cottonrpg.components.ResourceBarComponent;
+import io.github.cottonmc.cottonrpg.components.SimpleResourceBarComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
-public class DemoResourceBar extends ResourceBarComponent {
+public class DemoResourceBar extends SimpleResourceBarComponent {
 
   public static final Identifier RESOURCE_ID = new Identifier("cottonrpg", "demo_resource");
   
@@ -34,13 +34,6 @@ public class DemoResourceBar extends ResourceBarComponent {
     return Color.GREEN;
   }
   
-  /*
-  @Override
-  public ComponentType<?> getComponentType() {
-    return null;
-  }
-  */
-
   @Override
   protected long getDefaultMax() {
     return 128;

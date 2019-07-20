@@ -1,47 +1,28 @@
 package io.github.cottonmc.cottonrpg.components;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Identifier;
 
-public abstract class ClassComponent implements IClassComponent {
-  public static String KEY_LEVEL = "level";
-
-  protected int level = 0;
+/**
+ * Just a regular RPG class.
+ * 
+ * @see SimpleClassComponent
+ */
+public interface ClassComponent {
+  PlayerEntity getPlayer();
+  public void fromTag(CompoundTag tag);
+  public CompoundTag toTag(CompoundTag tag);
   
-  protected PlayerEntity owner;
+  /**
+   * Invisible if <0
+   * Unlockable if =0
+   * Unlocked and possibly affects skill power if >0
+   * @return Class level
+   */  
+  int getLevel();
   
-  public ClassComponent(PlayerEntity owner) {
-    this.owner = owner;
-  }
+  void setLevel(int level);
   
-  /*
-  @Override
-  public Entity getEntity() {
-    return owner;
-  }
-  */
-  
-  @Override
-  public int getLevel() {
-    return level;
-  }
-  
-  @Override
-  public void setLevel(int level) {
-    this.level = level;
-  }
-  
-  /*
-  @Override
-  public CompoundTag toTag(CompoundTag tag) {
-    tag.putInt(KEY_LEVEL, level);
-    return tag;
-  }
-  
-  @Override
-  public void fromTag(CompoundTag tag) {
-    if (tag.containsKey(KEY_LEVEL)) {
-      level = tag.getInt(KEY_LEVEL);
-    }
-  }
-  */
+  Identifier getID();
 }
