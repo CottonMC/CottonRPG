@@ -46,7 +46,7 @@ public class HUDMixin {
     AtomicInteger i = new AtomicInteger(1);
     RPGPlayer p = (RPGPlayer) client.player;
     
-    p.forEachRPGResourceBar((id, cons) -> {
+    p.cottonRPGGetCharacterDataHolder().resourceBars.forEach((id, cons) -> {
       ResourceBarComponentType comp = ResourceBarRegistry.INSTANCE.get(id);
       if (comp.getVisibility() != ResourceBarComponentType.ResourceVisibility.HUD)
         return;

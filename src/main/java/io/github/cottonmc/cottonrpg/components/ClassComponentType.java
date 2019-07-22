@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-public abstract class ClassComponentType {
+public abstract class ClassComponentType implements PlayerComponentType<ClassComponent> {
 
   public abstract ClassComponent construct(PlayerEntity player);
   public abstract Identifier getID();

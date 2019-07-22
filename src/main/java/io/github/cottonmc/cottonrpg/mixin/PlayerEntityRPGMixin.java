@@ -1,15 +1,11 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.cottonmc.cottonrpg.ClassRegistry;
-import io.github.cottonmc.cottonrpg.ResourceBarRegistry;
+import io.github.cottonmc.cottonrpg.CharacterDataHolder;
 import io.github.cottonmc.cottonrpg.components.ClassComponent;
 import io.github.cottonmc.cottonrpg.components.ResourceBarComponent;
 import io.github.cottonmc.cottonrpg.util.RPGPlayer;
@@ -19,25 +15,17 @@ import net.minecraft.util.Identifier;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityRPGMixin implements RPGPlayer {
-  private ConcurrentHashMap<Identifier, ClassComponent> cottonRPGClasses;
-  private ConcurrentHashMap<Identifier, ResourceBarComponent> cottonRPGResourceBars; 
+  
+  CharacterDataHolder cottonRPGCharData;
   
   @Inject(at = @At("RETURN"), method = "<init>")
   private void init(CallbackInfo ci) {
-    cottonRPGClasses = new ConcurrentHashMap<>();
-    ClassRegistry.INSTANCE.forEach(cct -> {
-      cottonRPGClasses.put(cct.getID(), cct.construct((PlayerEntity) (Object) this));
-    });
-    
-    cottonRPGResourceBars = new ConcurrentHashMap<>();
-    ResourceBarRegistry.INSTANCE.forEach(rbct -> {
-      cottonRPGResourceBars.put(rbct.getID(), rbct.construct((PlayerEntity) (Object) this));
-    });
+    cottonRPGCharData = new CharacterDataHolder((PlayerEntity) (Object) this);
   }
   
   @Inject(at = @At("RETURN"), method = "tick")
   private void tick(CallbackInfo ci) {
-    cottonRPGResourceBars.forEach((id, rb) -> {
+    cottonRPGCharData.resourceBars.forEach((id, rb) -> {
       rb.tick();
     });
   }
@@ -53,7 +41,10 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
       cclasses.getKeys().forEach(k -> {
         try {
           Identifier id = new Identifier(k);
-          ClassComponent cc = cottonRPGClasses.get(id);
+          ClassComponent cc = cottonRPGCharData.classes.get(id);
+          if (cc == null) {
+            cc = cottonRPGCharData.classes.enable(id);
+          }
           CompoundTag cclass = cclasses.getCompound(k);
           cc.fromTag(cclass);
         } catch (Exception e) {
@@ -67,7 +58,10 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
       cresourceBars.getKeys().forEach(k -> {
         try {
           Identifier id = new Identifier(k);
-          ResourceBarComponent rbc = cottonRPGResourceBars.get(id);
+          ResourceBarComponent rbc = cottonRPGCharData.resourceBars.get(id);
+          if (rbc == null) {
+            rbc = cottonRPGCharData.resourceBars.enable(id);
+          }
           CompoundTag cresourceBar = cresourceBars.getCompound(k);
           rbc.fromTag(cresourceBar);
         } catch (Exception e) {
@@ -83,7 +77,7 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
     CompoundTag crpg = new CompoundTag();
     
     CompoundTag cclasses = new CompoundTag();
-    cottonRPGClasses.forEach((id, cc) -> {
+    cottonRPGCharData.classes.forEach((id, cc) -> {
       CompoundTag cclass = new CompoundTag();
       cclass = cc.toTag(cclass);
       cclasses.put(id.getNamespace() + ":" + id.getPath(), cclass);
@@ -91,7 +85,7 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
     crpg.put("classes", cclasses);
     
     CompoundTag cresourceBars = new CompoundTag();
-    cottonRPGResourceBars.forEach((id, rbc) -> {
+    cottonRPGCharData.resourceBars.forEach((id, rbc) -> {
       CompoundTag cresourceBar = new CompoundTag();
       cresourceBar = rbc.toTag(cresourceBar);
       cresourceBars.put(id.getNamespace() + ":" + id.getPath(), cresourceBar);
@@ -102,23 +96,8 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
   }
   
   @Override
-  public ClassComponent getRPGClass(Identifier id) {
-    return cottonRPGClasses.get(id);
+  public CharacterDataHolder cottonRPGGetCharacterDataHolder() {
+    return cottonRPGCharData;
   }
   
-  @Override
-  public void forEachRPGClass(BiConsumer<Identifier, ClassComponent> cons) {
-    cottonRPGClasses.forEach(cons);
-  }
-  
-  @Override
-  public ResourceBarComponent getRPGResourceBar(Identifier id) {
-    return cottonRPGResourceBars.get(id);
-  }
-  
-  @Override
-  public void forEachRPGResourceBar(BiConsumer<Identifier, ResourceBarComponent> cons) {
-    cottonRPGResourceBars.forEach(cons);
-  }
-
 }

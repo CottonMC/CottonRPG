@@ -35,7 +35,13 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
         return 2;
       }
       
-      ClassComponent cc = ((RPGPlayer) p).getRPGClass(cid);
+      ClassComponent cc = ((RPGPlayer) p).cottonRPGGetCharacterDataHolder().classes.get(cid);
+      
+      if (cc == null) {
+        Text text = new TranslatableText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);
+        p.addChatMessage(text, false);
+        return 2;
+      }
       
       int level = context.getArgument("level", Integer.class);
       

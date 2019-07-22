@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-public abstract class ResourceBarComponentType {
+public abstract class ResourceBarComponentType implements PlayerComponentType<ResourceBarComponent> {
 
   public enum ResourceVisibility {
     INVISIBLE,

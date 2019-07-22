@@ -34,7 +34,13 @@ public class ClassGetCommand implements Command<ServerCommandSource> {
         return 2;
       }
       
-      ClassComponent cc = ((RPGPlayer) p).getRPGClass(cid);
+      ClassComponent cc = ((RPGPlayer) p).cottonRPGGetCharacterDataHolder().classes.get(cid);
+      
+      if (cc == null) {
+        Text text = new TranslatableText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);
+        p.addChatMessage(text, false);
+        return 2;
+      }
       
       Text text = new TranslatableText(cid.toString() + " == " + cc.getLevel()).formatted(Formatting.GOLD);
       
