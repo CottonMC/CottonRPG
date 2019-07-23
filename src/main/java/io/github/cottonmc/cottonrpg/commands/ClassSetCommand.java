@@ -4,10 +4,10 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import io.github.cottonmc.cottonrpg.ClassRegistry;
-import io.github.cottonmc.cottonrpg.components.ClassComponent;
-import io.github.cottonmc.cottonrpg.components.ClassComponentType;
-import io.github.cottonmc.cottonrpg.util.RPGPlayer;
+import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.CharacterClassEntry;
+import io.github.cottonmc.cottonrpg.data.CharacterClass;
+import io.github.cottonmc.cottonrpg.data.CharacterData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -27,7 +27,7 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
       
       Identifier cid = context.getArgument("classname", Identifier.class);
       
-      ClassComponentType cct = ClassRegistry.INSTANCE.get(cid);
+      CharacterClass cct = CottonRPG.CLASSES.get(cid);
       
       if (cct == null) {
         Text text = new TranslatableText("No such class").formatted(Formatting.RED);
@@ -35,7 +35,7 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
         return 2;
       }
       
-      ClassComponent cc = ((RPGPlayer) p).cottonRPGGetCharacterDataHolder().classes.get(cid);
+      CharacterClassEntry cc = CharacterData.get(p).getClasses().get(cid);
       
       if (cc == null) {
         Text text = new TranslatableText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);

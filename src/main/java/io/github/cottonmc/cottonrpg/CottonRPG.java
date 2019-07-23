@@ -2,21 +2,27 @@ package io.github.cottonmc.cottonrpg;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-
 import io.github.cottonmc.cottonrpg.commands.ClassGetCommand;
 import io.github.cottonmc.cottonrpg.commands.ClassSetCommand;
 import io.github.cottonmc.cottonrpg.commands.MainCommand;
-import io.github.cottonmc.cottonrpg.demo.DemoClass;
-import io.github.cottonmc.cottonrpg.demo.DemoResourceBar;
-import io.github.cottonmc.cottonrpg.mixin.PlayerEntityRPGMixin;
+import io.github.cottonmc.cottonrpg.data.CharacterClass;
+import io.github.cottonmc.cottonrpg.data.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.SimpleCharacterClass;
+import io.github.cottonmc.cottonrpg.data.SimpleCharacterResource;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.minecraft.command.arguments.IdentifierArgumentType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.SimpleRegistry;
 
-public class CottonRPGMod implements ModInitializer {  
+import java.awt.*;
+
+public class CottonRPG implements ModInitializer {
+  public static final Registry<CharacterClass> CLASSES = new SimpleRegistry<>();
+  public static final Registry<CharacterResource> RESOURCES = new SimpleRegistry<>();
 
   @Override
   public void onInitialize() {
@@ -44,9 +50,9 @@ public class CottonRPGMod implements ModInitializer {
             )
       );
     });
+
+    Registry.register(CLASSES, new Identifier("cotton-rpg", "test_class"), new SimpleCharacterClass(5));
+    Registry.register(RESOURCES, new Identifier("cotton-rpg", "test_resource"), new SimpleCharacterResource(16, 20, Color.GREEN, CharacterResource.ResourceVisibility.HUD));
     
-    ClassRegistry.register(DemoClass.CLASS_ID, new DemoClass.DemoClassType());
-    
-    ResourceBarRegistry.register(DemoResourceBar.RESOURCE_ID, new DemoResourceBar.DemoResourceBarType());
   }
 }

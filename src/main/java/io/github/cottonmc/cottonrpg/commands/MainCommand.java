@@ -17,7 +17,7 @@ public class MainCommand implements Command<ServerCommandSource> {
     if (e instanceof PlayerEntity) {
       PlayerEntity p = (PlayerEntity) e;
       
-      // int level = CottonRPGMod.DEMO_CLASS.maybeGet(p).map(IClassComponent::getLevel).orElse(-1);
+      // int level = CottonRPG.DEMO_CLASS.maybeGet(p).map(IClassComponent::getLevel).orElse(-1);
       
       Text text = new net.minecraft.text.TranslatableText("Hello! Actual help should be provided here, but handi is too lazy ;(");
       

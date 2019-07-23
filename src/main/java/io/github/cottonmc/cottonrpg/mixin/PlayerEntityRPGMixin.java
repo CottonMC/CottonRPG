@@ -1,50 +1,46 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
+import io.github.cottonmc.cottonrpg.data.CharacterClassEntry;
+import io.github.cottonmc.cottonrpg.data.CharacterClasses;
+import io.github.cottonmc.cottonrpg.data.CharacterResourceEntry;
+import io.github.cottonmc.cottonrpg.data.CharacterResources;
+import io.github.cottonmc.cottonrpg.util.CharacterDataHolder;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.cottonmc.cottonrpg.CharacterDataHolder;
-import io.github.cottonmc.cottonrpg.components.ClassComponent;
-import io.github.cottonmc.cottonrpg.components.ResourceBarComponent;
-import io.github.cottonmc.cottonrpg.util.RPGPlayer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Identifier;
-
 @Mixin(PlayerEntity.class)
-public class PlayerEntityRPGMixin implements RPGPlayer {
-  
-  CharacterDataHolder cottonRPGCharData;
-  
+public class PlayerEntityRPGMixin implements CharacterDataHolder {
+  private CharacterClasses classes = new CharacterClasses();
+  private CharacterResources resources = new CharacterResources();
+
   @Inject(at = @At("RETURN"), method = "<init>")
   private void init(CallbackInfo ci) {
-    cottonRPGCharData = new CharacterDataHolder((PlayerEntity) (Object) this);
+    //TODO: add listeners for sync here
   }
   
   @Inject(at = @At("RETURN"), method = "tick")
   private void tick(CallbackInfo ci) {
-    cottonRPGCharData.resourceBars.forEach((id, rb) -> {
-      rb.tick();
-    });
+    resources.forEach((id, rb) -> rb.tick());
   }
   
   @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromTag(Lnet/minecraft/nbt/CompoundTag;)V")
   private void fromTag(CompoundTag tag, CallbackInfo ci) {
     if (!tag.containsKey("cottonrpg")) return;
     
-    CompoundTag crpg = tag.getCompound("cottonrpg");
+    CompoundTag crpg = tag.getCompound("CottonRPG");
     
-    if (crpg.containsKey("classes")) {
-      CompoundTag cclasses = crpg.getCompound("classes");
+    if (crpg.containsKey("Classes")) {
+      CompoundTag cclasses = crpg.getCompound("Classes");
       cclasses.getKeys().forEach(k -> {
         try {
           Identifier id = new Identifier(k);
-          ClassComponent cc = cottonRPGCharData.classes.get(id);
-          if (cc == null) {
-            cc = cottonRPGCharData.classes.enable(id);
-          }
+          classes.giveIfAbsent(new CharacterClassEntry(id));
+          CharacterClassEntry cc = classes.get(id);
           CompoundTag cclass = cclasses.getCompound(k);
           cc.fromTag(cclass);
         } catch (Exception e) {
@@ -53,15 +49,13 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
       });
     }
     
-    if (crpg.containsKey("resourceBars")) {
-      CompoundTag cresourceBars = crpg.getCompound("resourceBars");
+    if (crpg.containsKey("Resources")) {
+      CompoundTag cresourceBars = crpg.getCompound("Resources");
       cresourceBars.getKeys().forEach(k -> {
         try {
           Identifier id = new Identifier(k);
-          ResourceBarComponent rbc = cottonRPGCharData.resourceBars.get(id);
-          if (rbc == null) {
-            rbc = cottonRPGCharData.resourceBars.enable(id);
-          }
+          resources.giveIfAbsent(new CharacterResourceEntry(id));
+          CharacterResourceEntry rbc = resources.get(id);
           CompoundTag cresourceBar = cresourceBars.getCompound(k);
           rbc.fromTag(cresourceBar);
         } catch (Exception e) {
@@ -77,27 +71,29 @@ public class PlayerEntityRPGMixin implements RPGPlayer {
     CompoundTag crpg = new CompoundTag();
     
     CompoundTag cclasses = new CompoundTag();
-    cottonRPGCharData.classes.forEach((id, cc) -> {
-      CompoundTag cclass = new CompoundTag();
-      cclass = cc.toTag(cclass);
+    classes.forEach((id, cc) -> {
+      CompoundTag cclass = cc.toTag();
       cclasses.put(id.getNamespace() + ":" + id.getPath(), cclass);
     });
-    crpg.put("classes", cclasses);
+    crpg.put("Classes", cclasses);
     
     CompoundTag cresourceBars = new CompoundTag();
-    cottonRPGCharData.resourceBars.forEach((id, rbc) -> {
-      CompoundTag cresourceBar = new CompoundTag();
-      cresourceBar = rbc.toTag(cresourceBar);
+    resources.forEach((id, rbc) -> {
+      CompoundTag cresourceBar = rbc.toTag();
       cresourceBars.put(id.getNamespace() + ":" + id.getPath(), cresourceBar);
     });
-    crpg.put("resourceBars", cresourceBars);
+    crpg.put("Resources", cresourceBars);
     
-    tag.put("cottonrpg", crpg);
+    tag.put("CottonRPG", crpg);
   }
-  
+
   @Override
-  public CharacterDataHolder cottonRPGGetCharacterDataHolder() {
-    return cottonRPGCharData;
+  public CharacterClasses crpg_getClasses() {
+    return classes;
   }
-  
+
+  @Override
+  public CharacterResources crpg_getResources() {
+    return resources;
+  }
 }
