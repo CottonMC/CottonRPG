@@ -1,6 +1,5 @@
 package io.github.cottonmc.cottonrpg.data;
 
-import com.sun.istack.internal.Nullable;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class CharacterClasses {
     listeners.forEach(listener -> listener.accept(this));
   }
 
-  public @Nullable CharacterClassEntry remove(Identifier id) {
+  public CharacterClassEntry remove(Identifier id) {
     CharacterClassEntry entry = underlying.remove(id);
     listeners.forEach(listener -> listener.accept(this));
     return entry;

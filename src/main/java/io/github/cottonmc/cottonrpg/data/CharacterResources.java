@@ -28,8 +28,7 @@ public class CharacterResources {
     listeners.forEach(listener -> listener.accept(this));
   }
 
-  public @Nullable
-  CharacterResourceEntry remove(Identifier id) {
+  public CharacterResourceEntry remove(Identifier id) {
     CharacterResourceEntry entry = underlying.remove(id);
     listeners.forEach(listener -> listener.accept(this));
     return entry;
