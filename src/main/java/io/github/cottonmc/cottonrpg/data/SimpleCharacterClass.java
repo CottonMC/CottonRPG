@@ -32,6 +32,7 @@ public class SimpleCharacterClass implements CharacterClass {
 
   @Override
   public boolean canLevelUp(int currentLevel, PlayerEntity player) {
+    //TODO: swap to predicate system for simple?
     int expCost = getExperienceCost(currentLevel);
     return player.experienceLevel >= expCost;
   }
