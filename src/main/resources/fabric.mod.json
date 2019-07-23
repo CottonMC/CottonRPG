@@ -7,11 +7,11 @@
   "description": "Utilities for RPG mod development",
   "authors": [
     "Nickolay (handicraftsman{,_}) Ilyushin <nickolay02@inbox.ru>",
-    "CottonMC Developers"
+    "the Cotton team"
   ],
   "contact": {
-    "homepage": "https://github.com/CottonMC/RPG",
-    "sources": "https://github.com/CottonMC/RPG"
+    "homepage": "https://github.com/CottonMC/CottonRPG",
+    "sources": "https://github.com/CottonMC/CottonRPG"
   },
 
   "license": "MIT",
@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.cottonmc.cottonrpg.CottonRPGMod"
+      "io.github.cottonmc.cottonrpg.CottonRPG"
     ]
   },
   "mixins": [

@@ -1,5 +1,6 @@
 package io.github.cottonmc.cottonrpg.util;
 
+//TODO: is this helpful?
 public class Ticker {
 
   @FunctionalInterface
@@ -10,7 +11,7 @@ public class Ticker {
   private long ticker = 0;
   private long tickTo;
   private TickHandler handler;
-  
+
   public Ticker(long tickTo, TickHandler handler) {
     this.tickTo = tickTo;
     this.handler = handler;

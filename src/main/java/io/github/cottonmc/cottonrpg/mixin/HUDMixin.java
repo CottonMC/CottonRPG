@@ -1,8 +1,12 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
-import java.awt.Color;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.CharacterData;
+import io.github.cottonmc.cottonrpg.data.CharacterResource;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.hud.InGameHud;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -11,14 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import io.github.cottonmc.cottonrpg.ResourceBarRegistry;
-import io.github.cottonmc.cottonrpg.components.ResourceBarComponentType;
-import io.github.cottonmc.cottonrpg.util.RPGPlayer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.hud.InGameHud;
+import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Mixin(InGameHud.class)
 public class HUDMixin {
@@ -44,11 +42,11 @@ public class HUDMixin {
     TextRenderer t = getFontRenderer();
     
     AtomicInteger i = new AtomicInteger(1);
-    RPGPlayer p = (RPGPlayer) client.player;
+    CharacterData data =  CharacterData.get(client.player);
     
-    p.cottonRPGGetCharacterDataHolder().resourceBars.forEach((id, cons) -> {
-      ResourceBarComponentType comp = ResourceBarRegistry.INSTANCE.get(id);
-      if (comp.getVisibility() != ResourceBarComponentType.ResourceVisibility.HUD)
+    data.getResources().forEach((id, cons) -> {
+      CharacterResource comp = CottonRPG.RESOURCES.get(id);
+      if (comp.getVisibility() != CharacterResource.ResourceVisibility.HUD)
         return;
       Color color = comp.getColor();
       
