@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
 
 public class CharacterResourceEntry {
-  public Identifier id;
+  public final Identifier id;
   private CharacterResource res;
   private long current;
   private long max;
@@ -30,6 +30,14 @@ public class CharacterResourceEntry {
     return this;
   }
 
+  public long getCurrent() {
+    return current;
+  }
+  
+  public long getMax() {
+    return max;
+  }
+  
   public void tick() {
     res.tick(this);
   }
