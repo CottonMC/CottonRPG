@@ -75,7 +75,7 @@ public class HUDMixin {
       }
       */
       GlStateManager.color4f(0.9f, 0.9f, 0.9f, 1.0f);
-      t.drawWithShadow(comp.getName().asFormattedString(), left, top, 1);
+      t.drawWithShadow(comp.getName().asString(), left, top, 1);
       
       // Bar
       GlStateManager.color4f(color.getRed() / 255, color.getGreen() / 255, color.getBlue() / 255, 1.0f);

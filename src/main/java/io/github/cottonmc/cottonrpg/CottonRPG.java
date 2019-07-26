@@ -11,6 +11,8 @@ import io.github.cottonmc.cottonrpg.commands.ClassRemoveCommand;
 import io.github.cottonmc.cottonrpg.commands.ClassSetCommand;
 import io.github.cottonmc.cottonrpg.commands.ClassesCommand;
 import io.github.cottonmc.cottonrpg.commands.MainCommand;
+import io.github.cottonmc.cottonrpg.commands.ResourceGiveCommand;
+import io.github.cottonmc.cottonrpg.commands.ResourceRemoveCommand;
 import io.github.cottonmc.cottonrpg.data.CharacterClass;
 import io.github.cottonmc.cottonrpg.data.CharacterResource;
 import io.github.cottonmc.cottonrpg.data.SimpleCharacterClass;
@@ -42,28 +44,42 @@ public class CottonRPG implements ModInitializer {
           .then(
             CommandManager.literal("class")
               .then(
-              CommandManager.argument("classname", IdentifierArgumentType.identifier())
-                .then(
-                  CommandManager.literal("get")
-                    .executes(new ClassGetCommand())
-                )
-                .then(
-                  CommandManager.literal("set")
-                    .then(
-                      CommandManager.argument("level", IntegerArgumentType.integer())
-                        .executes(new ClassSetCommand())
-                    )
-                )
-                .then(
-                  CommandManager.literal("give")
-                    .executes(new ClassGiveCommand())
-                )
-                .then(
-                  CommandManager.literal("remove")
-                  .executes(new ClassRemoveCommand())
-                )
+                CommandManager.argument("classname", IdentifierArgumentType.identifier())
+                  .then(
+                    CommandManager.literal("get")
+                      .executes(new ClassGetCommand())
+                  )
+                  .then(
+                    CommandManager.literal("set")
+                      .then(
+                        CommandManager.argument("level", IntegerArgumentType.integer())
+                          .executes(new ClassSetCommand())
+                      )
+                  )
+                  .then(
+                    CommandManager.literal("give")
+                      .executes(new ClassGiveCommand())
+                  )
+                  .then(
+                    CommandManager.literal("remove")
+                    .executes(new ClassRemoveCommand())
+                  )
               )
             )
+          .then(
+            CommandManager.literal("resource")
+              .then(
+                 CommandManager.argument("resourcename", IdentifierArgumentType.identifier())
+                   .then(
+                     CommandManager.literal("give")
+                       .executes(new ResourceGiveCommand())
+                   )
+                   .then(
+                     CommandManager.literal("remove")
+                       .executes(new ResourceRemoveCommand())
+                   )
+              )
+          )
       );
     });
 
