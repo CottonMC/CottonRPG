@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterClass;
-import io.github.cottonmc.cottonrpg.data.CharacterClassEntry;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,8 +15,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class ClassGetCommand implements Command<ServerCommandSource> {
-  
+public class ClassRemoveCommand implements Command<ServerCommandSource> {
+
   @Override
   public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
     Entity e = context.getSource().getEntity();
@@ -34,19 +33,11 @@ public class ClassGetCommand implements Command<ServerCommandSource> {
         return 2;
       }
       
-      CharacterClassEntry cc = CharacterData.get(p).getClasses().get(cid);
+      CharacterData.get(p).getClasses().remove(cid);
       
-      if (cc == null) {
-        Text text = new LiteralText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);
-        p.addChatMessage(text, false);
-        return 2;
-      }
-      
-      Text text = new LiteralText(cid.toString() + " == " + cc.getLevel()).formatted(Formatting.GOLD);
-      
-      p.addChatMessage(text, false);
+      p.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
     }
     return 1;
   }
-
+  
 }

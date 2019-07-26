@@ -1,9 +1,15 @@
 package io.github.cottonmc.cottonrpg;
 
+import java.awt.Color;
+
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+
 import io.github.cottonmc.cottonrpg.commands.ClassGetCommand;
+import io.github.cottonmc.cottonrpg.commands.ClassGiveCommand;
+import io.github.cottonmc.cottonrpg.commands.ClassRemoveCommand;
 import io.github.cottonmc.cottonrpg.commands.ClassSetCommand;
+import io.github.cottonmc.cottonrpg.commands.ClassesCommand;
 import io.github.cottonmc.cottonrpg.commands.MainCommand;
 import io.github.cottonmc.cottonrpg.data.CharacterClass;
 import io.github.cottonmc.cottonrpg.data.CharacterResource;
@@ -18,8 +24,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 
-import java.awt.*;
-
 public class CottonRPG implements ModInitializer {
   public static final Registry<CharacterClass> CLASSES = new SimpleRegistry<>();
   public static final Registry<CharacterResource> RESOURCES = new SimpleRegistry<>();
@@ -31,6 +35,10 @@ public class CottonRPG implements ModInitializer {
       cmd.register(
         CommandManager.literal("cottonrpg")
           .executes(new MainCommand())
+          .then(
+            CommandManager.literal("classes")
+              .executes(new ClassesCommand())
+          )
           .then(
             CommandManager.literal("class")
               .then(
@@ -46,13 +54,23 @@ public class CottonRPG implements ModInitializer {
                         .executes(new ClassSetCommand())
                     )
                 )
+                .then(
+                  CommandManager.literal("give")
+                    .executes(new ClassGiveCommand())
+                )
+                .then(
+                  CommandManager.literal("remove")
+                  .executes(new ClassRemoveCommand())
+                )
               )
             )
       );
     });
 
-    Registry.register(CLASSES, new Identifier("cotton-rpg", "test_class"), new SimpleCharacterClass(5));
-    Registry.register(RESOURCES, new Identifier("cotton-rpg", "test_resource"), new SimpleCharacterResource(16, 20, Color.GREEN, CharacterResource.ResourceVisibility.HUD));
+    Identifier tcid = new Identifier("cotton-rpg", "test_class");
+    Registry.register(CLASSES, tcid, new SimpleCharacterClass(tcid, 5));
+    Identifier trid = new Identifier("cotton-rpg", "test_resource");
+    Registry.register(RESOURCES, trid, new SimpleCharacterResource(trid, 16, 20, Color.GREEN, CharacterResource.ResourceVisibility.HUD));
     
   }
 }

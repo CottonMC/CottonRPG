@@ -11,7 +11,7 @@ public class CharacterData {
     data.holder = ((CharacterDataHolder)player);
     return data;
   }
-
+  
   public CharacterClasses getClasses() {
     return holder.crpg_getClasses();
   }

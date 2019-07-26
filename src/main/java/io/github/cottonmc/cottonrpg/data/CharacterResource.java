@@ -28,6 +28,11 @@ public interface CharacterResource {
   }
 
   /**
+   * @return The resource identifier because we still might need to access it.
+   */
+  Identifier getID();
+  
+  /**
    * @return The max amount of this resource you can hold at a time when you first obtain the resource.
    */
   long getDefaultMaxLevel();

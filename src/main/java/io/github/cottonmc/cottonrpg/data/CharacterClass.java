@@ -1,5 +1,7 @@
 package io.github.cottonmc.cottonrpg.data;
 
+import java.util.List;
+
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -8,10 +10,13 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 public interface CharacterClass {
 
+  /**
+   * @return The class identifier. Yes, we need it for both entries and components.
+   */
+  Identifier getID();
+  
   /**
    * @return The max level you can obtain with this class.
    */

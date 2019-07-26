@@ -15,10 +15,19 @@ public class SimpleCharacterClass implements CharacterClass {
   private int maxLevel;
   private List<Text> additionalLines = new ArrayList<>();
 
-  public SimpleCharacterClass(int maxLevel) {
+  private Identifier id;
+  
+  public SimpleCharacterClass(Identifier id, int maxLevel) {
+    this.id = id;
     this.maxLevel = maxLevel;
   }
 
+  @Override
+  public Identifier getID() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  
   @Override
   public int getMaxLevel() {
     return maxLevel;

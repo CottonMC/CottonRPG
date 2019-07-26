@@ -16,11 +16,19 @@ public class SimpleCharacterResource implements CharacterResource {
   private Color color;
   private ResourceVisibility vis;
 
-  public SimpleCharacterResource(long defaultValue, long maxValue, Color color, ResourceVisibility vis) {
+  private Identifier id;
+  
+  public SimpleCharacterResource(Identifier id, long defaultValue, long maxValue, Color color, ResourceVisibility vis) {
+    this.id = id;
     this.def = defaultValue;
     this.max = maxValue;
     this.color = color;
     this.vis = vis;
+  }
+  
+  @Override
+  public Identifier getID() {
+    return id;
   }
 
   @Override
