@@ -1,6 +1,9 @@
 package io.github.cottonmc.cottonrpg.data;
 
+import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 /**
@@ -10,12 +13,14 @@ import net.minecraft.util.Identifier;
  * However, you may want to implement experience on your classes, so feel free to access this then.
  */
 public class CharacterClassEntry {
-  public Identifier id;
+  public final Identifier id;
+  private PlayerEntity player;
   private int level = 0;
   private int experience = 0;
 
-  public CharacterClassEntry(Identifier id) {
+  public CharacterClassEntry(Identifier id, PlayerEntity player) {
     this.id = id;
+    this.player = player;
   }
 
   public CompoundTag toTag() {
@@ -37,6 +42,7 @@ public class CharacterClassEntry {
 
   public void setLevel(int i) {
     this.level = i;
+    if (player instanceof ServerPlayerEntity) CottonRPGNetworking.syncClassChange((ServerPlayerEntity)player, this);
   }
 
   public int getExperience() {
@@ -45,5 +51,6 @@ public class CharacterClassEntry {
 
   public void setExperience(int i) {
     this.experience = i;
+    if (player instanceof ServerPlayerEntity) CottonRPGNetworking.syncClassChange((ServerPlayerEntity)player, this);
   }
 }

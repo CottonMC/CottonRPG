@@ -1,5 +1,8 @@
 package io.github.cottonmc.cottonrpg.data;
 
+import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -10,9 +13,13 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class CharacterClasses {
+  private PlayerEntity player;
+
+  public CharacterClasses(PlayerEntity player) {
+    this.player = player;
+  }
+
   private Map<Identifier, CharacterClassEntry> underlying = new HashMap<>();
-  //TODO: figure out how to listen to changes in individual classes too
-  private List<Consumer<CharacterClasses>> listeners = new ArrayList<>();
 
   public boolean has(Identifier id) {
     return underlying.containsKey(id);
@@ -24,12 +31,12 @@ public class CharacterClasses {
 
   public void giveIfAbsent(CharacterClassEntry clazz) {
     underlying.putIfAbsent(clazz.id, clazz);
-    listeners.forEach(listener -> listener.accept(this));
+    markDirty();
   }
 
   public CharacterClassEntry remove(Identifier id) {
     CharacterClassEntry entry = underlying.remove(id);
-    listeners.forEach(listener -> listener.accept(this));
+    markDirty();
     return entry;
   }
 
@@ -37,7 +44,8 @@ public class CharacterClasses {
     underlying.forEach(consumer);
   }
 
-  public void listen(Consumer<CharacterClasses> listener) {
-    listeners.add(listener);
+  public void markDirty() {
+    if (player instanceof ServerPlayerEntity) CottonRPGNetworking.syncAllClasses((ServerPlayerEntity)player, this);
   }
+
 }

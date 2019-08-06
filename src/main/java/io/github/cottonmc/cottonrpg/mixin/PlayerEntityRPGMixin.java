@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityRPGMixin implements CharacterDataHolder {
-  private CharacterClasses classes = new CharacterClasses();
+  private CharacterClasses classes = new CharacterClasses((PlayerEntity)(Object)this);
   private CharacterResources resources = new CharacterResources();
 
   @Inject(at = @At("RETURN"), method = "<init>")
@@ -39,7 +39,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
       cclasses.getKeys().forEach(k -> {
         try {
           Identifier id = new Identifier(k);
-          classes.giveIfAbsent(new CharacterClassEntry(id));
+          classes.giveIfAbsent(new CharacterClassEntry(id, (PlayerEntity)(Object)this));
           CharacterClassEntry cc = classes.get(id);
           CompoundTag cclass = cclasses.getCompound(k);
           cc.fromTag(cclass);
@@ -54,7 +54,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
       cresourceBars.getKeys().forEach(k -> {
         try {
           Identifier id = new Identifier(k);
-          resources.giveIfAbsent(new CharacterResourceEntry(id));
+          resources.giveIfAbsent(new CharacterResourceEntry(id, (PlayerEntity)(Object)this));
           CharacterResourceEntry rbc = resources.get(id);
           CompoundTag cresourceBar = cresourceBars.getCompound(k);
           rbc.fromTag(cresourceBar);
