@@ -5,12 +5,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class CharacterResources {
   private PlayerEntity player;
@@ -20,7 +17,14 @@ public class CharacterResources {
   }
 
   private Map<Identifier, CharacterResourceEntry> underlying = new HashMap<>();
-  //TODO: figure out how to listen to changes in individual resources too
+
+  public int getSize() {
+    return underlying.size();
+  }
+
+  public void clear() {
+    underlying.clear();
+  }
 
   public boolean has(Identifier id) {
     return underlying.containsKey(id);
@@ -30,8 +34,8 @@ public class CharacterResources {
     return underlying.get(id);
   }
 
-  public void giveIfAbsent(CharacterResourceEntry clazz) {
-    underlying.putIfAbsent(clazz.id, clazz);
+  public void giveIfAbsent(CharacterResourceEntry resource) {
+    underlying.putIfAbsent(resource.id, resource);
     markDirty();
   }
 

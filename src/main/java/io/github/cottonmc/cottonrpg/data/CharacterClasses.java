@@ -5,12 +5,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class CharacterClasses {
   private PlayerEntity player;
@@ -20,6 +17,14 @@ public class CharacterClasses {
   }
 
   private Map<Identifier, CharacterClassEntry> underlying = new HashMap<>();
+
+  public int getSize() {
+    return underlying.size();
+  }
+
+  public void clear() {
+    underlying.clear();
+  }
 
   public boolean has(Identifier id) {
     return underlying.containsKey(id);

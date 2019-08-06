@@ -16,12 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityRPGMixin implements CharacterDataHolder {
   private CharacterClasses classes = new CharacterClasses((PlayerEntity)(Object)this);
-  private CharacterResources resources = new CharacterResources();
-
-  @Inject(at = @At("RETURN"), method = "<init>")
-  private void init(CallbackInfo ci) {
-    //TODO: add listeners for sync here
-  }
+  private CharacterResources resources = new CharacterResources((PlayerEntity)(Object)this);
   
   @Inject(at = @At("RETURN"), method = "tick")
   private void tick(CallbackInfo ci) {
