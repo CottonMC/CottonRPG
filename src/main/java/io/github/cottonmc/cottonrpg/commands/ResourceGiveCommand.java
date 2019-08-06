@@ -34,7 +34,7 @@ public class ResourceGiveCommand implements Command<ServerCommandSource> {
         return 2;
       }
       
-      CharacterData.get(p).getResources().giveIfAbsent(new CharacterResourceEntry(cid));
+      CharacterData.get(p).getResources().giveIfAbsent(new CharacterResourceEntry(cid, p));
       
       p.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
     }
