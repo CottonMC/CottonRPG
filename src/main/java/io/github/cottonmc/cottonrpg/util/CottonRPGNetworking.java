@@ -4,7 +4,6 @@ import io.github.cottonmc.cottonrpg.data.*;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
@@ -16,6 +15,8 @@ public class CottonRPGNetworking {
 	public static final Identifier SINGLE_RESOURCE = new Identifier("cotton-rpg", "single_resource");
 
 	public static void init() {
+		//TODO: impl all classes when it's not 1 AM, make sure client has classes properly added/removed
+		//TODO: impl all resources when it's not 1 AM, make sure client has all resources properly added/removed
 		ClientSidePacketRegistry.INSTANCE.register(SINGLE_CLASS, ((ctx, buf) -> {
 			Identifier id = buf.readIdentifier();
 			CharacterClasses classes = CharacterData.get(ctx.getPlayer()).getClasses();
