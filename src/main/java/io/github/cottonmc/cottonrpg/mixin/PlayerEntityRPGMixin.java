@@ -25,7 +25,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
   
   @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromTag(Lnet/minecraft/nbt/CompoundTag;)V")
   private void fromTag(CompoundTag tag, CallbackInfo ci) {
-    if (!tag.containsKey("cottonrpg")) return;
+    if (!tag.containsKey("CottonRPG")) return;
     
     CompoundTag crpg = tag.getCompound("CottonRPG");
     
@@ -39,7 +39,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
           CompoundTag cclass = cclasses.getCompound(k);
           cc.fromTag(cclass);
         } catch (Exception e) {
-          // todo: report warning
+          System.out.println("[CottonRPG] Couldn't read class!");
         }
       });
     }
@@ -54,7 +54,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
           CompoundTag cresourceBar = cresourceBars.getCompound(k);
           rbc.fromTag(cresourceBar);
         } catch (Exception e) {
-          // todo: report warning
+          System.out.println("[CottonRPG] Couldn't read resource!");
         }
       });
     }
@@ -68,14 +68,14 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
     CompoundTag cclasses = new CompoundTag();
     classes.forEach((id, cc) -> {
       CompoundTag cclass = cc.toTag();
-      cclasses.put(id.getNamespace() + ":" + id.getPath(), cclass);
+      cclasses.put(id.toString(), cclass);
     });
     crpg.put("Classes", cclasses);
     
     CompoundTag cresourceBars = new CompoundTag();
     resources.forEach((id, rbc) -> {
       CompoundTag cresourceBar = rbc.toTag();
-      cresourceBars.put(id.getNamespace() + ":" + id.getPath(), cresourceBar);
+      cresourceBars.put(id.toString(), cresourceBar);
     });
     crpg.put("Resources", cresourceBars);
     

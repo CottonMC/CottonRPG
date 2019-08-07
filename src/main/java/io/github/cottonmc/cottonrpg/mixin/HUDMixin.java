@@ -20,11 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Mixin(InGameHud.class)
 public class HUDMixin {
-
-  @Shadow
-  private int scaledWidth;
-  @Shadow
-  private int scaledHeight;
   
   @Shadow @Mutable
   private MinecraftClient client;
@@ -48,7 +43,7 @@ public class HUDMixin {
       CharacterResource comp = CottonRPG.RESOURCES.get(id);
       if (comp.getVisibility() != CharacterResource.ResourceVisibility.HUD)
         return;
-      Color color = comp.getColor();
+      int color = comp.getColor();
       
       // Coords
       float left = 16.0f;
@@ -78,7 +73,10 @@ public class HUDMixin {
       t.drawWithShadow(comp.getName().asString(), left, top, 1);
       
       // Bar
-      GlStateManager.color4f(color.getRed() / 255, color.getGreen() / 255, color.getBlue() / 255, 1.0f);
+      float r = (color >> 16 & 255) / 255f;
+      float g = (color >> 8 & 255) / 255f;
+      float b = (color & 255) / 255f;
+      GlStateManager.color4f(r, g, b, 1.0f);
       GlStateManager.begin(GL11.GL_QUADS);
         GlStateManager.vertex3f(left, bartop, 1.0f);
         GlStateManager.vertex3f(left, bottom, 1.0f);

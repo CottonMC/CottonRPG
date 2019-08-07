@@ -13,12 +13,12 @@ import java.util.List;
 public class SimpleCharacterResource implements CharacterResource {
   private long max;
   private long def;
-  private Color color;
+  private int color;
   private ResourceVisibility vis;
 
   private Identifier id;
   
-  public SimpleCharacterResource(Identifier id, long defaultValue, long maxValue, Color color, ResourceVisibility vis) {
+  public SimpleCharacterResource(Identifier id, long defaultValue, long maxValue, int color, ResourceVisibility vis) {
     this.id = id;
     this.def = defaultValue;
     this.max = maxValue;
@@ -42,7 +42,7 @@ public class SimpleCharacterResource implements CharacterResource {
   }
 
   @Override
-  public Color getColor() {
+  public int getColor() {
     return color;
   }
 

@@ -43,9 +43,9 @@ public interface CharacterResource {
   long getDefaultLevel();
 
   /**
-   * @return the color of the bar to display.
+   * @return the color of the bar to display, in RGB format.
    */
-  Color getColor();
+  int getColor();
 
   /**
    * @return The visibility of the resource to the player.

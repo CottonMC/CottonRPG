@@ -23,7 +23,7 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-	modCompile('io.github.prospector.modmenu:ModMenu:1.6.3-95') { transitive = false }
+//	modCompile('io.github.prospector.modmenu:ModMenu:1.6.3-95') { transitive = false }
 	
 	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 }
