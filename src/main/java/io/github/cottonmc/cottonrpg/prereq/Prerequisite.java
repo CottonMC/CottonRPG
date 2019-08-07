@@ -27,10 +27,10 @@ public interface Prerequisite {
     Prerequisite[] children = getChildren();
     if (children != null) {
       for (int i = 0; i < children.length; ++i) {
-        List<String> tl = children[i].describe();
-        tl.forEach(t -> {
-          text.add("  " + tl);
-        });
+        List<String> lines = children[i].describe();
+        for (String line : lines) {
+          text.add("  " + line);
+        }
       }
     }
     return text;
@@ -67,8 +67,8 @@ public interface Prerequisite {
   public static class Any implements Prerequisite {
     private Prerequisite[] prereqs;
     
-    public Any(Prerequisite... ps) {
-      prereqs = ps;
+    public Any(Prerequisite... prereqs) {
+      this.prereqs = prereqs;
     }
     
     @Override
@@ -95,8 +95,8 @@ public interface Prerequisite {
   public static class Not implements Prerequisite {
     private Prerequisite prereq;
     
-    public Not(Prerequisite p) {
-      prereq = p;
+    public Not(Prerequisite prereq) {
+      this.prereq = prereq;
     }
     
     @Override

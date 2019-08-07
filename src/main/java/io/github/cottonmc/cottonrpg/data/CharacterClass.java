@@ -15,7 +15,7 @@ public interface CharacterClass {
   /**
    * @return The class identifier. Yes, we need it for both entries and components.
    */
-  Identifier getID();
+  Identifier getId();
   
   /**
    * @return The max level you can obtain with this class.

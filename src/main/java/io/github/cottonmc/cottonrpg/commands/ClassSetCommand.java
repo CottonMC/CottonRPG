@@ -20,36 +20,36 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
 
   @Override
   public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-    Entity e = context.getSource().getEntity();
-    if (e instanceof PlayerEntity) {
-      PlayerEntity p = (PlayerEntity) e;
-      if (!p.allowsPermissionLevel(4)) { return 2; }
+    Entity entity = context.getSource().getEntity();
+    if (entity instanceof PlayerEntity) {
+      PlayerEntity player = (PlayerEntity) entity;
+      if (!player.allowsPermissionLevel(4)) { return 2; }
       
-      Identifier cid = context.getArgument("classname", Identifier.class);
+      Identifier id = context.getArgument("classname", Identifier.class);
       
-      CharacterClass cct = CottonRPG.CLASSES.get(cid);
+      CharacterClass clazz = CottonRPG.CLASSES.get(id);
       
-      if (cct == null) {
+      if (clazz == null) {
         Text text = new TranslatableText("No such class").formatted(Formatting.RED);
-        p.addChatMessage(text, false);
+        player.addChatMessage(text, false);
         return 2;
       }
       
-      CharacterClassEntry cc = CharacterData.get(p).getClasses().get(cid);
+      CharacterClassEntry entry = CharacterData.get(player).getClasses().get(id);
       
-      if (cc == null) {
+      if (entry == null) {
         Text text = new TranslatableText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);
-        p.addChatMessage(text, false);
+        player.addChatMessage(text, false);
         return 2;
       }
       
       int level = context.getArgument("level", Integer.class);
       
-      cc.setLevel(level);
+      entry.setLevel(level);
       
-      Text text = new TranslatableText(cid.toString() + " <- " + level).formatted(Formatting.GOLD);
+      Text text = new TranslatableText(id.toString() + " <- " + level).formatted(Formatting.GOLD);
       
-      p.addChatMessage(text, false);
+      player.addChatMessage(text, false);
     }
     return 1;
   }

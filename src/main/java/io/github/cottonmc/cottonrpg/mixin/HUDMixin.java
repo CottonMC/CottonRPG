@@ -34,16 +34,16 @@ public class HUDMixin {
     GlStateManager.enableBlend();
     GlStateManager.enableAlphaTest();
 
-    TextRenderer t = getFontRenderer();
+    TextRenderer renderer = getFontRenderer();
     
     AtomicInteger i = new AtomicInteger(1);
     CharacterData data =  CharacterData.get(client.player);
     
-    data.getResources().forEach((id, cons) -> {
-      CharacterResource comp = CottonRPG.RESOURCES.get(id);
-      if (comp.getVisibility() != CharacterResource.ResourceVisibility.HUD)
+    data.getResources().forEach((id, entry) -> {
+      CharacterResource resource = CottonRPG.RESOURCES.get(id);
+      if (resource.getVisibility() != CharacterResource.ResourceVisibility.HUD)
         return;
-      int color = comp.getColor();
+      int color = resource.getColor();
       
       // Coords
       float left = 16.0f;
@@ -70,7 +70,7 @@ public class HUDMixin {
       }
       */
       GlStateManager.color4f(0.9f, 0.9f, 0.9f, 1.0f);
-      t.drawWithShadow(comp.getName().asString(), left, top, 1);
+      renderer.drawWithShadow(resource.getName().asString(), left, top, 1);
       
       // Bar
       float r = (color >> 16 & 255) / 255f;

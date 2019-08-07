@@ -19,19 +19,19 @@ public class ClassesCommand implements Command<ServerCommandSource> {
 
   @Override
   public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-    Entity e = context.getSource().getEntity();
-    if (e instanceof PlayerEntity) {
-      PlayerEntity p = (PlayerEntity) e;
+    Entity entity = context.getSource().getEntity();
+    if (entity instanceof PlayerEntity) {
+      PlayerEntity player = (PlayerEntity) entity;
       Text header = new TranslatableText("cmd.cottonrpg.classes.yourclasses").formatted(Formatting.AQUA);
-      p.addChatMessage(header, false);
-      CharacterData cd = CharacterData.get(p);
-      CottonRPG.CLASSES.forEach(cc -> {
-        String name = cc.getName().asString();
-        Identifier cid = cc.getID();
-        CharacterClassEntry ce = cd.getClasses().get(cid);
-        if (ce != null) {
-          Text t = new TranslatableText("%s [%s] == %d", name, cid.toString(), ce.getLevel()).formatted(Formatting.GOLD);
-          p.addChatMessage(t, false);
+      player.addChatMessage(header, false);
+      CharacterData data = CharacterData.get(player);
+      CottonRPG.CLASSES.forEach(clazz -> {
+        String name = clazz.getName().asString();
+        Identifier id = clazz.getId();
+        CharacterClassEntry entry = data.getClasses().get(id);
+        if (entry != null) {
+          Text text = new TranslatableText("%s [%s] == %d", name, id.toString(), entry.getLevel()).formatted(Formatting.GOLD);
+          player.addChatMessage(text, false);
         }
       });
       /*

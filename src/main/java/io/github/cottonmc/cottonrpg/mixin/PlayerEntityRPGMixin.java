@@ -5,6 +5,7 @@ import io.github.cottonmc.cottonrpg.data.CharacterClasses;
 import io.github.cottonmc.cottonrpg.data.CharacterResourceEntry;
 import io.github.cottonmc.cottonrpg.data.CharacterResources;
 import io.github.cottonmc.cottonrpg.util.CharacterDataHolder;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
@@ -20,7 +21,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
   
   @Inject(at = @At("RETURN"), method = "tick")
   private void tick(CallbackInfo ci) {
-    resources.forEach((id, rb) -> rb.tick());
+    resources.forEach((id, resource) -> resource.tick());
   }
   
   @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromTag(Lnet/minecraft/nbt/CompoundTag;)V")
@@ -31,32 +32,32 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
     
     if (crpg.containsKey("Classes")) {
       CompoundTag cclasses = crpg.getCompound("Classes");
-      cclasses.getKeys().forEach(k -> {
-        try {
-          Identifier id = new Identifier(k);
-          classes.giveIfAbsent(new CharacterClassEntry(id, (PlayerEntity)(Object)this));
-          CharacterClassEntry cc = classes.get(id);
-          CompoundTag cclass = cclasses.getCompound(k);
-          cc.fromTag(cclass);
+      for (String key : cclasses.getKeys()) {
+        if (cclasses.getType(key) == NbtType.COMPOUND) try {
+          Identifier id = new Identifier(key);
+          this.classes.giveIfAbsent(new CharacterClassEntry(id, (PlayerEntity)(Object)this));
+          CharacterClassEntry entry = this.classes.get(id);
+          CompoundTag cclass = cclasses.getCompound(key);
+          entry.fromTag(cclass);
         } catch (Exception e) {
           System.out.println("[CottonRPG] Couldn't read class!");
         }
-      });
+      }
     }
     
     if (crpg.containsKey("Resources")) {
-      CompoundTag cresourceBars = crpg.getCompound("Resources");
-      cresourceBars.getKeys().forEach(k -> {
-        try {
-          Identifier id = new Identifier(k);
-          resources.giveIfAbsent(new CharacterResourceEntry(id, (PlayerEntity)(Object)this));
-          CharacterResourceEntry rbc = resources.get(id);
-          CompoundTag cresourceBar = cresourceBars.getCompound(k);
-          rbc.fromTag(cresourceBar);
+      CompoundTag cresources = crpg.getCompound("Resources");
+      for (String key : cresources.getKeys()) {
+        if (cresources.getType(key) == NbtType.COMPOUND) try {
+          Identifier id = new Identifier(key);
+          this.resources.giveIfAbsent(new CharacterResourceEntry(id, (PlayerEntity)(Object)this));
+          CharacterResourceEntry entry = this.resources.get(id);
+          CompoundTag cresourceBar = cresources.getCompound(key);
+          entry.fromTag(cresourceBar);
         } catch (Exception e) {
           System.out.println("[CottonRPG] Couldn't read resource!");
         }
-      });
+      }
     }
     
   }
@@ -66,15 +67,15 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
     CompoundTag crpg = new CompoundTag();
     
     CompoundTag cclasses = new CompoundTag();
-    classes.forEach((id, cc) -> {
-      CompoundTag cclass = cc.toTag();
+    classes.forEach((id, entry) -> {
+      CompoundTag cclass = entry.toTag();
       cclasses.put(id.toString(), cclass);
     });
     crpg.put("Classes", cclasses);
     
     CompoundTag cresourceBars = new CompoundTag();
-    resources.forEach((id, rbc) -> {
-      CompoundTag cresourceBar = rbc.toTag();
+    resources.forEach((id, entry) -> {
+      CompoundTag cresourceBar = entry.toTag();
       cresourceBars.put(id.toString(), cresourceBar);
     });
     crpg.put("Resources", cresourceBars);

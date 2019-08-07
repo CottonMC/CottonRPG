@@ -19,23 +19,23 @@ public class ResourceRemoveCommand implements Command<ServerCommandSource> {
 
   @Override
   public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-    Entity e = context.getSource().getEntity();
-    if (e instanceof PlayerEntity) {
-      PlayerEntity p = (PlayerEntity) e;
+    Entity entity = context.getSource().getEntity();
+    if (entity instanceof PlayerEntity) {
+      PlayerEntity player = (PlayerEntity) entity;
       
-      Identifier cid = context.getArgument("resourcename", Identifier.class);
+      Identifier id = context.getArgument("resourcename", Identifier.class);
       
-      CharacterResource cct = CottonRPG.RESOURCES.get(cid);
+      CharacterResource resource = CottonRPG.RESOURCES.get(id);
       
-      if (cct == null) {
+      if (resource == null) {
         Text text = new LiteralText("No such resource").formatted(Formatting.RED);
-        p.addChatMessage(text, false);
+        player.addChatMessage(text, false);
         return 2;
       }
       
-      CharacterData.get(p).getResources().remove(cid);
+      CharacterData.get(player).getResources().remove(id);
       
-      p.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
+      player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
     }
     return 1;
   }

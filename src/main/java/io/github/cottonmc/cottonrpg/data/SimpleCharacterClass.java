@@ -23,7 +23,7 @@ public class SimpleCharacterClass implements CharacterClass {
   }
 
   @Override
-  public Identifier getID() {
+  public Identifier getId() {
     // TODO Auto-generated method stub
     return null;
   }

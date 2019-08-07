@@ -5,7 +5,6 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.awt.*;
 import java.util.List;
 
 /**
