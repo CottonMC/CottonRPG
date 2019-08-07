@@ -153,6 +153,7 @@ public class CottonRPGNetworking {
 		}
 
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+		buf.writeBoolean(syncAll);
 		if (syncAll) {
 			buf.writeInt(data.getSize());
 			data.forEach((id, entry) -> {
