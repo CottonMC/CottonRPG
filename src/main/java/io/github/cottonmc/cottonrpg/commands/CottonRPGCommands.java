@@ -2,10 +2,17 @@ package io.github.cottonmc.cottonrpg.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import io.github.cottonmc.cottonrpg.CottonRPG;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.minecraft.command.arguments.IdentifierArgumentType;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
+
+import java.util.concurrent.CompletableFuture;
 
 public class CottonRPGCommands {
   public static void init() {
@@ -18,7 +25,7 @@ public class CottonRPGCommands {
          .then(
                  CommandManager.literal("class")
               .then(
-                      CommandManager.argument("classname", IdentifierArgumentType.identifier())
+                      CommandManager.argument("classname", ClassArgumentType.clazz())
                    .then(
                            CommandManager.literal("get")
                         .executes(new ClassGetCommand())
@@ -43,7 +50,7 @@ public class CottonRPGCommands {
          .then(
                  CommandManager.literal("resource")
               .then(
-                      CommandManager.argument("resourcename", IdentifierArgumentType.identifier())
+                      CommandManager.argument("resourcename", ResourceArgumentType.resource())
                    .then(
                            CommandManager.literal("give")
                         .executes(new ResourceGiveCommand())
@@ -55,5 +62,27 @@ public class CottonRPGCommands {
               )
          )
     ));
+  }
+
+  public static class ClassArgumentType extends IdentifierArgumentType {
+    public static ClassArgumentType clazz() {
+      return new ClassArgumentType();
+    }
+
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+      return CommandSource.suggestIdentifiers(CottonRPG.CLASSES.getIds(), builder);
+    }
+  }
+
+  public static class ResourceArgumentType extends IdentifierArgumentType {
+    public static ResourceArgumentType resource() {
+      return new ResourceArgumentType();
+    }
+
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+      return CommandSource.suggestIdentifiers(CottonRPG.RESOURCES.getIds(), builder);
+    }
   }
 }

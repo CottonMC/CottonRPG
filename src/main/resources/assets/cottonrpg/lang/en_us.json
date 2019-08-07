@@ -4,5 +4,6 @@
   "prereq.cottonrpg.not": "Not:",
   "prereq.cottonrpg.wants_resource": "%s >= %d",
   
-  "cmd.cottonrpg.classes.yourclasses": "Your classes"
+  "cmd.cottonrpg.classes.yourclasses": "Your classes:",
+  "cmd.cottonrpg.classes.entry": "  - %s [%s] == %s"
 }

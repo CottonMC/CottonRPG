@@ -14,13 +14,12 @@ import net.minecraft.util.Identifier;
  */
 public class CharacterClassEntry {
   public final Identifier id;
-  private PlayerEntity player;
   private int level = 0;
   private int experience = 0;
+  private transient boolean dirty = false;
 
-  public CharacterClassEntry(Identifier id, PlayerEntity player) {
+  public CharacterClassEntry(Identifier id) {
     this.id = id;
-    this.player = player;
   }
 
   public CompoundTag toTag() {
@@ -33,6 +32,7 @@ public class CharacterClassEntry {
   public CharacterClassEntry fromTag(CompoundTag tag) {
     this.level = tag.getInt("level");
     this.experience = tag.getInt("experience");
+    markDirty();
     return this;
   }
 
@@ -41,8 +41,8 @@ public class CharacterClassEntry {
   }
 
   public void setLevel(int i) {
+    markDirty();
     this.level = i;
-    if (player instanceof ServerPlayerEntity) CottonRPGNetworking.syncClassChange((ServerPlayerEntity)player, this);
   }
 
   public int getExperience() {
@@ -50,7 +50,19 @@ public class CharacterClassEntry {
   }
 
   public void setExperience(int i) {
+    markDirty();
     this.experience = i;
-    if (player instanceof ServerPlayerEntity) CottonRPGNetworking.syncClassChange((ServerPlayerEntity)player, this);
+  }
+
+  public void markDirty() {
+    dirty = true;
+  }
+
+  public boolean isDirty() {
+    return dirty;
+  }
+
+  public void clearDirty() {
+    dirty = false;
   }
 }

@@ -13,10 +13,7 @@ import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
 public class CharacterResources {
   private ArrayList<Identifier> removed = new ArrayList<>();
 
-  public CharacterResources() {
-  }
-
-  private Map<Identifier, CharacterResourceEntry> underlying = new HashMap<>();
+  private final Map<Identifier, CharacterResourceEntry> underlying = new HashMap<>();
 
   public int getSize() {
     synchronized(underlying) {
@@ -75,11 +72,10 @@ public class CharacterResources {
     if (!isDirty()) return;
 
     if (!removed.isEmpty()) {
-      CottonRPGNetworking.syncAllResources(player, this);
+      CottonRPGNetworking.batchSyncResources(player, this, true);
       removed.clear();
     } else {
-      //TODO: Do a partial sync for just those resources.
-      CottonRPGNetworking.syncAllResources(player, this);
+      CottonRPGNetworking.batchSyncResources(player, this, false);
     }
   }
 }

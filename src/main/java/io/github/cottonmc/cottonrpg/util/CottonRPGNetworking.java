@@ -15,33 +15,53 @@ import java.util.List;
 
 
 public class CottonRPGNetworking {
-	public static final Identifier ALL_CLASSES = new Identifier("cotton-rpg", "all_classes");
-	public static final Identifier ALL_RESOURCES = new Identifier("cotton-rpg", "all_resources");
+	public static final Identifier BATCH_CLASSES = new Identifier("cotton-rpg", "batch_classes");
+	public static final Identifier BATCH_RESOURCES = new Identifier("cotton-rpg", "batch_resources");
 	public static final Identifier SINGLE_CLASS = new Identifier("cotton-rpg", "single_class");
 	public static final Identifier SINGLE_RESOURCE = new Identifier("cotton-rpg", "single_resource");
 
 	public static void init() {
-		ClientSidePacketRegistry.INSTANCE.register(ALL_CLASSES, (ctx, buf) -> {
-			/*ctx.getTaskQueue().execute( ()->{
-				int count = buf.readInt();
+		ClientSidePacketRegistry.INSTANCE.register(BATCH_CLASSES, (ctx, buf) -> {
+			//Unpack data on the netty thread, while the buffer is still available.
+			boolean clear = buf.readBoolean();
+			int count = buf.readInt();
+			List<CharacterClassEntry> read = new ArrayList<>();
+			for (int i = 0; i < count; i++) {
+				CharacterClassEntry entry = new CharacterClassEntry(buf.readIdentifier());
+				entry.setLevel(buf.readInt());
+				entry.setExperience(buf.readInt());
+				read.add(entry);
+			}
+
+			ctx.getTaskQueue().execute( ()->{ //DO NOT access the buffer past this point! DO NOT access the world or player before this point!
+
+				//Now that worlds and players are in-scope, get the CharacterData and pour our unpacked entries into it.
 				PlayerEntity player = ctx.getPlayer();
-				CharacterClasses classes = CharacterData.get(player).getClasses();
-				List<CharacterClassEntry> read = new ArrayList<>();
-				for (int i = 0; i < count; i++) {
-					CharacterClassEntry entry = new CharacterClassEntry(buf.readIdentifier(), player);
-					entry.setLevel(buf.readInt());
-					entry.setExperience(buf.readInt());
-					read.add(entry);
+				CharacterData data = CharacterData.get(player);
+				if (data==null) {
+					System.out.println("Actor not ready yet!");
+					return;
 				}
-				classes.clear();
-				for (CharacterClassEntry entry : read) {
-					classes.giveIfAbsent(entry);
+				CharacterClasses classes = data.getClasses();
+				if (clear) {
+					classes.clear();
+					for (CharacterClassEntry entry : read) {
+						classes.giveIfAbsent(entry);
+					}
+				} else {
+					for (CharacterClassEntry entry : read) {
+						classes.giveIfAbsent(entry);
+						CharacterClassEntry set = classes.get(entry.id);
+						set.setLevel(entry.getLevel());
+						set.setExperience(entry.getExperience());
+					}
 				}
-			});*/
+			});
 		});
 		
-		ClientSidePacketRegistry.INSTANCE.register(ALL_RESOURCES, (ctx, buf) -> {
+		ClientSidePacketRegistry.INSTANCE.register(BATCH_RESOURCES, (ctx, buf) -> {
 			//Unpack data on the netty thread, while the buffer is still available.
+			boolean clear = buf.readBoolean();
 			int count = buf.readInt();
 			List<CharacterResourceEntry> read = new ArrayList<>();
 			for (int i = 0; i < count; i++) {
@@ -61,21 +81,28 @@ public class CottonRPGNetworking {
 					return;
 				}
 				CharacterResources resources = data.getResources();
-				resources.clear();
-				for (CharacterResourceEntry entry : read) {
-					resources.giveIfAbsent(entry);
+				if (clear) {
+					resources.clear();
+					for (CharacterResourceEntry entry : read) {
+						resources.giveIfAbsent(entry);
+					}
+				} else {
+					for (CharacterResourceEntry entry : read) {
+						resources.giveIfAbsent(entry);
+						CharacterResourceEntry set = resources.get(entry.id);
+						set.setCurrent(entry.getCurrent());
+						set.setMax(entry.getMax());
+					}
 				}
 			});
 		});
-		
-		//TODO: impl all resources when it's not 1 AM, make sure client has all resources properly added/removed
-		ClientSidePacketRegistry.INSTANCE.register(SINGLE_CLASS, ((ctx, buf) -> { /*
+		ClientSidePacketRegistry.INSTANCE.register(SINGLE_CLASS, ((ctx, buf) -> {
 			Identifier id = buf.readIdentifier();
 			CharacterClasses classes = CharacterData.get(ctx.getPlayer()).getClasses();
-			classes.giveIfAbsent(new CharacterClassEntry(id, ctx.getPlayer()));
+			classes.giveIfAbsent(new CharacterClassEntry(id));
 			CharacterClassEntry entry = classes.get(id);
 			entry.setLevel(buf.readInt());
-			entry.setExperience(buf.readInt());*/
+			entry.setExperience(buf.readInt());
 		}));
 		ClientSidePacketRegistry.INSTANCE.register(SINGLE_RESOURCE, ((ctx, buf) -> {
 			Identifier id = buf.readIdentifier();
@@ -87,32 +114,67 @@ public class CottonRPGNetworking {
 		}));
 	}
 
-	public static void syncAllClasses(ServerPlayerEntity player, CharacterClasses data) {
-		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-		buf.writeInt(data.getSize());
-		data.forEach((id, entry) -> {
-			buf.writeIdentifier(id);
-			buf.writeInt(entry.getLevel());
-			buf.writeInt(entry.getExperience());
-		});
-		player.networkHandler.sendPacket(new CustomPayloadS2CPacket(ALL_CLASSES, buf));
-	}
-
-	public static boolean syncAllResources(ServerPlayerEntity player, CharacterResources data) {
+	public static boolean batchSyncClasses(ServerPlayerEntity player, CharacterClasses data, boolean syncAll) {
 		if (player.networkHandler==null) {
 			return false;
 		}
-		
+
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-		buf.writeInt(data.getSize());
-		data.forEach((id, entry) -> {
-			buf.writeIdentifier(id);
-			buf.writeLong(entry.getCurrent());
-			buf.writeLong(entry.getMax());
-			entry.clearDirty();
-		});
+		buf.writeBoolean(syncAll);
+		if (syncAll) {
+			buf.writeInt(data.getSize());
+			data.forEach((id, entry) -> {
+				buf.writeIdentifier(id);
+				buf.writeInt(entry.getLevel());
+				buf.writeInt(entry.getExperience());
+				entry.clearDirty();
+			});
+		} else {
+			List<CharacterClassEntry> entries = new ArrayList<>();
+			data.forEach((id, entry) -> {
+				if (entry.isDirty()) entries.add(entry);
+			});
+			buf.writeInt(entries.size());
+			for (CharacterClassEntry entry : entries) {
+				buf.writeIdentifier(entry.id);
+				buf.writeInt(entry.getLevel());
+				buf.writeInt(entry.getExperience());
+			}
+		}
+
+		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(BATCH_CLASSES, buf));
+
+		return true;
+	}
+
+	public static boolean batchSyncResources(ServerPlayerEntity player, CharacterResources data, boolean syncAll) {
+		if (player.networkHandler==null) {
+			return false;
+		}
+
+		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+		if (syncAll) {
+			buf.writeInt(data.getSize());
+			data.forEach((id, entry) -> {
+				buf.writeIdentifier(id);
+				buf.writeLong(entry.getCurrent());
+				buf.writeLong(entry.getMax());
+				entry.clearDirty();
+			});
+		} else {
+			List<CharacterResourceEntry> entries = new ArrayList<>();
+			data.forEach((id, entry) -> {
+				if (entry.isDirty()) entries.add(entry);
+			});
+			buf.writeInt(entries.size());
+			for (CharacterResourceEntry entry : entries) {
+				buf.writeIdentifier(entry.id);
+				buf.writeLong(entry.getCurrent());
+				buf.writeLong(entry.getMax());
+			}
+		}
 		
-		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(ALL_RESOURCES, buf));
+		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(BATCH_RESOURCES, buf));
 		
 		return true;
 	}

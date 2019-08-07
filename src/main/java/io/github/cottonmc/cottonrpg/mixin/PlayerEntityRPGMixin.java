@@ -17,13 +17,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityRPGMixin implements CharacterDataHolder {
-  private CharacterClasses classes = new CharacterClasses((PlayerEntity)(Object)this);
+  private CharacterClasses classes = new CharacterClasses();
   private CharacterResources resources = new CharacterResources();
   
   @Inject(at = @At("RETURN"), method = "tick")
   private void tick(CallbackInfo ci) {
-    if ((Object)this instanceof ServerPlayerEntity) {
+    if (((Object)this) instanceof ServerPlayerEntity) {
       resources.sync((ServerPlayerEntity)(Object)this);
+      classes.sync((ServerPlayerEntity)(Object)this);
     }
     resources.forEach((id, resource) -> resource.tick());
   }
@@ -36,8 +37,6 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
     if (crpg==null) {
     	System.out.println("CottonRPG tag was the wrong type! ("+tag.getTag("CottonRPG").getClass().getSimpleName()+")");
     	return;
-    } else {
-    	System.out.println("Unpacking tag "+crpg.asString());
     }
     
     if (crpg.containsKey("Classes")) {
@@ -45,7 +44,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
       for (String key : cclasses.getKeys()) {
         if (cclasses.getType(key) == NbtType.COMPOUND) try {
           Identifier id = new Identifier(key);
-          this.classes.giveIfAbsent(new CharacterClassEntry(id, (PlayerEntity)(Object)this));
+          this.classes.giveIfAbsent(new CharacterClassEntry(id));
           CharacterClassEntry entry = this.classes.get(id);
           CompoundTag cclass = cclasses.getCompound(key);
           entry.fromTag(cclass);
@@ -90,9 +89,7 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
       cresourceBars.put(id.toString(), cresourceBar);
     });
     crpg.put("Resources", cresourceBars);
-    
-    System.out.println("Saving down tag "+crpg.asString());
-    
+
     tag.put("CottonRPG", crpg);
   }
 

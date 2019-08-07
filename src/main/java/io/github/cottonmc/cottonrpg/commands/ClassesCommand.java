@@ -10,6 +10,7 @@ import io.github.cottonmc.cottonrpg.data.CharacterData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -24,22 +25,11 @@ public class ClassesCommand implements Command<ServerCommandSource> {
       PlayerEntity player = (PlayerEntity) entity;
       Text header = new TranslatableText("cmd.cottonrpg.classes.yourclasses").formatted(Formatting.AQUA);
       player.addChatMessage(header, false);
-      CharacterData data = CharacterData.get(player);
-      CottonRPG.CLASSES.forEach(clazz -> {
-        String name = clazz.getName().asString();
-        Identifier id = clazz.getId();
-        CharacterClassEntry entry = data.getClasses().get(id);
-        if (entry != null) {
-          Text text = new TranslatableText("%s [%s] == %d", name, id.toString(), entry.getLevel()).formatted(Formatting.GOLD);
-          player.addChatMessage(text, false);
-        }
-      });
-      /*
-      CharacterData.get(p).getClasses().forEach((id, ce) -> {
+      CharacterData.get(player).getClasses().forEach((id, entry) -> {
         String name = CottonRPG.CLASSES.get(id).getName().asString();
-        
+        Text text = new TranslatableText("cmd.cottonrpg.classes.entry", name, id.toString(), entry.getLevel()).formatted(Formatting.GOLD);
+        player.addChatMessage(text, false);
       });
-      */
     }
     return 1;
   }

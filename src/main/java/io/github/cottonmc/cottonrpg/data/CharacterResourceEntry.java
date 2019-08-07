@@ -28,7 +28,7 @@ public class CharacterResourceEntry {
   public CharacterResourceEntry fromTag(CompoundTag tag) {
     this.current = tag.getLong("CurrentLevel");
     this.max = tag.getLong("MaxLevel");
-    dirty = true;
+     markDirty();
     return this;
   }
 
