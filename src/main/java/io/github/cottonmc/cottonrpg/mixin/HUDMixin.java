@@ -36,7 +36,8 @@ public class HUDMixin {
 
     TextRenderer renderer = getFontRenderer();
     
-    AtomicInteger i = new AtomicInteger(1);
+    final int[] height = new int[1];
+    height[0] = 1;
     CharacterData data =  CharacterData.get(client.player);
     
     data.getResources().forEach((id, entry) -> {
@@ -48,7 +49,7 @@ public class HUDMixin {
       // Coords
       float left = 16.0f;
       float right = left + 128.0f;
-      float top = 16.0f+32.0f*(i.get()-1);
+      float top = 16.0f+32.0f*(height[0]-1);
       float bartop = top+16.0f;
       float bottom = top+32.0f;
       
@@ -85,7 +86,7 @@ public class HUDMixin {
       GlStateManager.end();
 
       // Increment
-      i.incrementAndGet();
+      height[0]++;
     });
     
     GlStateManager.disableAlphaTest();
