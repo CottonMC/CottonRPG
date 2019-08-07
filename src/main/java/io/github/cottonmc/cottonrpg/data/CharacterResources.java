@@ -1,56 +1,85 @@
 package io.github.cottonmc.cottonrpg.data;
 
-import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public class CharacterResources {
-  private PlayerEntity player;
+import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
 
-  public CharacterResources(PlayerEntity player) {
-    this.player = player;
+public class CharacterResources {
+  private ArrayList<Identifier> removed = new ArrayList<>();
+
+  public CharacterResources() {
   }
 
   private Map<Identifier, CharacterResourceEntry> underlying = new HashMap<>();
 
   public int getSize() {
-    return underlying.size();
+    synchronized(underlying) {
+      return underlying.size();
+    }
   }
 
   public void clear() {
-    underlying.clear();
+    synchronized(underlying) {
+      underlying.clear();
+    }
   }
 
   public boolean has(Identifier id) {
-    return underlying.containsKey(id);
+    synchronized(underlying) {
+      return underlying.containsKey(id);
+    }
   }
 
   public CharacterResourceEntry get(Identifier id) {
-    return underlying.get(id);
+    synchronized(underlying) {
+      return underlying.get(id);
+    }
   }
 
   public void giveIfAbsent(CharacterResourceEntry resource) {
-    underlying.putIfAbsent(resource.id, resource);
-    markDirty();
+    synchronized(underlying) {
+      underlying.putIfAbsent(resource.id, resource);
+    }
+    resource.markDirty();
   }
 
   public CharacterResourceEntry remove(Identifier id) {
     CharacterResourceEntry entry = underlying.remove(id);
-    markDirty();
+    if (entry!=null) removed.add(id);
     return entry;
   }
 
   public void forEach(BiConsumer<Identifier, CharacterResourceEntry> consumer) {
-    underlying.forEach(consumer);
+    synchronized(underlying) {
+      underlying.forEach(consumer);
+    }
   }
 
-  public void markDirty() {
-    if (player instanceof ServerPlayerEntity) CottonRPGNetworking.syncAllResources((ServerPlayerEntity)player, this);
+  public boolean isDirty() {
+    if (!removed.isEmpty()) return true;
+
+    for(CharacterResourceEntry entry : underlying.values()) {
+      if (entry.isDirty()) return true;
+    }
+
+    return false;
   }
 
+  public void sync(ServerPlayerEntity player) {
+    if (!isDirty()) return;
+
+    if (!removed.isEmpty()) {
+      CottonRPGNetworking.syncAllResources(player, this);
+      removed.clear();
+    } else {
+      //TODO: Do a partial sync for just those resources.
+      CottonRPGNetworking.syncAllResources(player, this);
+    }
+  }
 }

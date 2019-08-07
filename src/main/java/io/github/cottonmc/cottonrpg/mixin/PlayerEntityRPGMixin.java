@@ -8,6 +8,7 @@ import io.github.cottonmc.cottonrpg.util.CharacterDataHolder;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,10 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityRPGMixin implements CharacterDataHolder {
   private CharacterClasses classes = new CharacterClasses((PlayerEntity)(Object)this);
-  private CharacterResources resources = new CharacterResources((PlayerEntity)(Object)this);
+  private CharacterResources resources = new CharacterResources();
   
   @Inject(at = @At("RETURN"), method = "tick")
   private void tick(CallbackInfo ci) {
+    if ((Object)this instanceof ServerPlayerEntity) {
+      resources.sync((ServerPlayerEntity)(Object)this);
+    }
     resources.forEach((id, resource) -> resource.tick());
   }
   
@@ -29,6 +33,12 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
     if (!tag.containsKey("CottonRPG")) return;
     
     CompoundTag crpg = tag.getCompound("CottonRPG");
+    if (crpg==null) {
+    	System.out.println("CottonRPG tag was the wrong type! ("+tag.getTag("CottonRPG").getClass().getSimpleName()+")");
+    	return;
+    } else {
+    	System.out.println("Unpacking tag "+crpg.asString());
+    }
     
     if (crpg.containsKey("Classes")) {
       CompoundTag cclasses = crpg.getCompound("Classes");
@@ -50,12 +60,13 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
       for (String key : cresources.getKeys()) {
         if (cresources.getType(key) == NbtType.COMPOUND) try {
           Identifier id = new Identifier(key);
-          this.resources.giveIfAbsent(new CharacterResourceEntry(id, (PlayerEntity)(Object)this));
+          this.resources.giveIfAbsent(new CharacterResourceEntry(id));
           CharacterResourceEntry entry = this.resources.get(id);
           CompoundTag cresourceBar = cresources.getCompound(key);
           entry.fromTag(cresourceBar);
         } catch (Exception e) {
           System.out.println("[CottonRPG] Couldn't read resource!");
+          e.printStackTrace();
         }
       }
     }
@@ -79,6 +90,8 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
       cresourceBars.put(id.toString(), cresourceBar);
     });
     crpg.put("Resources", cresourceBars);
+    
+    System.out.println("Saving down tag "+crpg.asString());
     
     tag.put("CottonRPG", crpg);
   }
