@@ -12,6 +12,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 
 public class CottonRPG implements ModInitializer {
+  public static final String MODID = "cottonrpg";
   public static final Registry<CharacterClass> CLASSES = new SimpleRegistry<>();
   public static final Registry<CharacterResource> RESOURCES = new SimpleRegistry<>();
 
@@ -20,10 +21,10 @@ public class CottonRPG implements ModInitializer {
     CottonRPGNetworking.init();
     CottonRPGCommands.init();
 
-    Identifier test_class = new Identifier("cotton-rpg", "test_class");
+    Identifier test_class = new Identifier(MODID, "test_class");
     Registry.register(CLASSES, test_class, new SimpleCharacterClass(test_class, 5));
-    Identifier test_resource = new Identifier("cotton-rpg", "test_resource");
-    Registry.register(RESOURCES, test_resource, new SimpleCharacterResource(test_resource, 16L, 20L, 0x00FF00, CharacterResource.ResourceVisibility.HUD));
+    Identifier test_resource = new Identifier(MODID, "test_resource");
+    Registry.register(RESOURCES, test_resource, new SimpleCharacterResource(test_resource, 15L, 20L, 4L, 0x00FF00, CharacterResource.ResourceVisibility.HUD));
     
   }
 }

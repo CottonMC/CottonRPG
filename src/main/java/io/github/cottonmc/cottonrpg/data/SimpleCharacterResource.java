@@ -11,17 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleCharacterResource implements CharacterResource {
-  private long max;
   private long def;
+  private long max;
+  private long unitsPerBar;
   private int color;
   private ResourceVisibility vis;
 
   private Identifier id;
   
-  public SimpleCharacterResource(Identifier id, long defaultValue, long maxValue, int color, ResourceVisibility vis) {
+  public SimpleCharacterResource(Identifier id, long defaultValue, long maxValue, long unitsPerBar, int color, ResourceVisibility vis) {
     this.id = id;
     this.def = defaultValue;
     this.max = maxValue;
+    this.unitsPerBar = unitsPerBar;
     this.color = color;
     this.vis = vis;
   }
@@ -29,6 +31,11 @@ public class SimpleCharacterResource implements CharacterResource {
   @Override
   public Identifier getID() {
     return id;
+  }
+
+  @Override
+  public long getUnitsPerBar() {
+    return unitsPerBar;
   }
 
   @Override

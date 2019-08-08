@@ -14,15 +14,13 @@ public interface CharacterResource {
 
   /**
    * How the resource should be displayed/synced to the user
-   * INVISIBLE: Not displayed anywhere, and not synced. Use for resources with server-side logic you don't want to display.
-   * HIDDEN: Not displayed anywhere, but synced. Use for resources with client-side logic you don't want to display.
-   * MENU: Displayed in a menu, and synced.
-   * HUD: Displayed in the HUD, and synced.
+   * INVISIBLE: Not synced to client.
+   * HIDDEN: Synced to client, but not displayed anywhere by Cotton RPG itself.
+   * HUD: Synced to client, and displayed in the HUD.
    */
   public enum ResourceVisibility {
     INVISIBLE,
     HIDDEN,
-    MENU,
     HUD
   }
 
@@ -30,6 +28,11 @@ public interface CharacterResource {
    * @return The resource identifier because we still might need to access it.
    */
   Identifier getID();
+
+  /**
+   * @return How many units can be displayed in a bar before they get boxed.
+   */
+  long getUnitsPerBar();
   
   /**
    * @return The max amount of this resource you can hold at a time when you first obtain the resource.
