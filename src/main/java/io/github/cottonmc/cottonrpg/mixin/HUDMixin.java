@@ -56,7 +56,7 @@ public class HUDMixin {
       int top = (12*(height[0]-1))+16;
 
       //draw icon
-      Identifier icon = new Identifier(id.getNamespace(), "textures/resource_icon/" + id.getPath() + ".png");
+      Identifier icon = new Identifier(id.getNamespace(), "textures/rpg_resource/" + id.getPath() + ".png");
       client.getTextureManager().bindTexture(icon);
       blit(left, top, 9, 9);
 

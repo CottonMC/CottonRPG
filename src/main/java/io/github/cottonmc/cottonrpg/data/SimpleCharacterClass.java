@@ -15,19 +15,10 @@ public class SimpleCharacterClass implements CharacterClass {
   private int maxLevel;
   private List<Text> additionalLines = new ArrayList<>();
 
-  private Identifier id;
-  
   public SimpleCharacterClass(Identifier id, int maxLevel) {
-    this.id = id;
     this.maxLevel = maxLevel;
   }
 
-  @Override
-  public Identifier getId() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
   @Override
   public int getMaxLevel() {
     return maxLevel;
@@ -41,13 +32,14 @@ public class SimpleCharacterClass implements CharacterClass {
 
   @Override
   public boolean canLevelUp(int currentLevel, PlayerEntity player) {
-    //TODO: swap to predicate system for simple?
+    //TODO: swap to prerequisites when ready
     int expCost = getExperienceCost(currentLevel);
     return player.experienceLevel >= expCost;
   }
 
   @Override
   public void applyLevelUp(int previousLevel, PlayerEntity player) {
+    //TODO: swap to functional interface when prerequisites are ready
     int expCost = getExperienceCost(previousLevel);
     player.experienceLevel -= expCost;
   }

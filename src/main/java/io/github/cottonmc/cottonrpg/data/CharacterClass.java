@@ -11,11 +11,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public interface CharacterClass {
-
-  /**
-   * @return The class identifier. Yes, we need it for both entries and components.
-   */
-  Identifier getId();
   
   /**
    * @return The max level you can obtain with this class.

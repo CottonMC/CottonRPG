@@ -2,8 +2,10 @@ package io.github.cottonmc.cottonrpg.util;
 
 import io.github.cottonmc.cottonrpg.data.*;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,6 +23,11 @@ public class CottonRPGNetworking {
 	public static final Identifier SINGLE_RESOURCE = new Identifier("cotton-rpg", "single_resource");
 
 	public static void init() {
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) initClient();
+		initServer();
+	}
+
+	public static void initClient() {
 		ClientSidePacketRegistry.INSTANCE.register(BATCH_CLASSES, (ctx, buf) -> {
 			//Unpack data on the netty thread, while the buffer is still available.
 			boolean clear = buf.readBoolean();
@@ -58,7 +65,6 @@ public class CottonRPGNetworking {
 				}
 			});
 		});
-		
 		ClientSidePacketRegistry.INSTANCE.register(BATCH_RESOURCES, (ctx, buf) -> {
 			//Unpack data on the netty thread, while the buffer is still available.
 			boolean clear = buf.readBoolean();
@@ -70,9 +76,9 @@ public class CottonRPGNetworking {
 				entry.setMax(buf.readLong());
 				read.add(entry);
 			}
-			
+
 			ctx.getTaskQueue().execute( ()->{ //DO NOT access the buffer past this point! DO NOT access the world or player before this point!
-				
+
 				//Now that worlds and players are in-scope, get the CharacterData and pour our unpacked entries into it.
 				PlayerEntity player = ctx.getPlayer();
 				CharacterData data = CharacterData.get(player);
@@ -114,10 +120,11 @@ public class CottonRPGNetworking {
 		}));
 	}
 
+	public static void initServer() {
+	}
+
 	public static boolean batchSyncClasses(ServerPlayerEntity player, CharacterClasses data, boolean syncAll) {
-		if (player.networkHandler==null) {
-			return false;
-		}
+		if (player.networkHandler==null) return false;
 
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		buf.writeBoolean(syncAll);
@@ -148,9 +155,7 @@ public class CottonRPGNetworking {
 	}
 
 	public static boolean batchSyncResources(ServerPlayerEntity player, CharacterResources data, boolean syncAll) {
-		if (player.networkHandler==null) {
-			return false;
-		}
+		if (player.networkHandler==null) return false;
 
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		buf.writeBoolean(syncAll);
@@ -180,25 +185,26 @@ public class CottonRPGNetworking {
 		return true;
 	}
 
-	public static void syncClassChange(ServerPlayerEntity player, CharacterClassEntry entry) {
+	public static boolean syncClassChange(ServerPlayerEntity player, CharacterClassEntry entry) {
+		if (player.networkHandler == null) return false;
+
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		buf.writeIdentifier(entry.id);
 		buf.writeInt(entry.getLevel());
 		buf.writeInt(entry.getExperience());
-		player.networkHandler.sendPacket(new CustomPayloadS2CPacket(SINGLE_CLASS, buf));
+		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(SINGLE_CLASS, buf));
+		return true;
 	}
 
 	public static boolean syncResourceChange(ServerPlayerEntity player, CharacterResourceEntry entry) {
-		if (player.networkHandler==null) {
-			return false;
-		}
+		if (player.networkHandler==null) return false;
 		
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		buf.writeIdentifier(entry.id);
 		buf.writeLong(entry.getCurrent());
 		buf.writeLong(entry.getMax());
 		entry.clearDirty();
-		player.networkHandler.sendPacket(new CustomPayloadS2CPacket(SINGLE_RESOURCE, buf));
+		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(SINGLE_RESOURCE, buf));
 		return true;
 	}
 }
