@@ -42,7 +42,7 @@ public class CottonRPGCommands {
                         .executes(new ClassGiveCommand())
                    )
                    .then(
-                           CommandManager.literal("remove")
+                           CommandManager.literal("take")
                         .executes(new ClassRemoveCommand())
                    )
               )
@@ -56,7 +56,7 @@ public class CottonRPGCommands {
                         .executes(new ResourceGiveCommand())
                    )
                    .then(
-                           CommandManager.literal("remove")
+                           CommandManager.literal("take")
                         .executes(new ResourceRemoveCommand())
                    )
               )

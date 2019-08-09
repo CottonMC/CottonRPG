@@ -15,7 +15,7 @@ public class SimpleCharacterClass implements CharacterClass {
   private int maxLevel;
   private List<Text> additionalLines = new ArrayList<>();
 
-  public SimpleCharacterClass(Identifier id, int maxLevel) {
+  public SimpleCharacterClass(int maxLevel) {
     this.maxLevel = maxLevel;
   }
 

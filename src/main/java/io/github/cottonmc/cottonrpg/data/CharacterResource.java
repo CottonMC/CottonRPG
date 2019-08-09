@@ -25,11 +25,6 @@ public interface CharacterResource {
   }
 
   /**
-   * @return The resource identifier because we still might need to access it.
-   */
-  Identifier getID();
-
-  /**
    * @return How many units can be displayed in a bar before they get boxed.
    */
   long getUnitsPerBar();

@@ -24,9 +24,9 @@ public class CottonRPG implements ModInitializer {
     CottonRPGCommands.init();
 
     Identifier test_class = new Identifier(MODID, "test_class");
-    Registry.register(CLASSES, test_class, new SimpleCharacterClass(test_class, 5));
+    Registry.register(CLASSES, test_class, new SimpleCharacterClass(5));
     Identifier test_resource = new Identifier(MODID, "test_resource");
-    Registry.register(RESOURCES, test_resource, new SimpleCharacterResource(test_resource, 15L, 20L, 4L, 0x00FF00, CharacterResource.ResourceVisibility.HUD));
+    Registry.register(RESOURCES, test_resource, new SimpleCharacterResource(15L, 20L, 4L, 0x00FF00, CharacterResource.ResourceVisibility.HUD));
     
   }
 }
