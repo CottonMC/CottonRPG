@@ -15,6 +15,8 @@ public class CottonRPG implements ModInitializer {
   public static final String MODID = "cottonrpg";
   public static final Registry<CharacterClass> CLASSES = new SimpleRegistry<>();
   public static final Registry<CharacterResource> RESOURCES = new SimpleRegistry<>();
+  //TODO: figure out how we want to do config
+  public static CottonRPGConfig config = new CottonRPGConfig();
 
   @Override
   public void onInitialize() {
