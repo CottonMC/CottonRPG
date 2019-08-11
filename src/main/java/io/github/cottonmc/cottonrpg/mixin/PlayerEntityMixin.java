@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityRPGMixin implements CharacterDataHolder {
+public class PlayerEntityMixin implements CharacterDataHolder {
   private CharacterClasses classes = new CharacterClasses();
   private CharacterResources resources = new CharacterResources();
   
@@ -101,5 +101,15 @@ public class PlayerEntityRPGMixin implements CharacterDataHolder {
   @Override
   public CharacterResources crpg_getResources() {
     return resources;
+  }
+
+  @Override
+  public void crpg_setClasses(CharacterClasses classes) {
+    this.classes = classes;
+  }
+
+  @Override
+  public void crpg_setResources(CharacterResources resources) {
+    this.resources = resources;
   }
 }

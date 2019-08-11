@@ -3,7 +3,8 @@
   "package": "io.github.cottonmc.cottonrpg.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-	"PlayerEntityRPGMixin"
+	"PlayerEntityMixin",
+    "ServerPlayerEntityMixin"
   ],
   "client": [
   	"HUDMixin"
