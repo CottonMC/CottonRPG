@@ -21,6 +21,7 @@ public interface SkillHandler<T> {
 			if (skill.canPerform(player, target)) {
 				CharacterSkillEntry entry = CharacterData.get(player).getSkills().get(skill);
 				skill.perform(player, entry, target);
+				entry.startCooldown();
 			}
 		}
 	}

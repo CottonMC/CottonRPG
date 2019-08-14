@@ -3,11 +3,17 @@ package io.github.cottonmc.cottonrpg.util.skill;
 import io.github.cottonmc.cottonrpg.data.CharacterSkill;
 import net.minecraft.entity.player.PlayerEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class SelfSkillHandler implements SkillHandler<PlayerEntity> {
-	private List<CharacterSkill> skills;
+public class ManualSelfSkillHandler implements SkillHandler<PlayerEntity> {
+	private List<CharacterSkill> skills = new ArrayList<>();
+
+	public void perform(PlayerEntity player) {
+		perform(player, createTarget(Collections.singleton(player)));
+	}
 
 	@Override
 	public void addSkill(CharacterSkill skill) {

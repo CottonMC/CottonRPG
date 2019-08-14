@@ -43,7 +43,7 @@ public interface CharacterSkill {
 	void perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target);
 
 	/**
-	 * @return The handler that should manage this skill, or null if this skill is only ever run manually.
+	 * @return The handler that should manage this skill.
 	 */
 	@Nullable
 	SkillHandler getHandler();

@@ -40,10 +40,7 @@ public class SimpleCharacterSkill implements CharacterSkill {
 
 	@Override
 	public void perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target) {
-		if (canPerform(player, target)) {
-			action.accept(player, entry, target);
-			entry.startCooldown();
-		}
+		action.accept(player, entry, target);
 	}
 
 	@Nullable
