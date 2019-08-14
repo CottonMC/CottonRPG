@@ -46,7 +46,7 @@ public class SimpleCharacterSkill implements CharacterSkill {
 	@Nullable
 	@Override
 	public SkillHandler getHandler() {
-		return CottonRPG.SELF_HANDLER;
+		return CottonRPG.ACTIVE_SKILLS;
 	}
 
 

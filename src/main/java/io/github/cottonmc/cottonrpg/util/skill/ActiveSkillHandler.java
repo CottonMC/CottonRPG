@@ -8,12 +8,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class ManualSelfSkillHandler implements SkillHandler<PlayerEntity> {
+/**
+ * A handler for skills that are manually, explicitly activated.
+ */
+public class ActiveSkillHandler implements SkillHandler {
 	private List<CharacterSkill> skills = new ArrayList<>();
-
-	public void perform(PlayerEntity player) {
-		perform(player, createTarget(Collections.singleton(player)));
-	}
 
 	@Override
 	public void addSkill(CharacterSkill skill) {
@@ -26,7 +25,7 @@ public class ManualSelfSkillHandler implements SkillHandler<PlayerEntity> {
 	}
 
 	@Override
-	public Target<PlayerEntity> createTarget(Collection<PlayerEntity> target) {
-		return new PlayerTarget(target);
+	public void performAll(PlayerEntity player, Target target) {
+		throw new UnsupportedOperationException("You cannot perform all active skills with a single Target object!");
 	}
 }

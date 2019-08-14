@@ -4,10 +4,9 @@ import io.github.cottonmc.cottonrpg.commands.CottonRPGCommands;
 import io.github.cottonmc.cottonrpg.data.*;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
-import io.github.cottonmc.cottonrpg.util.skill.ManualSelfSkillHandler;
+import io.github.cottonmc.cottonrpg.util.skill.ActiveSkillHandler;
 import io.github.cottonmc.cottonrpg.util.skill.SkillHandler;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -26,7 +25,7 @@ public class CottonRPG implements ModInitializer {
   public static CharacterClass TEST_CLASS;
   public static CharacterResource TEST_RESOURCE;
   public static CharacterSkill TEST_SKILL;
-  public static SkillHandler<PlayerEntity> SELF_HANDLER;
+  public static SkillHandler ACTIVE_SKILLS;
 
   @Override
   public void onInitialize() {
@@ -34,7 +33,7 @@ public class CottonRPG implements ModInitializer {
     CottonRPGCommands.init();
 
     Identifier self_handler = new Identifier(MODID, "self_handler");
-    SELF_HANDLER = Registry.register(SKILL_HANDLERS, self_handler, new ManualSelfSkillHandler());
+    ACTIVE_SKILLS = Registry.register(SKILL_HANDLERS, self_handler, new ActiveSkillHandler());
 
     Identifier test_class = new Identifier(MODID, "test_class");
     TEST_CLASS = Registry.register(CLASSES, test_class, new SimpleCharacterClass(5));

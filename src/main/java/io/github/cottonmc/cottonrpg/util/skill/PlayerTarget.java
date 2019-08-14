@@ -4,9 +4,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class PlayerTarget implements Target<PlayerEntity> {
 	private Collection<PlayerEntity> players;
+
+	public PlayerTarget(PlayerEntity player) {
+		this.players = Collections.singleton(player);
+	}
 
 	public PlayerTarget(Collection<PlayerEntity> players) {
 		this.players = players;
