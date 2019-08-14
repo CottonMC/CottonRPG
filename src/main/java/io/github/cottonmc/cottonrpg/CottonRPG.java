@@ -17,7 +17,6 @@ public class CottonRPG implements ModInitializer {
   public static final Registry<CharacterClass> CLASSES = new SimpleRegistry<>();
   public static final Registry<CharacterResource> RESOURCES = new SimpleRegistry<>();
   public static final Registry<CharacterSkill> SKILLS = new SimpleRegistry<>();
-  public static final Registry<SkillHandler> SKILL_HANDLERS = new SimpleRegistry<>();
 
   //TODO: figure out how we want to do config-wise
   public static CottonRPGConfig config = new CottonRPGConfig();
@@ -25,16 +24,13 @@ public class CottonRPG implements ModInitializer {
   public static CharacterClass TEST_CLASS;
   public static CharacterResource TEST_RESOURCE;
   public static CharacterSkill TEST_SKILL;
-  public static SkillHandler ACTIVE_SKILLS;
+  public static SkillHandler ACTIVE_SKILLS = new ActiveSkillHandler();
 
   @Override
   public void onInitialize() {
     CottonRPGNetworking.init();
     CottonRPGCommands.init();
-
-    Identifier self_handler = new Identifier(MODID, "self_handler");
-    ACTIVE_SKILLS = Registry.register(SKILL_HANDLERS, self_handler, new ActiveSkillHandler());
-
+    
     Identifier test_class = new Identifier(MODID, "test_class");
     TEST_CLASS = Registry.register(CLASSES, test_class, new SimpleCharacterClass(5));
     Identifier test_resource = new Identifier(MODID, "test_resource");
