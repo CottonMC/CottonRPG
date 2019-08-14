@@ -2,9 +2,10 @@ package io.github.cottonmc.cottonrpg.data;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
+import io.github.cottonmc.cottonrpg.util.skill.SkillHandler;
+import io.github.cottonmc.cottonrpg.util.skill.Target;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.event.Event;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -13,7 +14,7 @@ import net.minecraft.util.Identifier;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public interface CharacterSkill<T> {
+public interface CharacterSkill {
 	/**
 	 * @return How many ticks this skill takes to cool down after using.
 	 */
@@ -24,7 +25,7 @@ public interface CharacterSkill<T> {
 	 */
 	Prerequisite getRequirement();
 
-	default boolean canPerform(PlayerEntity player) {
+	default boolean canPerform(PlayerEntity player, Target<?> target) {
 		Identifier id = CottonRPG.SKILLS.getId(this);
 		CharacterSkills skills = CharacterData.get(player).getSkills();
 		if (!skills.has(id)) return false;
@@ -39,15 +40,13 @@ public interface CharacterSkill<T> {
 	/**
 	 * @return A lambda of the interface to use when running. Needs a PlayerEntity instance for checking if it's currently possible.
 	 */
-	//TODO: this always requires a `canPerform()` at the start of the lambda, is that avoidable?
-	//TODO: this always requires a manual call to `CharacterData.get(player).getSkills().get(CottonRPG.SKILLS.getId(this)).startCooldown()` at the end, is that avoidable?
-	T getCallback();
+	void perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target);
 
 	/**
-	 * @return The Event to register to, or null if there is no associated event and you want to call this manually.
+	 * @return The handler that should manage this skill, or null if this skill is only ever run manually.
 	 */
 	@Nullable
-	Event getEvent();
+	SkillHandler getHandler();
 
 	default String getTranslationKey() {
 		Identifier id = CottonRPG.SKILLS.getId(this);

@@ -1,5 +1,6 @@
 package io.github.cottonmc.cottonrpg.data;
 
+import io.github.cottonmc.cottonrpg.CottonRPG;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -27,10 +28,18 @@ public class CharacterResources {
     }
   }
 
+  public boolean has(CharacterResource resource) {
+    return has(CottonRPG.RESOURCES.getId(resource));
+  }
+
   public boolean has(Identifier id) {
     synchronized(underlying) {
       return underlying.containsKey(id);
     }
+  }
+
+  public CharacterResourceEntry get(CharacterResource resource) {
+    return get(CottonRPG.RESOURCES.getId(resource));
   }
 
   public CharacterResourceEntry get(Identifier id) {
@@ -44,6 +53,10 @@ public class CharacterResources {
       underlying.putIfAbsent(resource.id, resource);
     }
     resource.markDirty();
+  }
+
+  public CharacterResourceEntry remove(CharacterResource resource) {
+    return remove(CottonRPG.RESOURCES.getId(resource));
   }
 
   public CharacterResourceEntry remove(Identifier id) {

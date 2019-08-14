@@ -1,6 +1,7 @@
 package io.github.cottonmc.cottonrpg.data;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.util.resource.Ticker;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
 
@@ -9,6 +10,7 @@ public class CharacterResourceEntry {
   private CharacterResource res;
   private long current;
   private long max;
+  private Ticker ticker;
   private transient boolean dirty = false;
 
   public CharacterResourceEntry(Identifier id) {
@@ -16,18 +18,21 @@ public class CharacterResourceEntry {
     this.res = CottonRPG.RESOURCES.get(id);
     current = res.getDefaultLevel();
     max = res.getDefaultMaxLevel();
+    this.ticker = res.makeTicker(this);
   }
 
   public CompoundTag toTag() {
     CompoundTag tag = new CompoundTag();
     tag.putLong("CurrentLevel", current);
     tag.putLong("MaxLevel", max);
+    tag.put("Ticker", ticker.toTag());
     return tag;
   }
 
   public CharacterResourceEntry fromTag(CompoundTag tag) {
     this.current = tag.getLong("CurrentLevel");
     this.max = tag.getLong("MaxLevel");
+    this.ticker = res.makeTicker(this).fromTag(tag.getCompound("Ticker"));
      markDirty();
     return this;
   }
@@ -51,7 +56,11 @@ public class CharacterResourceEntry {
   }
   
   public void tick() {
-    res.tick(this);
+    ticker.tick(this);
+    if (ticker.isDirty()) {
+      markDirty();
+      ticker.clearDirty();
+    }
   }
   
   public void markDirty() {

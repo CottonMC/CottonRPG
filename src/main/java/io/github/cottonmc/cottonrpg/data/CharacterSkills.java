@@ -1,5 +1,6 @@
 package io.github.cottonmc.cottonrpg.data;
 
+import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -26,10 +27,18 @@ public class CharacterSkills {
 		}
 	}
 
+	public boolean has(CharacterSkill skill) {
+		return has(CottonRPG.SKILLS.getId(skill));
+	}
+
 	public boolean has(Identifier id) {
 		synchronized(underlying) {
 			return underlying.containsKey(id);
 		}
+	}
+
+	public CharacterSkillEntry get(CharacterSkill skill) {
+		return get(CottonRPG.SKILLS.getId(skill));
 	}
 
 	public CharacterSkillEntry get(Identifier id) {
@@ -43,6 +52,10 @@ public class CharacterSkills {
 			underlying.putIfAbsent(skill.id, skill);
 		}
 		skill.markDirty();
+	}
+
+	public CharacterSkillEntry remove(CharacterSkill skill) {
+		return remove(CottonRPG.SKILLS.getId(skill));
 	}
 
 	public CharacterSkillEntry remove(Identifier id) {

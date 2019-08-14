@@ -1,12 +1,13 @@
 package io.github.cottonmc.cottonrpg.data;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.util.resource.SimpeTicker;
+import io.github.cottonmc.cottonrpg.util.resource.Ticker;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,12 @@ public class SimpleCharacterResource implements CharacterResource {
   }
 
   @Override
+  public Ticker makeTicker(CharacterResourceEntry entry) {
+    //regen by one every tick
+    return new SimpeTicker(1, e -> e.setCurrent(e.getMax() + 1), e -> e.getCurrent() < e.getMax());
+  }
+
+  @Override
   public List<Text> getDescription() {
     List<Text> lines = new ArrayList<>();
     Identifier id = CottonRPG.RESOURCES.getId(this);
@@ -62,10 +69,5 @@ public class SimpleCharacterResource implements CharacterResource {
       }
     }
     return lines;
-  }
-
-  @Override
-  public void tick(CharacterResourceEntry entry) {
-    //do nothing
   }
 }
