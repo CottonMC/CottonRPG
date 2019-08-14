@@ -4,10 +4,12 @@ import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.Event;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface CharacterSkill<T> {
@@ -22,10 +24,15 @@ public interface CharacterSkill<T> {
 	Prerequisite getRequirement();
 
 	/**
-	 * Perform this skill's action.
-	 * @return A lambda of the event callback to use.
+	 * @return A lambda of the interface to use when running. Needs a PlayerEntity instance for checking if it's currently possible.
 	 */
-	T perform();
+	T getCallback();
+
+	/**
+	 * @return The Event to register to, or null if there is no associated event and you want to call this manually.
+	 */
+	@Nullable
+	Event getEvent();
 
 	default String getTranslationKey() {
 		Identifier id = CottonRPG.SKILLS.getId(this);
