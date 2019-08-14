@@ -11,7 +11,6 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public interface CharacterSkill {
@@ -25,6 +24,17 @@ public interface CharacterSkill {
 	 */
 	Prerequisite getRequirement();
 
+	/**
+	 * @param player The player attempting to perform a skill.
+	 * @return The targets this skill can affect.
+	 */
+	Target<?> createTarget(PlayerEntity player);
+
+	/**
+	 * @param player The player attempting to perform a skill.
+	 * @param target The potential targets for this skill.
+	 * @return Whether this skill can be performed under these circumstances.
+	 */
 	default boolean canPerform(PlayerEntity player, Target<?> target) {
 		Identifier id = CottonRPG.SKILLS.getId(this);
 		CharacterSkills skills = CharacterData.get(player).getSkills();
@@ -43,9 +53,8 @@ public interface CharacterSkill {
 	void perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target);
 
 	/**
-	 * @return The handler that should manage this skill.
+	 * @return The skill handler that should manage this skill.
 	 */
-	@Nullable
 	SkillHandler getHandler();
 
 	default String getTranslationKey() {

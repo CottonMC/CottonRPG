@@ -5,7 +5,6 @@ import io.github.cottonmc.cottonrpg.data.CharacterSkill;
 import io.github.cottonmc.cottonrpg.data.CharacterSkillEntry;
 import net.minecraft.entity.player.PlayerEntity;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface SkillHandler<T> {
@@ -14,10 +13,9 @@ public interface SkillHandler<T> {
 
 	List<CharacterSkill> getSkills();
 
-	Target<T> createTarget(Collection<T> target);
-
-	default void perform(PlayerEntity player, Target<T> target) {
+	default void perform(PlayerEntity player) {
 		for (CharacterSkill skill : getSkills()) {
+			Target target = skill.createTarget(player);
 			if (skill.canPerform(player, target)) {
 				CharacterSkillEntry entry = CharacterData.get(player).getSkills().get(skill);
 				skill.perform(player, entry, target);
