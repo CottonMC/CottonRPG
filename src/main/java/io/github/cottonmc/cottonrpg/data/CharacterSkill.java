@@ -5,6 +5,7 @@ import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -23,9 +24,23 @@ public interface CharacterSkill<T> {
 	 */
 	Prerequisite getRequirement();
 
+	default boolean canPerform(PlayerEntity player) {
+		Identifier id = CottonRPG.SKILLS.getId(this);
+		CharacterSkills skills = CharacterData.get(player).getSkills();
+		if (!skills.has(id)) return false;
+		CharacterSkillEntry entry = skills.get(id);
+		return entry.getCooldown() <= 0;
+	}
+
+	default void tick(CharacterSkillEntry entry) {
+		if (entry.getCooldown() > 0) entry.setCooldown(entry.getCooldown() - 1);
+	}
+
 	/**
 	 * @return A lambda of the interface to use when running. Needs a PlayerEntity instance for checking if it's currently possible.
 	 */
+	//TODO: this always requires a `canPerform()` at the start of the lambda, is that avoidable?
+	//TODO: this always requires a manual call to `CharacterData.get(player).getSkills().get(CottonRPG.SKILLS.getId(this)).startCooldown()` at the end, is that avoidable?
 	T getCallback();
 
 	/**

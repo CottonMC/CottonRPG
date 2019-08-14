@@ -8,6 +8,8 @@ import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.CharacterResource;
 import io.github.cottonmc.cottonrpg.data.CharacterResources;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
@@ -18,22 +20,39 @@ import net.minecraft.util.Identifier;
 public interface Prerequisite {
   boolean isOkay(PlayerEntity player);
   
-  String getDescription();
+  Text getDescription();
   Prerequisite[] getChildren();
   
-  public default List<String> describe() {
-    List<String> text = new ArrayList<>();
+  public default List<Text> describe() {
+    List<Text> text = new ArrayList<>();
     text.add(getDescription());
     Prerequisite[] children = getChildren();
     if (children != null) {
       for (int i = 0; i < children.length; ++i) {
-        List<String> lines = children[i].describe();
-        for (String line : lines) {
-          text.add("  " + line);
+        List<Text> lines = children[i].describe();
+        for (Text line : lines) {
+          text.add(new LiteralText("  " + line));
         }
       }
     }
     return text;
+  }
+
+  public static class True implements Prerequisite {
+    @Override
+    public boolean isOkay(PlayerEntity player) {
+      return true;
+    }
+
+    @Override
+    public Text getDescription() {
+      return new TranslatableText("prereq.cottonrpg.true");
+    }
+
+    @Override
+    public Prerequisite[] getChildren() {
+      return new Prerequisite[0];
+    }
   }
   
   public static class All implements Prerequisite {
@@ -59,8 +78,8 @@ public interface Prerequisite {
     }
     
     @Override
-    public String getDescription() {
-      return new TranslatableText("prereq.cottonrpg.all").asString();
+    public Text getDescription() {
+      return new TranslatableText("prereq.cottonrpg.all");
     }
   }
   
@@ -87,8 +106,8 @@ public interface Prerequisite {
     }
     
     @Override
-    public String getDescription() {
-      return new TranslatableText("prereq.cottonrpg.any").asString();
+    public Text getDescription() {
+      return new TranslatableText("prereq.cottonrpg.any");
     }
   }
   
@@ -110,8 +129,8 @@ public interface Prerequisite {
     }
     
     @Override
-    public String getDescription() {
-      return new TranslatableText("prereq.cottonrpg.not").asString();
+    public Text getDescription() {
+      return new TranslatableText("prereq.cottonrpg.not");
     }
   }
   
@@ -135,12 +154,12 @@ public interface Prerequisite {
     }
     
     @Override
-    public String getDescription() {
+    public Text getDescription() {
       return new TranslatableText(
         "prereq.cottonrpg.wants_resource",
         CottonRPG.RESOURCES.get(resourceId).getName().asString(),
         amount
-      ).asString();
+      );
     }
   }
 }

@@ -38,11 +38,11 @@ public class CharacterClasses {
     }
   }
 
-  public void giveIfAbsent(CharacterClassEntry resource) {
+  public void giveIfAbsent(CharacterClassEntry clazz) {
     synchronized(underlying) {
-      underlying.putIfAbsent(resource.id, resource);
+      underlying.putIfAbsent(clazz.id, clazz);
     }
-    resource.markDirty();
+    clazz.markDirty();
   }
 
   public CharacterClassEntry remove(Identifier id) {

@@ -15,5 +15,6 @@ public class ServerPlayerEntityMixin {
 	private void copyPlayerData(ServerPlayerEntity player, boolean keepAll, CallbackInfo ci) {
 		((CharacterDataHolder)this).crpg_setClasses(CharacterData.get(player).getClasses());
 		((CharacterDataHolder)this).crpg_setResources(CharacterData.get(player).getResources());
+		((CharacterDataHolder)this).crpg_setSkills(CharacterData.get(player).getSkills());
 	}
 }

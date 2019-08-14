@@ -1,9 +1,6 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
-import io.github.cottonmc.cottonrpg.data.CharacterClassEntry;
-import io.github.cottonmc.cottonrpg.data.CharacterClasses;
-import io.github.cottonmc.cottonrpg.data.CharacterResourceEntry;
-import io.github.cottonmc.cottonrpg.data.CharacterResources;
+import io.github.cottonmc.cottonrpg.data.*;
 import io.github.cottonmc.cottonrpg.util.CharacterDataHolder;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,14 +16,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerEntityMixin implements CharacterDataHolder {
   private CharacterClasses classes = new CharacterClasses();
   private CharacterResources resources = new CharacterResources();
+  private CharacterSkills skills = new CharacterSkills();
   
   @Inject(at = @At("RETURN"), method = "tick")
   private void tick(CallbackInfo ci) {
     if (((Object)this) instanceof ServerPlayerEntity) {
       resources.sync((ServerPlayerEntity)(Object)this);
       classes.sync((ServerPlayerEntity)(Object)this);
+      skills.sync((ServerPlayerEntity)(Object)this);
     }
     resources.forEach((id, resource) -> resource.tick());
+    skills.forEach((id, skill) -> skill.tick());
   }
   
   @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromTag(Lnet/minecraft/nbt/CompoundTag;)V")
@@ -69,6 +69,21 @@ public class PlayerEntityMixin implements CharacterDataHolder {
         }
       }
     }
+
+    if (crpg.containsKey("Skills")) {
+      CompoundTag cskills = crpg.getCompound("Skills");
+      for (String key : cskills.getKeys()) {
+        if (cskills.getType(key) == NbtType.COMPOUND) try {
+          Identifier id = new Identifier(key);
+          this.skills.giveIfAbsent(new CharacterSkillEntry(id));
+          CharacterSkillEntry entry = this.skills.get(id);
+          CompoundTag cskill = cskills.getCompound(key);
+          entry.fromTag(cskill);
+        } catch (Exception e) {
+          System.out.println("[CottonRPG] Couldn't read skill!");
+        }
+      }
+    }
     
   }
   
@@ -90,6 +105,13 @@ public class PlayerEntityMixin implements CharacterDataHolder {
     });
     crpg.put("Resources", cresourceBars);
 
+    CompoundTag cskills = new CompoundTag();
+    skills.forEach((id, entry) -> {
+      CompoundTag cskill = entry.toTag();
+      cskills.put(id.toString(), cskill);
+    });
+    crpg.put("Skills", cskills);
+
     tag.put("CottonRPG", crpg);
   }
 
@@ -104,6 +126,11 @@ public class PlayerEntityMixin implements CharacterDataHolder {
   }
 
   @Override
+  public CharacterSkills crpg_getSkills() {
+    return skills;
+  }
+
+  @Override
   public void crpg_setClasses(CharacterClasses classes) {
     this.classes = classes;
   }
@@ -111,5 +138,10 @@ public class PlayerEntityMixin implements CharacterDataHolder {
   @Override
   public void crpg_setResources(CharacterResources resources) {
     this.resources = resources;
+  }
+
+  @Override
+  public void crpg_setSkills(CharacterSkills skills) {
+    this.skills = skills;
   }
 }

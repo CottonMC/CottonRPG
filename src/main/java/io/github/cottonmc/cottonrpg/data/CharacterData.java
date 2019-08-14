@@ -20,6 +20,8 @@ public class CharacterData {
     return holder.crpg_getResources();
   }
 
-  //TODO: skills
+  public CharacterSkills getSkills() {
+    return holder.crpg_getSkills();
+  }
   
 }
