@@ -45,7 +45,7 @@ public class SimpleCharacterClass implements CharacterClass {
   }
 
   @Override
-  public List<Text> getClassDescription() {
+  public List<Text> getDescription() {
     List<Text> lines = new ArrayList<>();
     Identifier id = CottonRPG.CLASSES.getId(this);
     if (id != null) {

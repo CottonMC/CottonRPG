@@ -44,7 +44,7 @@ public interface CharacterClass {
    * @return The lines of description to display in the character sheet. Will be auto-wrapped.
    */
   @Environment(EnvType.CLIENT)
-  List<Text> getClassDescription();
+  List<Text> getDescription();
 
   /**
    * Allow other mods to add description if they use your player class.
