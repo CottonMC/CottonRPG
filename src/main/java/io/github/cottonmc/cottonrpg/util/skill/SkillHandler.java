@@ -3,6 +3,7 @@ package io.github.cottonmc.cottonrpg.util.skill;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.CharacterSkill;
 import io.github.cottonmc.cottonrpg.data.CharacterSkillEntry;
+import io.github.cottonmc.cottonrpg.data.CharacterSkills;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.List;
@@ -27,8 +28,9 @@ public interface SkillHandler<T> {
 	 * @param skill The skill to perform.
 	 */
 	default void perform(PlayerEntity player, Target<T> target, CharacterSkill skill) {
-		if (skill.canPerform(player, target)) {
-			CharacterSkillEntry entry = CharacterData.get(player).getSkills().get(skill);
+		CharacterSkills skills = CharacterData.get(player).getSkills();
+		if (skills.has(skill) && skill.canPerform(player, target)) {
+			CharacterSkillEntry entry = skills.get(skill);
 			skill.perform(player, entry, target);
 			entry.startCooldown();
 		}
@@ -41,11 +43,7 @@ public interface SkillHandler<T> {
 	 */
 	default void performAll(PlayerEntity player, Target<T> target) {
 		for (CharacterSkill skill : getSkills()) {
-			if (skill.canPerform(player, target)) {
-				CharacterSkillEntry entry = CharacterData.get(player).getSkills().get(skill);
-				skill.perform(player, entry, target);
-				entry.startCooldown();
-			}
+			perform(player, target, skill);
 		}
 	}
 }
