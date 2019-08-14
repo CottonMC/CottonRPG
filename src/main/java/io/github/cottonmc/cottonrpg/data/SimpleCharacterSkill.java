@@ -2,7 +2,6 @@ package io.github.cottonmc.cottonrpg.data;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
-import io.github.cottonmc.cottonrpg.util.skill.PlayerTarget;
 import io.github.cottonmc.cottonrpg.util.skill.SkillHandler;
 import io.github.cottonmc.cottonrpg.util.skill.Target;
 import net.minecraft.client.resource.language.I18n;
@@ -12,18 +11,18 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.util.TriConsumer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-public class SimpleSelfTargetSkill implements CharacterSkill {
+public class SimpleCharacterSkill implements CharacterSkill {
 	private int cooldown;
 	private Prerequisite prereq;
-	private List<Text> additionalLines = new ArrayList<>();
+	private List<Text> additionalLines;
 	private TriConsumer<PlayerEntity, CharacterSkillEntry, Target<?>> action;
 
-	public SimpleSelfTargetSkill(int cooldown, Prerequisite prereq, TriConsumer<PlayerEntity, CharacterSkillEntry, Target<?>> action) {
+	public SimpleCharacterSkill(int cooldown, Prerequisite prereq, TriConsumer<PlayerEntity, CharacterSkillEntry, Target<?>> action) {
 		this.cooldown = cooldown;
 		this.prereq = prereq;
 		this.action = action;
@@ -40,19 +39,16 @@ public class SimpleSelfTargetSkill implements CharacterSkill {
 	}
 
 	@Override
-	public Target<?> createTarget(PlayerEntity player) {
-		return new PlayerTarget(Collections.singleton(player));
-	}
-
-	@Override
 	public void perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target) {
 		action.accept(player, entry, target);
 	}
 
+	@Nullable
 	@Override
 	public SkillHandler getHandler() {
 		return CottonRPG.SELF_HANDLER;
 	}
+
 
 	@Override
 	public List<Text> getDescription() {
