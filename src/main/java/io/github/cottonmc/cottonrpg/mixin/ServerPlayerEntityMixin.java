@@ -1,7 +1,7 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
 import io.github.cottonmc.cottonrpg.data.CharacterData;
-import io.github.cottonmc.cottonrpg.util.CharacterDataHolder;
+import io.github.cottonmc.cottonrpg.data.CharacterDataHolder;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

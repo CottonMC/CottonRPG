@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data;
+package io.github.cottonmc.cottonrpg.data.resource;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -83,8 +83,8 @@ public class CharacterResources {
 		return false;
 	}
 
-	/** Returns a shallow defensive copy of all the resources managed by this object. Don't modify the
-	 * returned resources unless you know what you're doing! */
+	/** Returns a shallow defensive copy of all the resource managed by this object. Don't modify the
+	 * returned resource unless you know what you're doing! */
 	public Map<Identifier, CharacterResourceEntry> getAll() {
 		return ImmutableMap.copyOf(underlying);
 	}

@@ -1,8 +1,8 @@
-package io.github.cottonmc.cottonrpg.data;
+package io.github.cottonmc.cottonrpg.data.skill;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
-import io.github.cottonmc.cottonrpg.util.skill.Target;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;

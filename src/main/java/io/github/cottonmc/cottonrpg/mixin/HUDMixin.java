@@ -3,7 +3,7 @@ package io.github.cottonmc.cottonrpg.mixin;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
-import io.github.cottonmc.cottonrpg.data.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.BufferBuilder;

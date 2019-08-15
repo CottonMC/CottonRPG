@@ -1,8 +1,7 @@
-package io.github.cottonmc.cottonrpg.data;
+package io.github.cottonmc.cottonrpg.data.skill;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
-import io.github.cottonmc.cottonrpg.util.skill.Target;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;

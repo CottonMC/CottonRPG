@@ -1,6 +1,5 @@
-package io.github.cottonmc.cottonrpg.util.resource;
+package io.github.cottonmc.cottonrpg.data.resource;
 
-import io.github.cottonmc.cottonrpg.data.CharacterResourceEntry;
 import net.minecraft.nbt.CompoundTag;
 
 public interface Ticker {

@@ -1,7 +1,12 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
-import io.github.cottonmc.cottonrpg.data.*;
-import io.github.cottonmc.cottonrpg.util.CharacterDataHolder;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClassEntry;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
+import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
+import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
+import io.github.cottonmc.cottonrpg.data.skill.CharacterSkillEntry;
+import io.github.cottonmc.cottonrpg.data.skill.CharacterSkills;
+import io.github.cottonmc.cottonrpg.data.CharacterDataHolder;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;

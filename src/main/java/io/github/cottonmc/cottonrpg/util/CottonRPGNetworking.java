@@ -1,6 +1,12 @@
 package io.github.cottonmc.cottonrpg.util;
 
 import io.github.cottonmc.cottonrpg.data.*;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClassEntry;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
+import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
+import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
+import io.github.cottonmc.cottonrpg.data.skill.CharacterSkillEntry;
+import io.github.cottonmc.cottonrpg.data.skill.CharacterSkills;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;

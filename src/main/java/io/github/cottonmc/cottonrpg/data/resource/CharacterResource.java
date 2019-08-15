@@ -1,7 +1,6 @@
-package io.github.cottonmc.cottonrpg.data;
+package io.github.cottonmc.cottonrpg.data.resource;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.util.resource.Ticker;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;

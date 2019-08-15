@@ -1,7 +1,12 @@
 package io.github.cottonmc.cottonrpg;
 
 import io.github.cottonmc.cottonrpg.commands.CottonRPGCommands;
-import io.github.cottonmc.cottonrpg.data.*;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClass;
+import io.github.cottonmc.cottonrpg.data.clazz.SimpleCharacterClass;
+import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.resource.SimpleCharacterResource;
+import io.github.cottonmc.cottonrpg.data.skill.CharacterSkill;
+import io.github.cottonmc.cottonrpg.data.skill.SimpleCharacterSkill;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
 import net.fabricmc.api.ModInitializer;

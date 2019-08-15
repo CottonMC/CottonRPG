@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data;
+package io.github.cottonmc.cottonrpg.data.clazz;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import net.minecraft.client.resource.language.I18n;

@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.util.skill;
+package io.github.cottonmc.cottonrpg.data.skill;
 
 import net.minecraft.util.math.BlockPos;
 

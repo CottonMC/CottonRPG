@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data;
+package io.github.cottonmc.cottonrpg.data.clazz;
 
 import java.util.List;
 

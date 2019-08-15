@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterClass;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClass;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;

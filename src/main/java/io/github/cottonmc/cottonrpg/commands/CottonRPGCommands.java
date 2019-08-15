@@ -25,7 +25,7 @@ public class CottonRPGCommands {
 								.executes(new DiceRollCommand())
 				)
 				.then(
-						CommandManager.literal("classes")
+						CommandManager.literal("clazz")
 								.executes(new ClassesCommand())
 				)
 				.then(
