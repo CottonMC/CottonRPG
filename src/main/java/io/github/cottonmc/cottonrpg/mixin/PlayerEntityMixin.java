@@ -24,9 +24,9 @@ public class PlayerEntityMixin implements CharacterDataHolder {
       resources.sync((ServerPlayerEntity)(Object)this);
       classes.sync((ServerPlayerEntity)(Object)this);
       skills.sync((ServerPlayerEntity)(Object)this);
+      resources.forEach((id, resource) -> resource.tick());
+      skills.forEach((id, skill) -> skill.tick());
     }
-    resources.forEach((id, resource) -> resource.tick());
-    skills.forEach((id, skill) -> skill.tick());
   }
   
   @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromTag(Lnet/minecraft/nbt/CompoundTag;)V")

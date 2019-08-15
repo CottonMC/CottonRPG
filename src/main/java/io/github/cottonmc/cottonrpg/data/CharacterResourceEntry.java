@@ -43,7 +43,7 @@ public class CharacterResourceEntry {
 
   public void setCurrent(long l) {
     markDirty();
-    this.current = l;
+    this.current = Math.min(l, getMax());
   }
   
   public long getMax() {

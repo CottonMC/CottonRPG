@@ -60,7 +60,7 @@ public class HUDMixin {
       int boxes = (int)(entry.getMax() / resource.getUnitsPerBar()) - 1;
       boolean needsPlus = boxes > 36;
       long rows = (Math.min(boxes, 35) / 12) + 1;
-      int fullBoxes = (int)(entry.getCurrent() / resource.getUnitsPerBar()) - 1;
+      int fullBoxes = (int)((entry.getCurrent()-1) / resource.getUnitsPerBar());
       boolean plusOn = fullBoxes > 36;
 
       if (!CottonRPG.config.bigResourceBars) {
@@ -70,7 +70,7 @@ public class HUDMixin {
         if (remainder == 0) remainder = resource.getUnitsPerBar();
         int bgLength = (int) (((float) aboveLastBox / (float) resource.getUnitsPerBar()) * 62F);
         int fgLength = (int) (((float) remainder / (float) aboveLastBox) * bgLength);
-        if (fgLength == 0) fgLength = 1;
+        if (fgLength == 0) fgLength = entry.getCurrent() == 0? 0 : 1;
 
         //bar BG: left edge, middle, right edge
         blit(left, top, 1, 5, texUV(0), texUV(0), texUV(1), texUV(5));

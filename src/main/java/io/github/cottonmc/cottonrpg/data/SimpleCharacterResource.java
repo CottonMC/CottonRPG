@@ -15,13 +15,15 @@ public class SimpleCharacterResource implements CharacterResource {
   private long def;
   private long max;
   private long unitsPerBar;
+  private int ticksPerUnit;
   private int color;
   private ResourceVisibility vis;
 
-  public SimpleCharacterResource(long defaultValue, long maxValue, long unitsPerBar, int color, ResourceVisibility vis) {
+  public SimpleCharacterResource(long defaultValue, long maxValue, long unitsPerBar, int ticksPerUnit, int color, ResourceVisibility vis) {
     this.def = defaultValue;
     this.max = maxValue;
     this.unitsPerBar = unitsPerBar;
+    this.ticksPerUnit = ticksPerUnit;
     this.color = color;
     this.vis = vis;
   }
@@ -53,8 +55,8 @@ public class SimpleCharacterResource implements CharacterResource {
 
   @Override
   public Ticker makeTicker(CharacterResourceEntry entry) {
-    //regen by one every tick
-    return new SimpeTicker(1, e -> e.setCurrent(e.getMax() + 1), e -> e.getCurrent() < e.getMax());
+    //regen by one every <ticksPerUnit> ticks.
+    return new SimpeTicker(ticksPerUnit, e -> e.setCurrent(e.getCurrent() + 1), e -> e.getCurrent() < e.getMax());
   }
 
   @Override
