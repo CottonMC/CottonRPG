@@ -2,7 +2,6 @@ package io.github.cottonmc.cottonrpg.data;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
-import io.github.cottonmc.cottonrpg.util.skill.SkillHandler;
 import io.github.cottonmc.cottonrpg.util.skill.Target;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,7 +10,6 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public interface CharacterSkill {
@@ -25,6 +23,11 @@ public interface CharacterSkill {
 	 */
 	Prerequisite getRequirement();
 
+	/**
+	 * @param player The player attempting to perform a skill.
+	 * @param target The target of the skill to perform.
+	 * @return Whether the player can currently perform the skill.
+	 */
 	default boolean canPerform(PlayerEntity player, Target<?> target) {
 		Identifier id = CottonRPG.SKILLS.getId(this);
 		CharacterSkills skills = CharacterData.get(player).getSkills();
@@ -33,20 +36,21 @@ public interface CharacterSkill {
 		return entry.getCooldown() <= 0;
 	}
 
+	/**
+	 * Ticks the cooldown of this skill.
+	 * @param entry The entry form of the skill.
+	 */
 	default void tick(CharacterSkillEntry entry) {
 		if (entry.getCooldown() > 0) entry.setCooldown(entry.getCooldown() - 1);
 	}
 
 	/**
-	 * @return A lambda of the interface to use when running. Needs a PlayerEntity instance for checking if it's currently possible.
+	 * Perform a skill.
+	 * @param player The player performing the skill.
+	 * @param target The target being performed on.
+	 * @return Whether the skill succeeded or not.
 	 */
-	void perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target);
-
-	/**
-	 * @return The handler that should manage this skill.
-	 */
-	@Nullable
-	SkillHandler getHandler();
+	boolean perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target);
 
 	default String getTranslationKey() {
 		Identifier id = CottonRPG.SKILLS.getId(this);
