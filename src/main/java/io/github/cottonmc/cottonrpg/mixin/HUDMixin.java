@@ -70,20 +70,17 @@ public class HUDMixin {
 			long rows = 1;
 			
 			if (!CottonRPG.config.bigResourceBars) {
-				
-				
+
 				int boxes = (int)(entry.getMax() / resource.getUnitsPerBar()) - 1;
 				rows += (Math.min(boxes, 35) / 12);
-				
-				
-				
+
 				double toDistribute = entry.getCurrentForRender();
 				long fullBoxes = (long)toDistribute / resource.getUnitsPerBar();
 				if (fullBoxes>boxes) fullBoxes = boxes;
 				
 				long barMaxAmount = resource.getUnitsPerBar();
 				if (fullBoxes==boxes) {
-					barMaxAmount = entry.getMax() - (long)(fullBoxes*resource.getUnitsPerBar());
+					barMaxAmount = entry.getMax() - (fullBoxes*resource.getUnitsPerBar());
 					if (barMaxAmount==0) {
 						fullBoxes--;
 						barMaxAmount = resource.getUnitsPerBar(); //One full bar retrieved back from boxes
@@ -164,19 +161,20 @@ public class HUDMixin {
 						} else {
 							toDraw = boxesLeft;
 						}
+
 						//first box
-						blit(left, newTop, 6, 5, texUV(0), texUV(15), texUV(6), texUV(20));
+						guiRect(left, newTop, 6, 5, 0, 15);
 						int newLeft = left + 5;
 						//the rest of the boxes
 						for (int j = 1; j < toDraw; j++) {
-							blit(newLeft, newTop, 6, 5, texUV(6), texUV(15), texUV(12), texUV(20));
+							guiRect(newLeft, newTop, 6, 5, 6, 15);
 							newLeft += 5;
 						}
 						if (plusOn) {
 							if (i < 2) {
-								blit(newLeft, newTop, 3, 5, texUV(19), texUV(15), texUV(22), texUV(20));
+								guiRect(newLeft, newTop, 3, 5, 19, 15);
 							} else {
-								blit(newLeft, newTop, 5, 5, texUV(22), texUV(15), texUV(27), texUV(20));
+								guiRect(newLeft, newTop, 5, 5, 22, 15);
 							}
 						}
 						newTop += 4;
@@ -184,16 +182,19 @@ public class HUDMixin {
 				}
 			} else {
 				//bar BG: left edge, middle, right edge
-				blit(left, top, 1, 9, texUV(0), texUV(20), texUV(1), texUV(29));
-				blit(left + 1, top, 62, 9, texUV(1), texUV(20), texUV(63), texUV(29));
-				blit(left + 63, top, 1, 9, texUV(63), texUV(20), texUV(64), texUV(29));
+				guiRect(left, top, 1, 9, 0, 20);
+				guiRect(left + 1, top, CRPG_FULL_BAR_WIDTH, 9, 1, 20);
+				guiRect(left + 63, top, 1, 9, 63, 20);
+
+				double toRender = entry.getCurrentForRender();
 
 				GlStateManager.color4f(r, g, b, 1.0f);
-				int fgLength = (int)(((float)entry.getCurrent() / (float)entry.getMax()) * 62f);
+				int fgWidth = (int)((toRender / (float)entry.getMax()) * CRPG_FULL_BAR_WIDTH);
+				if (toRender>0 && fgWidth<=0) fgWidth=1; //never display an empty bar for *some* health
 				//bar FG: left edge, middle, right edge
-				blit(left, top, 1, 9, texUV(0), texUV(29), texUV(1), texUV(38));
-				blit(left + 1, top, fgLength, 9, texUV(1), texUV(29), texUV(fgLength + 1), texUV(38));
-				blit(left + fgLength + 1, top, 1, 9, texUV(63), texUV(29), texUV(64), texUV(38));
+				guiRect(left, top, 1, 9, 0, 29);
+				guiRect(left + 1, top, fgWidth, 9, 1, 29);
+				guiRect(left + fgWidth + 1, top, 1, 9, 63, 29);
 			}
 
 			// Increment
