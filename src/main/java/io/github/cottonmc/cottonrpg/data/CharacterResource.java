@@ -13,67 +13,67 @@ import java.util.List;
  */
 public interface CharacterResource {
 
-  /**
-   * How the resource should be displayed/synced to the user
-   * INVISIBLE: Not synced to client.
-   * HIDDEN: Synced to client, but not displayed in Cotton RPG's HUD mixins.
-   * HUD: Synced to client, and displayed in the HUD.
-   */
-  public enum ResourceVisibility {
-    INVISIBLE,
-    HIDDEN,
-    HUD
-  }
+	/**
+	 * How the resource should be displayed/synced to the user
+	 * INVISIBLE: Not synced to client.
+	 * HIDDEN: Synced to client, but not displayed in Cotton RPG's HUD mixins.
+	 * HUD: Synced to client, and displayed in the HUD.
+	 */
+	public enum ResourceVisibility {
+		INVISIBLE,
+		HIDDEN,
+		HUD
+	}
 
-  /**
-   * @return How many units can be displayed in a bar before they get boxed.
-   */
-  long getUnitsPerBar();
-  
-  /**
-   * @return The max amount of this resource you can hold at a time when you first obtain the resource.
-   */
-  long getDefaultMaxLevel();
+	/**
+	 * @return How many units can be displayed in a bar before they get boxed.
+	 */
+	long getUnitsPerBar();
 
-  /**
-   * @return How much of this resourse you start with when you spawn.
-   */
-  long getDefaultLevel();
+	/**
+	 * @return The max amount of this resource you can hold at a time when you first obtain the resource.
+	 */
+	long getDefaultMaxLevel();
 
-  /**
-   * @return the color of the bar to display, in RGB format.
-   */
-  int getColor();
+	/**
+	 * @return How much of this resourse you start with when you spawn.
+	 */
+	long getDefaultLevel();
 
-  /**
-   * @return The visibility of the resource to the player.
-   */
-  ResourceVisibility getVisibility();
+	/**
+	 * @return the color of the bar to display, in RGB format.
+	 */
+	int getColor();
 
-  /**
-   * @param entry The entry on this player.
-   * @return A Ticker to manage what should happen to this resource every tick.
-   */
-  Ticker makeTicker(CharacterResourceEntry entry);
+	/**
+	 * @return The visibility of the resource to the player.
+	 */
+	ResourceVisibility getVisibility();
 
-  /**
-   * @return The translation key for this resource. Typically at `resource.<namespace>.<path>`.
-   */
-  default String getTranslationKey() {
-    Identifier id = CottonRPG.RESOURCES.getId(this);
-    return "resource." + id.getNamespace() + "." + id.getPath();
-  }
+	/**
+	 * @param entry The entry on this player.
+	 * @return A Ticker to manage what should happen to this resource every tick.
+	 */
+	Ticker makeTicker(CharacterResourceEntry entry);
 
-  /**
-   * @return The name of this resource to be displayed in a gui.
-   */
-  default Text getName() {
-    return new TranslatableText(getTranslationKey());
-  }
+	/**
+	 * @return The translation key for this resource. Typically at `resource.<namespace>.<path>`.
+	 */
+	default String getTranslationKey() {
+		Identifier id = CottonRPG.RESOURCES.getId(this);
+		return "resource." + id.getNamespace() + "." + id.getPath();
+	}
 
-  /**
-   * @return Lines of text to be put in a gui.
-   */
-  List<Text> getDescription();
+	/**
+	 * @return The name of this resource to be displayed in a gui.
+	 */
+	default Text getName() {
+		return new TranslatableText(getTranslationKey());
+	}
+
+	/**
+	 * @return Lines of text to be put in a gui.
+	 */
+	List<Text> getDescription();
 
 }

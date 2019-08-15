@@ -14,89 +14,89 @@ import com.google.common.collect.ImmutableMap;
 import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
 
 public class CharacterResources {
-  private ArrayList<Identifier> removed = new ArrayList<>();
+	private ArrayList<Identifier> removed = new ArrayList<>();
 
-  private final Map<Identifier, CharacterResourceEntry> underlying = new HashMap<>();
+	private final Map<Identifier, CharacterResourceEntry> underlying = new HashMap<>();
 
-  public int getSize() {
-    synchronized(underlying) {
-      return underlying.size();
-    }
-  }
+	public int getSize() {
+		synchronized(underlying) {
+			return underlying.size();
+		}
+	}
 
-  public void clear() {
-    synchronized(underlying) {
-      underlying.clear();
-    }
-  }
+	public void clear() {
+		synchronized(underlying) {
+			underlying.clear();
+		}
+	}
 
-  public boolean has(CharacterResource resource) {
-    return has(CottonRPG.RESOURCES.getId(resource));
-  }
+	public boolean has(CharacterResource resource) {
+		return has(CottonRPG.RESOURCES.getId(resource));
+	}
 
-  public boolean has(Identifier id) {
-    synchronized(underlying) {
-      return underlying.containsKey(id);
-    }
-  }
+	public boolean has(Identifier id) {
+		synchronized(underlying) {
+			return underlying.containsKey(id);
+		}
+	}
 
-  public CharacterResourceEntry get(CharacterResource resource) {
-    return get(CottonRPG.RESOURCES.getId(resource));
-  }
+	public CharacterResourceEntry get(CharacterResource resource) {
+		return get(CottonRPG.RESOURCES.getId(resource));
+	}
 
-  public CharacterResourceEntry get(Identifier id) {
-    synchronized(underlying) {
-      return underlying.get(id);
-    }
-  }
+	public CharacterResourceEntry get(Identifier id) {
+		synchronized(underlying) {
+			return underlying.get(id);
+		}
+	}
 
-  public void giveIfAbsent(CharacterResourceEntry resource) {
-    synchronized(underlying) {
-      underlying.putIfAbsent(resource.id, resource);
-    }
-    resource.markDirty();
-  }
+	public void giveIfAbsent(CharacterResourceEntry resource) {
+		synchronized(underlying) {
+			underlying.putIfAbsent(resource.id, resource);
+		}
+		resource.markDirty();
+	}
 
-  public CharacterResourceEntry remove(CharacterResource resource) {
-    return remove(CottonRPG.RESOURCES.getId(resource));
-  }
+	public CharacterResourceEntry remove(CharacterResource resource) {
+		return remove(CottonRPG.RESOURCES.getId(resource));
+	}
 
-  public CharacterResourceEntry remove(Identifier id) {
-    CharacterResourceEntry entry = underlying.remove(id);
-    if (entry!=null) removed.add(id);
-    return entry;
-  }
+	public CharacterResourceEntry remove(Identifier id) {
+		CharacterResourceEntry entry = underlying.remove(id);
+		if (entry!=null) removed.add(id);
+		return entry;
+	}
 
-  public void forEach(BiConsumer<Identifier, CharacterResourceEntry> consumer) {
-    synchronized(underlying) {
-      underlying.forEach(consumer);
-    }
-  }
+	public void forEach(BiConsumer<Identifier, CharacterResourceEntry> consumer) {
+		synchronized(underlying) {
+			underlying.forEach(consumer);
+		}
+	}
 
-  public boolean isDirty() {
-    if (!removed.isEmpty()) return true;
+	public boolean isDirty() {
+		if (!removed.isEmpty()) return true;
 
-    for(CharacterResourceEntry entry : underlying.values()) {
-      if (entry.isDirty()) return true;
-    }
+		for(CharacterResourceEntry entry : underlying.values()) {
+			if (entry.isDirty()) return true;
+		}
 
-    return false;
-  }
-  
-  /** Returns a shallow defensive copy of all the resources managed by this object. Don't modify the
-   * returned resources unless you know what you're doing! */
-  public Map<Identifier, CharacterResourceEntry> getAll() {
-      return ImmutableMap.copyOf(underlying);
-  }
+		return false;
+	}
 
-  public void sync(ServerPlayerEntity player) {
-    if (!isDirty()) return;
+	/** Returns a shallow defensive copy of all the resources managed by this object. Don't modify the
+	 * returned resources unless you know what you're doing! */
+	public Map<Identifier, CharacterResourceEntry> getAll() {
+		return ImmutableMap.copyOf(underlying);
+	}
 
-    if (!removed.isEmpty()) {
-      CottonRPGNetworking.batchSyncResources(player, this, true);
-      removed.clear();
-    } else {
-      CottonRPGNetworking.batchSyncResources(player, this, false);
-    }
-  }
+	public void sync(ServerPlayerEntity player) {
+		if (!isDirty()) return;
+
+		if (!removed.isEmpty()) {
+			CottonRPGNetworking.batchSyncResources(player, this, true);
+			removed.clear();
+		} else {
+			CottonRPGNetworking.batchSyncResources(player, this, false);
+		}
+	}
 }

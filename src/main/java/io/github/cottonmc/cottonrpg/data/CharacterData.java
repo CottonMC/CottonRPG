@@ -4,24 +4,24 @@ import io.github.cottonmc.cottonrpg.util.CharacterDataHolder;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class CharacterData {
-  private CharacterDataHolder holder;
-  
-  public static CharacterData get(PlayerEntity player) {
-    CharacterData data = new CharacterData();
-    data.holder = ((CharacterDataHolder)player);
-    return data;
-  }
-  
-  public CharacterClasses getClasses() {
-    return holder.crpg_getClasses();
-  }
+	private CharacterDataHolder holder;
 
-  public CharacterResources getResources() {
-    return holder.crpg_getResources();
-  }
+	public static CharacterData get(PlayerEntity player) {
+		CharacterData data = new CharacterData();
+		data.holder = ((CharacterDataHolder)player);
+		return data;
+	}
 
-  public CharacterSkills getSkills() {
-    return holder.crpg_getSkills();
-  }
-  
+	public CharacterClasses getClasses() {
+		return holder.crpg_getClasses();
+	}
+
+	public CharacterResources getResources() {
+		return holder.crpg_getResources();
+	}
+
+	public CharacterSkills getSkills() {
+		return holder.crpg_getSkills();
+	}
+
 }

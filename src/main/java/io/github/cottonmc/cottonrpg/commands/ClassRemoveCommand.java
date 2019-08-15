@@ -17,27 +17,27 @@ import net.minecraft.util.Identifier;
 
 public class ClassRemoveCommand implements Command<ServerCommandSource> {
 
-  @Override
-  public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-    Entity entity = context.getSource().getEntity();
-    if (entity instanceof PlayerEntity) {
-      PlayerEntity player = (PlayerEntity) entity;
-      
-      Identifier id = context.getArgument("classname", Identifier.class);
-      
-      CharacterClass entry = CottonRPG.CLASSES.get(id);
-      
-      if (entry == null) {
-        Text text = new LiteralText("No such class").formatted(Formatting.RED);
-        player.addChatMessage(text, false);
-        return 2;
-      }
-      
-      CharacterData.get(player).getClasses().remove(id);
-      
-      player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
-    }
-    return 1;
-  }
-  
+	@Override
+	public int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+		Entity entity = context.getSource().getEntity();
+		if (entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity) entity;
+
+			Identifier id = context.getArgument("classname", Identifier.class);
+
+			CharacterClass entry = CottonRPG.CLASSES.get(id);
+
+			if (entry == null) {
+				Text text = new LiteralText("No such class").formatted(Formatting.RED);
+				player.addChatMessage(text, false);
+				return 2;
+			}
+
+			CharacterData.get(player).getClasses().remove(id);
+
+			player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
+		}
+		return 1;
+	}
+
 }
