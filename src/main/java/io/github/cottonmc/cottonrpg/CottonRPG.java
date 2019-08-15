@@ -27,7 +27,7 @@ public class CottonRPG implements ModInitializer {
     Identifier test_class = new Identifier(MODID, "test_class");
     Registry.register(CLASSES, test_class, new SimpleCharacterClass(5));
     Identifier test_resource = new Identifier(MODID, "test_resource");
-    Registry.register(RESOURCES, test_resource, new SimpleCharacterResource(0L, 20L, 4L, 5, 0x00FF00, CharacterResource.ResourceVisibility.HUD));
+    Registry.register(RESOURCES, test_resource, new SimpleCharacterResource(0L, 26L, 4L, 5, 0x00FF00, CharacterResource.ResourceVisibility.HUD));
     Identifier test_skill = new Identifier(MODID, "test_skill");
     Registry.register(SKILLS, test_skill, new SimpleCharacterSkill(100, new Prerequisite.True(), (player, target) -> {
       player.sendMessage(new LiteralText("Test success!"));

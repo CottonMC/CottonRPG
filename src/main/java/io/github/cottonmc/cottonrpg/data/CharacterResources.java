@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import com.google.common.collect.ImmutableMap;
+
 import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
 
 public class CharacterResources {
@@ -79,6 +81,12 @@ public class CharacterResources {
     }
 
     return false;
+  }
+  
+  /** Returns a shallow defensive copy of all the resources managed by this object. Don't modify the
+   * returned resources unless you know what you're doing! */
+  public Map<Identifier, CharacterResourceEntry> getAll() {
+      return ImmutableMap.copyOf(underlying);
   }
 
   public void sync(ServerPlayerEntity player) {

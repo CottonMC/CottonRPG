@@ -14,6 +14,7 @@ import net.minecraft.util.PacketByteBuf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class CottonRPGNetworking {
@@ -89,10 +90,13 @@ public class CottonRPGNetworking {
 					return;
 				}
 				CharacterResources resources = data.getResources();
+				
 				if (clear) {
+					Map<Identifier, CharacterResourceEntry> oldMap = resources.getAll();
 					resources.clear();
 					for (CharacterResourceEntry entry : read) {
 						resources.giveIfAbsent(entry);
+						if (oldMap.containsKey(entry.id)) entry.setRenderValue(oldMap.get(entry.id).getCurrentForRender()); 
 					}
 				} else {
 					for (CharacterResourceEntry entry : read) {
