@@ -5,6 +5,11 @@ import net.minecraft.nbt.CompoundTag;
 
 public interface Ticker {
 	/**
+	 * Get a ticker that never ticks and never triggers sync.
+	 */
+	Ticker EMPTY = new EmptyTicker();
+
+	/**
 	 * Called every tick to process logic for affecting a resource over time.
 	 * @param entry The entry of this resource.
 	 */
@@ -35,4 +40,24 @@ public interface Ticker {
 	 * Clear the mark for this ticker being dirty.
 	 */
 	void clearDirty();
+
+	class EmptyTicker implements Ticker {
+		@Override
+		public void tick(CharacterResourceEntry entry) { }
+
+		@Override
+		public CompoundTag toTag() { return new CompoundTag(); }
+
+		@Override
+		public Ticker fromTag(CompoundTag tag) { return this; }
+
+		@Override
+		public void markDirty() { }
+
+		@Override
+		public boolean isDirty() { return false; }
+
+		@Override
+		public void clearDirty() { }
+	}
 }
