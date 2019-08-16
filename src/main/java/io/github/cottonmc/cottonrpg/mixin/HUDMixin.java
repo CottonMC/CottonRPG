@@ -143,7 +143,7 @@ public class HUDMixin {
 					}
 				}
 
-				GlStateManager.color4f(r, g, b, 1.0f);
+				if (!CottonRPG.config.disableResourceColors) GlStateManager.color4f(r, g, b, 1.0f);
 				//bar FG: left edge, middle, right edge
 				guiRect(left, top, 1, 5, 0, 10);
 				guiRect(left + 1, top, fgWidth, 5, 1, 10);
