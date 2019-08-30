@@ -1,6 +1,7 @@
 package io.github.cottonmc.cottonrpg.data.clazz;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -10,13 +11,20 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class SimpleCharacterClass implements CharacterClass {
 	private int maxLevel;
+	private Function<Integer, Prerequisite> prereq;
+	private BiConsumer<Integer, PlayerEntity> levelConsumer;
 	private List<Text> additionalLines = new ArrayList<>();
 
-	public SimpleCharacterClass(int maxLevel) {
+	public SimpleCharacterClass(int maxLevel, Function<Integer, Prerequisite> prereq, BiConsumer<Integer, PlayerEntity> levelConsumer) {
 		this.maxLevel = maxLevel;
+		this.prereq = prereq;
+		this.levelConsumer = levelConsumer;
 	}
 
 	@Override
@@ -24,24 +32,14 @@ public class SimpleCharacterClass implements CharacterClass {
 		return maxLevel;
 	}
 
-	private int getExperienceCost(int currentLevel) {
-		if (currentLevel > 3) return 30;
-		if (currentLevel == 0) return 5;
-		return 10*currentLevel;
-	}
-
 	@Override
 	public boolean canLevelUp(int currentLevel, PlayerEntity player) {
-		//TODO: swap to prerequisites when ready
-		int expCost = getExperienceCost(currentLevel);
-		return player.experienceLevel >= expCost;
+		return prereq.apply(currentLevel).test(player);
 	}
 
 	@Override
 	public void applyLevelUp(int previousLevel, PlayerEntity player) {
-		//TODO: swap to functional interface when prerequisites are ready
-		int expCost = getExperienceCost(previousLevel);
-		player.experienceLevel -= expCost;
+		levelConsumer.accept(previousLevel, player);
 	}
 
 	@Override

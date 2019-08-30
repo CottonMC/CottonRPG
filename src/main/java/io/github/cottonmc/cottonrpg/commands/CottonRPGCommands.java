@@ -20,11 +20,6 @@ public class CottonRPGCommands {
 		CommandRegistry.INSTANCE.register(false, (CommandDispatcher<ServerCommandSource> cmd) -> cmd.register(CommandManager.literal("cottonrpg")
 				.executes(new MainCommand())
 				.then(
-						CommandManager.literal("roll")
-								.then(CommandManager.argument("formula", StringArgumentType.word()))
-								.executes(new DiceRollCommand())
-				)
-				.then(
 						CommandManager.literal("classes")
 								.executes(new ClassesCommand())
 				)

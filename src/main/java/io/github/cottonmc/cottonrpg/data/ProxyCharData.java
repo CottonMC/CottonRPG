@@ -7,8 +7,6 @@ import io.github.cottonmc.cottonrpg.data.resource.ProxyCharResources;
 import io.github.cottonmc.cottonrpg.data.skill.CharacterSkills;
 import io.github.cottonmc.cottonrpg.data.skill.ProxyCharSkills;
 
-import javax.annotation.Nullable;
-
 public class ProxyCharData extends CharacterData {
 	private CharacterData parent;
 	private CharacterData child;
