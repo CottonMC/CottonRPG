@@ -1,12 +1,10 @@
 package io.github.cottonmc.cottonrpg.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -24,7 +22,7 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 		RenderSystem.enableBlend();
 		RenderSystem.enableAlphaTest();
 
-		CharacterData data =  CharacterData.get(client.player);
+		CharacterData data = CharacterData.get(client.player);
 
 		//coords for each bar
 		int left = CottonRPG.config.barsX;

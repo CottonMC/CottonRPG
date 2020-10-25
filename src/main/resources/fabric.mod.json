@@ -1,47 +1,43 @@
 {
-  "schemaVersion": 1,
-  "id": "cottonrpg",
-  "version": "${version}",
-
-  "name": "Cotton RPG",
-  "description": "Utilities for RPG mod development",
-  "authors": [
-    "Nickolay (handicraftsman{,_}) Ilyushin <nickolay02@inbox.ru>",
-    "Meredith (B0undarybreaker) Espinosa",
-    "Falkreon",
-    "the Cotton team"
-  ],
-  "contact": {
-    "homepage": "https://github.com/CottonMC/CottonRPG",
-    "sources": "https://github.com/CottonMC/CottonRPG"
-  },
-
-  "license": "MIT",
-  "icon": "assets/cottonrpg/icon.png",
-
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "io.github.cottonmc.cottonrpg.CottonRPG"
-    ],
-    "client": [
-      "io.github.cottonmc.cottonrpg.client.CottonRPGClient"
-    ],
-    "cardinal-components-entity": [
-      "io.github.cottonmc.cottonrpg.RpgComponents"
-    ]
-  },
-  "mixins": [
-    "cottonrpg.mixins.json"
-  ],
-  "custom": {
-    "cardinal-components": [
-      "cottonrpg:character_data"
-    ]
-  },
-
-  "depends": {
-    "fabricloader": ">=0.4.0",
-    "fabric": "*"
-  }
+	"schemaVersion": 1,
+	"id": "cottonrpg",
+	"version": "${version}",
+	"name": "Cotton RPG",
+	"description": "Utilities for RPG mod development",
+	"authors": [
+		"Nickolay (handicraftsman{,_}) Ilyushin <nickolay02@inbox.ru>",
+		"Meredith (B0undarybreaker) Espinosa",
+		"Falkreon",
+		"the Cotton team"
+	],
+	"contact": {
+		"homepage": "https://github.com/CottonMC/CottonRPG",
+		"sources": "https://github.com/CottonMC/CottonRPG"
+	},
+	"license": "MIT",
+	"icon": "assets/cottonrpg/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"io.github.cottonmc.cottonrpg.CottonRPG"
+		],
+		"client": [
+			"io.github.cottonmc.cottonrpg.client.CottonRPGClient"
+		],
+		"cardinal-components-entity": [
+			"io.github.cottonmc.cottonrpg.RpgComponents"
+		]
+	},
+	"mixins": [
+		"cottonrpg.mixins.json"
+	],
+	"custom": {
+		"cardinal-components": [
+			"cottonrpg:character_data"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.4.0",
+		"fabric": "*"
+	}
 }

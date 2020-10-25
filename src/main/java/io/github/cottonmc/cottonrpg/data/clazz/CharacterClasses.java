@@ -12,7 +12,7 @@ import java.util.Objects;
 public interface CharacterClasses extends RpgDataContainer<CharacterClass, CharacterClassEntry> {
 	int SYNC_FLAG = 0b1;
 
-    class Impl extends BaseRpgDataContainer<CharacterClass, CharacterClassEntry> implements CharacterClasses {
+	class Impl extends BaseRpgDataContainer<CharacterClass, CharacterClassEntry> implements CharacterClasses {
 		@Override
 		public CharacterClassEntry giveIfAbsent(Identifier id) {
 			return this.giveIfAbsent(Objects.requireNonNull(CottonRPG.CLASSES.get(id)));

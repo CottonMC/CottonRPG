@@ -31,8 +31,7 @@ public class PlayerTarget implements Target<PlayerEntity> {
 			if (min == -1) {
 				min = distance;
 				minPlayer = player;
-			}
-			else if (distance < min) {
+			} else if (distance < min) {
 				min = distance;
 				minPlayer = player;
 			}

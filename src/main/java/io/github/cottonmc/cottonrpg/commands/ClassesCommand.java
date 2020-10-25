@@ -3,8 +3,6 @@ package io.github.cottonmc.cottonrpg.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.clazz.CharacterClassEntry;
 import net.minecraft.entity.Entity;

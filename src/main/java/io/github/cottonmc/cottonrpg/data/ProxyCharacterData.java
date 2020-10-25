@@ -14,8 +14,9 @@ public class ProxyCharacterData extends CharacterData {
 
 	/**
 	 * Create a proxy for interacting with multiple sets of data at once.
+	 *
 	 * @param parent The parent of the data sets. Checked last. Usually a player.
-	 * @param child The child of the data sets. Checked first. Usually an item.
+	 * @param child  The child of the data sets. Checked first. Usually an item.
 	 */
 	public ProxyCharacterData(CharacterData parent, CharacterData child) {
 		super();

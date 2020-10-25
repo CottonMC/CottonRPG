@@ -4,17 +4,12 @@ import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClassEntry;
 import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
-import io.github.cottonmc.cottonrpg.data.skill.CharacterSkillEntry;
 import io.github.cottonmc.cottonrpg.data.skill.CharacterSkills;
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Identifier;
 
 import javax.annotation.Nullable;
 
@@ -37,6 +32,7 @@ public class CharacterData implements Component {
 
 	/**
 	 * Get a player's data.
+	 *
 	 * @param player The player to get for.
 	 * @return The classes, resources, and skills of the player.
 	 */
@@ -46,6 +42,7 @@ public class CharacterData implements Component {
 
 	/**
 	 * Get a stack's data.
+	 *
 	 * @param stack The stack to get for.
 	 * @return The classes, resources, and skills of the item.
 	 */

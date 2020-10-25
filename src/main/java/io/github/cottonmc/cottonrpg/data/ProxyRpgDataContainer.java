@@ -19,7 +19,7 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 
 	@Override
 	public int size() {
-		return parent.size() + (child != null? child.size() : 0);
+		return parent.size() + (child != null ? child.size() : 0);
 	}
 
 	@Override

@@ -46,7 +46,8 @@ public class CottonRPG implements ModInitializer {
 		//only have these in for testing / sample purposes
 		if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 			Identifier test_class = id("test_class");
-			Registry.register(CLASSES, test_class, new SimpleCharacterClass(5, (level) -> Prerequisite.none(), (level, player) -> { }));
+			Registry.register(CLASSES, test_class, new SimpleCharacterClass(5, (level) -> Prerequisite.none(), (level, player) -> {
+			}));
 			Identifier test_resource = id("test_resource");
 			Registry.register(RESOURCES, test_resource, new SimpleCharacterResource(0, 20, 4, 5, 0x00FF00, CharacterResource.ResourceVisibility.HUD));
 			Identifier test_skill = id("test_skill");

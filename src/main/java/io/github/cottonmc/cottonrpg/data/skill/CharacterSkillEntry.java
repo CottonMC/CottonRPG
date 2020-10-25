@@ -1,6 +1,5 @@
 package io.github.cottonmc.cottonrpg.data.skill;
 
-import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.RpgDataEntry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketByteBuf;

@@ -44,6 +44,7 @@ public interface CharacterSkill extends RpgDataType {
 
 	/**
 	 * Ticks the cooldown of this skill.
+	 *
 	 * @param entry The entry form of the skill.
 	 */
 	default void tick(CharacterSkillEntry entry) {
@@ -52,6 +53,7 @@ public interface CharacterSkill extends RpgDataType {
 
 	/**
 	 * Perform a skill.
+	 *
 	 * @param player The player performing the skill.
 	 * @param target The target being performed on.
 	 * @return Whether the skill succeeded or not.
@@ -75,6 +77,7 @@ public interface CharacterSkill extends RpgDataType {
 
 	/**
 	 * Allow other mods to add description if they use your player class.
+	 *
 	 * @param lines The lines to add.
 	 */
 	void addAdditionalDescription(Text... lines);

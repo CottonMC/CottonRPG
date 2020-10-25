@@ -4,33 +4,31 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import java.util.function.BiConsumer;
-
 public interface RpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> extends Iterable<E> {
 
-    int size();
+	int size();
 
-    void clear();
+	void clear();
 
-    boolean has(T skill);
+	boolean has(T skill);
 
-    E get(T skill);
+	E get(T skill);
 
-    E giveIfAbsent(Identifier id);
+	E giveIfAbsent(Identifier id);
 
-    E giveIfAbsent(T type);
+	E giveIfAbsent(T type);
 
-    E remove(T skill);
+	E remove(T skill);
 
-    void fromTag(CompoundTag tag);
+	void fromTag(CompoundTag tag);
 
-    CompoundTag toTag();
+	CompoundTag toTag();
 
-    boolean isDirty();
+	boolean isDirty();
 
-    void clearDirty();
+	void clearDirty();
 
-    void writeSyncPacket(PacketByteBuf buf);
+	void writeSyncPacket(PacketByteBuf buf);
 
-    void applySyncPacket(PacketByteBuf buf);
+	void applySyncPacket(PacketByteBuf buf);
 }

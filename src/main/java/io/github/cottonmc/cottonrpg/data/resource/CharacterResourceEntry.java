@@ -1,6 +1,5 @@
 package io.github.cottonmc.cottonrpg.data.resource;
 
-import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.RpgDataEntry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketByteBuf;
@@ -86,23 +85,23 @@ public class CharacterResourceEntry implements RpgDataEntry<CharacterResource> {
 			ticker.clearDirty();
 		}
 	}
-	
+
 	public void clientTick() {
-		if (scramble>max) scramble=max; //Don't spend ages coming back from overfull
-		if (scramble!=current) {
-			double scrambleRate = SCRAMBLE_CAP/max;
-			double delta = (current-scramble)/scrambleRate;
-			if (delta<0 && delta>-SCRAMBLE_FLOOR) delta = -SCRAMBLE_FLOOR;
-			else if (delta>0 && delta<SCRAMBLE_FLOOR) delta = SCRAMBLE_FLOOR;
+		if (scramble > max) scramble = max; //Don't spend ages coming back from overfull
+		if (scramble != current) {
+			double scrambleRate = SCRAMBLE_CAP / max;
+			double delta = (current - scramble) / scrambleRate;
+			if (delta < 0 && delta > -SCRAMBLE_FLOOR) delta = -SCRAMBLE_FLOOR;
+			else if (delta > 0 && delta < SCRAMBLE_FLOOR) delta = SCRAMBLE_FLOOR;
 			//now scramble is at least SCRAMBLE_FLOOR and up to max/SCRAMBLE_CAP of the distance we need to cover
-			if (delta<0) {
-				if (scramble+delta<current) {
+			if (delta < 0) {
+				if (scramble + delta < current) {
 					scramble = current;
 				} else {
-					scramble+=delta;
+					scramble += delta;
 				}
 			} else {
-				if (scramble+delta>current) {
+				if (scramble + delta > current) {
 					scramble = current;
 				} else {
 					scramble += delta;

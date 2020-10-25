@@ -1,9 +1,5 @@
 package io.github.cottonmc.cottonrpg.prereq;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
-
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.clazz.CharacterClass;
@@ -16,6 +12,10 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Lazy;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * A simple interface which allows checking various player-related stuff.
@@ -87,6 +87,7 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 	 */
 	class True implements Prerequisite {
 		public static final True ALWAYS_TRUE = new True();
+
 		@Override
 		public boolean test(PlayerEntity player) {
 			return true;
@@ -182,7 +183,7 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 
 		@Override
 		public Prerequisite[] getChildren() {
-			return new Prerequisite[] { prereq };
+			return new Prerequisite[]{prereq};
 		}
 
 		@Override
@@ -218,9 +219,9 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 		@Override
 		public Text getDescription() {
 			return new TranslatableText(
-					"prereq.cottonrpg.wants_class",
-					classId.get().getName(),
-					level
+				"prereq.cottonrpg.wants_class",
+				classId.get().getName(),
+				level
 			);
 		}
 	}
@@ -252,9 +253,9 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 		@Override
 		public Text getDescription() {
 			return new TranslatableText(
-					"prereq.cottonrpg.wants_resource",
-					resourceId.get().getName(),
-					amount
+				"prereq.cottonrpg.wants_resource",
+				resourceId.get().getName(),
+				amount
 			);
 		}
 	}

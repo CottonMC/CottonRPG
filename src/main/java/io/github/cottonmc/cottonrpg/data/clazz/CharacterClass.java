@@ -1,8 +1,5 @@
 package io.github.cottonmc.cottonrpg.data.clazz;
 
-import java.util.List;
-import java.util.Objects;
-
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.RpgDataType;
 import net.fabricmc.api.EnvType;
@@ -11,6 +8,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
+import java.util.Objects;
 
 public interface CharacterClass extends RpgDataType {
 
@@ -26,15 +26,16 @@ public interface CharacterClass extends RpgDataType {
 
 	/**
 	 * @param currentLevel The curent class level of the player seeking to level up.
-	 * @param player The player seeking to level up.
+	 * @param player       The player seeking to level up.
 	 * @return Whether the player can level up.
 	 */
 	boolean canLevelUp(int currentLevel, PlayerEntity player);
 
 	/**
 	 * Apply whatever cost is needed to level up a player.
+	 *
 	 * @param previousLevel The class level of the player before they leveled up.
-	 * @param player The player leveling up.
+	 * @param player        The player leveling up.
 	 */
 	void applyLevelUp(int previousLevel, PlayerEntity player);
 
@@ -55,6 +56,7 @@ public interface CharacterClass extends RpgDataType {
 
 	/**
 	 * Allow other mods to add description if they use your player class.
+	 *
 	 * @param lines The lines to add.
 	 */
 	void addAdditionalDescription(Text... lines);

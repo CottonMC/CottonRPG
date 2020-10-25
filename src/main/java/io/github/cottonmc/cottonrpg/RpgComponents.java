@@ -8,11 +8,11 @@ import nerdhub.cardinal.components.api.util.RespawnCopyStrategy;
 import net.minecraft.entity.player.PlayerEntity;
 
 public final class RpgComponents implements EntityComponentInitializer {
-    @Override
-    public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.beginRegistration(PlayerEntity.class, CharacterData.KEY)
-                .impl(PlayerCharacterData.class)
-                .respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY)
-                .end(PlayerCharacterData::new);
-    }
+	@Override
+	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
+		registry.beginRegistration(PlayerEntity.class, CharacterData.KEY)
+			.impl(PlayerCharacterData.class)
+			.respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY)
+			.end(PlayerCharacterData::new);
+	}
 }

@@ -5,21 +5,21 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 public interface RpgDataEntry<T extends RpgDataType> {
-    Identifier getId();
+	Identifier getId();
 
-    T getType();
+	T getType();
 
-    CompoundTag toTag();
+	CompoundTag toTag();
 
-    void fromTag(CompoundTag tag);
+	void fromTag(CompoundTag tag);
 
-    void markDirty();
+	void markDirty();
 
-    boolean isDirty();
+	boolean isDirty();
 
-    void clearDirty();
+	void clearDirty();
 
-    void writeToPacket(PacketByteBuf buf);
+	void writeToPacket(PacketByteBuf buf);
 
-    void readFromPacket(PacketByteBuf buf);
+	void readFromPacket(PacketByteBuf buf);
 }

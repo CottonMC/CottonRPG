@@ -35,7 +35,6 @@
 package io.github.cottonmc.cottonrpg.mixin;
 
 import com.mojang.serialization.Lifecycle;
-import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,8 +44,8 @@ import java.util.function.Supplier;
 
 @Mixin(Registry.class)
 public interface RegistryAccessor {
-    @Invoker("create")
-    static <T> Registry<T> create(RegistryKey<? extends Registry<T>> registryKey, Lifecycle lifecycle, Supplier<T> defaultEntry) {
-        throw new UnsupportedOperationException("mixin was not transformed - " + registryKey + lifecycle + defaultEntry);
-    }
+	@Invoker("create")
+	static <T> Registry<T> create(RegistryKey<? extends Registry<T>> registryKey, Lifecycle lifecycle, Supplier<T> defaultEntry) {
+		throw new UnsupportedOperationException("mixin was not transformed - " + registryKey + lifecycle + defaultEntry);
+	}
 }
