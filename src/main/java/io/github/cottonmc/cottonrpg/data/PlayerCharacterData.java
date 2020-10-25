@@ -13,6 +13,7 @@ public class PlayerCharacterData extends CharacterData implements ServerTickingC
 
     @Override
     public void serverTick() {
+        getClasses().sync((ServerPlayerEntity) this.player);
         getResources().sync((ServerPlayerEntity) this.player);
         getSkills().sync((ServerPlayerEntity) this.player);
         getResources().forEach((id, resource) -> resource.tick());

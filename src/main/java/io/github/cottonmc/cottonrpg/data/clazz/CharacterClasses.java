@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class CharacterClasses {
-	private ArrayList<Identifier> removed = new ArrayList<>();
+	private final ArrayList<Identifier> removed = new ArrayList<>();
 
 	private final Map<Identifier, CharacterClassEntry> underlying = new HashMap<>();
 

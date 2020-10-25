@@ -5,8 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
 
 public class CharacterResourceEntry {
-	private final double SCRAMBLE_CAP = 200d;
-	private final double SCRAMBLE_FLOOR = 0.01d;
+	private static final double SCRAMBLE_CAP = 200d;
+	private static final double SCRAMBLE_FLOOR = 0.01d;
 	
 	public final Identifier id;
 	private CharacterResource res;

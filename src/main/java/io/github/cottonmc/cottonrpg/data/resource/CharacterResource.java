@@ -15,7 +15,7 @@ public interface CharacterResource {
 	/**
 	 * How the resource should be displayed/synced to the user
 	 * INVISIBLE: Not synced to client.
-	 * HIDDEN: Synced to client, but not displayed in Cotton RPG's HUD mixins.
+	 * HIDDEN: Synced to client, but not displayed in Cotton RPG's HUD.
 	 * HUD: Synced to client, and displayed in the HUD.
 	 */
 	public enum ResourceVisibility {

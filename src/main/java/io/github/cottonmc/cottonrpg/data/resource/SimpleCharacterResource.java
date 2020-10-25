@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleCharacterResource implements CharacterResource {
-	private long def;
-	private long max;
-	private long unitsPerBar;
-	private int ticksPerUnit;
-	private int color;
-	private ResourceVisibility vis;
+	private final long def;
+	private final long max;
+	private final long unitsPerBar;
+	private final int ticksPerUnit;
+	private final int color;
+	private final ResourceVisibility vis;
 
 	public SimpleCharacterResource(long defaultValue, long maxValue, long unitsPerBar, int ticksPerUnit, int color, ResourceVisibility vis) {
 		this.def = defaultValue;

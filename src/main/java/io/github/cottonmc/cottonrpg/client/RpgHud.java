@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -14,8 +15,6 @@ import net.minecraft.util.Identifier;
 public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 	private static final Identifier CRPG_BAR_TEX = new Identifier("cottonrpg", "textures/gui/rpg_bars.png");
 	private static final int CRPG_FULL_BAR_WIDTH = 62;
-	private static final float CRPG_DELTA_PER_TICK = 1f;
-	private float ticktimer = 0;
 	private final MinecraftClient client = MinecraftClient.getInstance();
 
 	@Override
@@ -23,18 +22,13 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 		if (client.options.hudHidden) return;
 		RenderSystem.enableBlend();
 		RenderSystem.enableAlphaTest();
-		
-		ticktimer += tickDelta;
-		int ticks = (int)(ticktimer /CRPG_DELTA_PER_TICK);
-		ticktimer -= ticks*CRPG_DELTA_PER_TICK;
-		
+
 		final int[] height = new int[1];
 		height[0] = CottonRPG.config.barsY;
 		CharacterData data =  CharacterData.get(client.player);
 
 		data.getResources().forEach((id, entry) -> {
 			CharacterResource resource = CottonRPG.RESOURCES.get(id);
-			for(int i = 0; i<ticks; i++) entry.clientTick();
 			
 			if (resource.getVisibility() != CharacterResource.ResourceVisibility.HUD) return;
 			int color = resource.getColor();

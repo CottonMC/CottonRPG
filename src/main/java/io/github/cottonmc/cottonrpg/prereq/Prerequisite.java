@@ -102,7 +102,7 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 	/**
 	 * Prerequisite that requires at least one child to be true.
 	 */
-	public static class Any implements Prerequisite {
+	class Any implements Prerequisite {
 		private Prerequisite[] prereqs;
 
 		public Any(Prerequisite... prereqs) {
@@ -133,7 +133,7 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 	/**
 	 * Prerequisite that requires that is child is false.
 	 */
-	public static class Not implements Prerequisite {
+	class Not implements Prerequisite {
 		private Prerequisite prereq;
 
 		public Not(Prerequisite prereq) {
