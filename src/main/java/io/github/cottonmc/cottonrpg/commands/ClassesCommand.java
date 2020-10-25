@@ -20,11 +20,11 @@ public class ClassesCommand implements Command<ServerCommandSource> {
 		Entity entity = context.getSource().getEntity();
 		if (entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) entity;
-			Text header = new TranslatableText("cmd.cottonrpg.clazz.yourclasses").formatted(Formatting.AQUA);
+			Text header = new TranslatableText("cmd.cottonrpg.classes.yourclasses").formatted(Formatting.AQUA);
 			player.sendMessage(header, false);
 			CharacterData.get(player).getClasses().forEach((id, entry) -> {
 				String name = CottonRPG.CLASSES.get(id).getName().asString();
-				Text text = new TranslatableText("cmd.cottonrpg.clazz.entry", name, id.toString(), entry.getLevel()).formatted(Formatting.GOLD);
+				Text text = new TranslatableText("cmd.cottonrpg.classes.entry", name, id.toString(), entry.getLevel()).formatted(Formatting.GOLD);
 				player.sendMessage(text, false);
 			});
 		}
