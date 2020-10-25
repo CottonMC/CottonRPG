@@ -25,15 +25,15 @@ public class ClassRemoveCommand implements Command<ServerCommandSource> {
 
 			Identifier id = context.getArgument("classname", Identifier.class);
 
-			CharacterClass entry = CottonRPG.CLASSES.get(id);
+			CharacterClass clazz = CottonRPG.CLASSES.get(id);
 
-			if (entry == null) {
+			if (clazz == null) {
 				Text text = new LiteralText("No such class").formatted(Formatting.RED);
 				player.sendMessage(text, false);
 				return 2;
 			}
 
-			CharacterData.get(player).getClasses().remove(id);
+			CharacterData.get(player).getClasses().remove(clazz);
 
 			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}

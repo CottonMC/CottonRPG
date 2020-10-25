@@ -36,10 +36,9 @@ public interface CharacterSkill extends RpgDataType {
 	 * @return Whether the player can currently perform the skill.
 	 */
 	default boolean canPerform(PlayerEntity player, Target<?> target) {
-		Identifier id = CottonRPG.SKILLS.getId(this);
 		CharacterSkills skills = CharacterData.get(player).getSkills();
-		if (!skills.has(id)) return false;
-		CharacterSkillEntry entry = skills.get(id);
+		if (!skills.has(this)) return false;
+		CharacterSkillEntry entry = skills.get(this);
 		return entry.getCooldown() <= 0;
 	}
 

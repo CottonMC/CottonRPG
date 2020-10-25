@@ -34,7 +34,7 @@ public class ClassGetCommand implements Command<ServerCommandSource> {
 				return 2;
 			}
 
-			CharacterClassEntry entry = CharacterData.get(player).getClasses().get(id);
+			CharacterClassEntry entry = CharacterData.get(player).getClasses().get(clazz);
 
 			if (entry == null) {
 				Text text = new LiteralText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);

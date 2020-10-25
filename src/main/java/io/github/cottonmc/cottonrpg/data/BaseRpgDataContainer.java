@@ -10,8 +10,8 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> implements RpgDataContainer<T, E> {
-    protected final Map<Identifier, E> underlying = new HashMap<>();
-    private final List<Identifier> removed = new ArrayList<>();
+    protected final Map<T, E> underlying = new HashMap<>();
+    private final List<T> removed = new ArrayList<>();
 
     @Override
     public int size() {
@@ -25,38 +25,23 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 
     @Override
     public boolean has(T skill) {
-        return has(skill.getId());
-    }
-
-    @Override
-    public boolean has(Identifier id) {
-        return underlying.containsKey(id);
+        return underlying.containsKey(skill);
     }
 
     @Override
     public E get(T skill) {
-        return get(skill.getId());
-    }
-
-    @Override
-    public E get(Identifier id) {
-        return underlying.get(id);
+        return underlying.get(skill);
     }
 
     @Override
     public E remove(T skill) {
-        return remove(skill.getId());
-    }
-
-    @Override
-    public E remove(Identifier id) {
-        E entry = underlying.remove(id);
-        if (entry!=null) removed.add(id);
+        E entry = underlying.remove(skill);
+        if (entry!=null) removed.add(skill);
         return entry;
     }
 
     @Override
-    public void forEach(BiConsumer<Identifier, E> consumer) {
+    public void forEach(BiConsumer<T, E> consumer) {
         underlying.forEach(consumer);
     }
 
@@ -75,7 +60,7 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
-        this.forEach((id, entry) -> tag.put(id.toString(), entry.toTag()));
+        this.forEach((type, entry) -> tag.put(entry.getId().toString(), entry.toTag()));
         return tag;
     }
 

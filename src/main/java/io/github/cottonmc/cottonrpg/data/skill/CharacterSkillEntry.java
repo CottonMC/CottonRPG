@@ -12,9 +12,9 @@ public class CharacterSkillEntry implements RpgDataEntry<CharacterSkill> {
 	private int cooldown = 0;
 	private transient boolean dirty = false;
 
-	public CharacterSkillEntry(Identifier id) {
-		this.id = id;
-		this.skill = CottonRPG.SKILLS.get(id);
+	public CharacterSkillEntry(CharacterSkill skill) {
+		this.skill = skill;
+		this.id = skill.getId();
 	}
 
 	@Override

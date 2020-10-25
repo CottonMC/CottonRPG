@@ -9,20 +9,20 @@ import net.minecraft.util.Identifier;
 public class CharacterResourceEntry implements RpgDataEntry<CharacterResource> {
 	private static final double SCRAMBLE_CAP = 200d;
 	private static final double SCRAMBLE_FLOOR = 0.01d;
-	
-	public final Identifier id;
-	private CharacterResource res;
+
+	private final Identifier id;
+	private final CharacterResource res;
 	private long current;
 	private long max;
 	private Ticker ticker;
 	private transient boolean dirty = false;
 	private transient double scramble;
 
-	public CharacterResourceEntry(Identifier id) {
-		this.id = id;
-		this.res = CottonRPG.RESOURCES.get(id);
-		current = res.getDefaultLevel();
-		max = res.getDefaultMaxLevel();
+	public CharacterResourceEntry(CharacterResource res) {
+		this.id = res.getId();
+		this.res = res;
+		this.current = res.getDefaultLevel();
+		this.max = res.getDefaultMaxLevel();
 		this.ticker = res.makeTicker(this);
 	}
 

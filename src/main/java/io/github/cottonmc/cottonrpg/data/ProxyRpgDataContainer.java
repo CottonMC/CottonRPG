@@ -26,24 +26,12 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	}
 
 	@Override
-	public boolean has(Identifier id) {
-		if (child != null && child.has(id)) return true;
-		else return parent.has(id);
-	}
-
-	@Override
 	public E get(T skill) {
 		return super.get(skill);
 	}
 
 	@Override
-	public E get(Identifier id) {
-		if (child != null && child.has(id)) return child.get(id);
-		else return parent.get(id);
-	}
-
-	@Override
-	public void forEach(BiConsumer<Identifier, E> consumer) {
+	public void forEach(BiConsumer<T, E> consumer) {
 		if (child != null) child.forEach(consumer);
 		parent.forEach(consumer);
 	}
@@ -59,12 +47,12 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	}
 
 	@Override
-	public E remove(Identifier id) {
-		throw new UnsupportedOperationException("Can't remove data from the proxy! Get the parent or child instead!");
+	public E giveIfAbsent(Identifier id) {
+		throw new UnsupportedOperationException("Can't add data from the proxy! Get the parent or child instead!");
 	}
 
 	@Override
-	public E giveIfAbsent(Identifier id) {
+	public E giveIfAbsent(T type) {
 		throw new UnsupportedOperationException("Can't add data from the proxy! Get the parent or child instead!");
 	}
 

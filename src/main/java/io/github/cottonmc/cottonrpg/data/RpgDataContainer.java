@@ -7,7 +7,6 @@ import net.minecraft.util.Identifier;
 import java.util.function.BiConsumer;
 
 public interface RpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> {
-    int getSyncFlag();
 
     int size();
 
@@ -15,19 +14,15 @@ public interface RpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<
 
     boolean has(T skill);
 
-    boolean has(Identifier id);
-
     E get(T skill);
-
-    E get(Identifier id);
 
     E giveIfAbsent(Identifier id);
 
+    E giveIfAbsent(T type);
+
     E remove(T skill);
 
-    E remove(Identifier id);
-
-    void forEach(BiConsumer<Identifier, E> consumer);
+    void forEach(BiConsumer<T, E> consumer);
 
     void fromTag(CompoundTag tag);
 

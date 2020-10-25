@@ -14,12 +14,14 @@ import net.minecraft.util.Identifier;
  */
 public class CharacterClassEntry implements RpgDataEntry<CharacterClass> {
 	public final Identifier id;
+	private final CharacterClass clazz;
 	private int level = 0;
 	private int experience = 0;
 	private transient boolean dirty = false;
 
-	public CharacterClassEntry(Identifier id) {
-		this.id = id;
+	public CharacterClassEntry(CharacterClass clazz) {
+		this.id = clazz.getId();
+		this.clazz = clazz;
 	}
 
 	@Override
@@ -29,7 +31,7 @@ public class CharacterClassEntry implements RpgDataEntry<CharacterClass> {
 
 	@Override
 	public CharacterClass getType() {
-		return CottonRPG.CLASSES.get(this.id);
+		return clazz;
 	}
 
 	@Override

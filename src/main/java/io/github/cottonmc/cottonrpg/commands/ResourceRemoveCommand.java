@@ -33,7 +33,7 @@ public class ResourceRemoveCommand implements Command<ServerCommandSource> {
 				return 2;
 			}
 
-			CharacterData.get(player).getResources().remove(id);
+			CharacterData.get(player).getResources().remove(resource);
 
 			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}

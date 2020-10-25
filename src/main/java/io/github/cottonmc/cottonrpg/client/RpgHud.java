@@ -27,8 +27,9 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 		height[0] = CottonRPG.config.barsY;
 		CharacterData data =  CharacterData.get(client.player);
 
-		data.getResources().forEach((id, entry) -> {
-			CharacterResource resource = CottonRPG.RESOURCES.get(id);
+		data.getResources().forEach((res, entry) -> {
+			CharacterResource resource = entry.getType();
+			Identifier id = resource.getId();
 			
 			if (resource.getVisibility() != CharacterResource.ResourceVisibility.HUD) return;
 			int color = resource.getColor();
