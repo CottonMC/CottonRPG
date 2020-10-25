@@ -2,10 +2,10 @@ package io.github.cottonmc.cottonrpg.prereq;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClass;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClass;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClasses;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;

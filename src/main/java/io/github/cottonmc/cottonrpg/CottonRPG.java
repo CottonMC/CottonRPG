@@ -2,12 +2,12 @@ package io.github.cottonmc.cottonrpg;
 
 import com.mojang.serialization.Lifecycle;
 import io.github.cottonmc.cottonrpg.commands.CottonRPGCommands;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClass;
-import io.github.cottonmc.cottonrpg.data.clazz.SimpleCharacterClass;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
-import io.github.cottonmc.cottonrpg.data.resource.SimpleCharacterResource;
-import io.github.cottonmc.cottonrpg.data.skill.CharacterSkill;
-import io.github.cottonmc.cottonrpg.data.skill.SimpleCharacterSkill;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClass;
+import io.github.cottonmc.cottonrpg.data.rpgclass.SimpleCharacterClass;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.rpgresource.SimpleCharacterResource;
+import io.github.cottonmc.cottonrpg.data.rpgskill.CharacterSkill;
+import io.github.cottonmc.cottonrpg.data.rpgskill.SimpleCharacterSkill;
 import io.github.cottonmc.cottonrpg.mixin.RegistryAccessor;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import net.fabricmc.api.ModInitializer;
@@ -35,8 +35,8 @@ public class CottonRPG implements ModInitializer {
 	public static CottonRPGConfig config = new CottonRPGConfig();
 
 	@NotNull
-	public static Identifier id(String remnant_states) {
-		return new Identifier(MODID, remnant_states);
+	public static Identifier id(String path) {
+		return new Identifier(MODID, path);
 	}
 
 	@Override

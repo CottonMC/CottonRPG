@@ -1,7 +1,7 @@
 package io.github.cottonmc.cottonrpg.client;
 
 import io.github.cottonmc.cottonrpg.data.CharacterData;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResourceEntry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;

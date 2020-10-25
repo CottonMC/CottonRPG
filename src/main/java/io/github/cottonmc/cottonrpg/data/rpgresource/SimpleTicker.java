@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.resource;
+package io.github.cottonmc.cottonrpg.data.rpgresource;
 
 import net.minecraft.nbt.CompoundTag;
 

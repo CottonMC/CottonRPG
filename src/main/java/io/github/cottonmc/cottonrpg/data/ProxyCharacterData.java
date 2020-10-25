@@ -1,8 +1,8 @@
 package io.github.cottonmc.cottonrpg.data;
 
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
-import io.github.cottonmc.cottonrpg.data.skill.CharacterSkills;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClasses;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResources;
+import io.github.cottonmc.cottonrpg.data.rpgskill.CharacterSkills;
 
 public class ProxyCharacterData extends CharacterData {
 	private final CharacterData parent;

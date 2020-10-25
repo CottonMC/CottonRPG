@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.clazz;
+package io.github.cottonmc.cottonrpg.data.rpgclass;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;

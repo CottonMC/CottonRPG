@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.clazz;
+package io.github.cottonmc.cottonrpg.data.rpgclass;
 
 import io.github.cottonmc.cottonrpg.data.RpgDataEntry;
 import net.minecraft.nbt.CompoundTag;
@@ -50,14 +50,14 @@ public class CharacterClassEntry implements RpgDataEntry<CharacterClass> {
 
 	@Override
 	public void writeToPacket(PacketByteBuf buf) {
-		buf.writeInt(this.getLevel());
-		buf.writeInt(this.getExperience());
+		buf.writeVarInt(this.getLevel());
+		buf.writeVarInt(this.getExperience());
 	}
 
 	@Override
 	public void readFromPacket(PacketByteBuf buf) {
-		this.setLevel(buf.readInt());
-		this.setExperience(buf.readInt());
+		this.setLevel(buf.readVarInt());
+		this.setExperience(buf.readVarInt());
 	}
 
 	public int getLevel() {

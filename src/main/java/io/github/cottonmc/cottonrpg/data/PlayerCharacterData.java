@@ -2,11 +2,11 @@ package io.github.cottonmc.cottonrpg.data;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
-import io.github.cottonmc.cottonrpg.data.skill.CharacterSkillEntry;
-import io.github.cottonmc.cottonrpg.data.skill.CharacterSkills;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClasses;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResourceEntry;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResources;
+import io.github.cottonmc.cottonrpg.data.rpgskill.CharacterSkillEntry;
+import io.github.cottonmc.cottonrpg.data.rpgskill.CharacterSkills;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;

@@ -3,8 +3,8 @@ package io.github.cottonmc.cottonrpg.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResourceEntry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -86,7 +86,6 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 
 				//bar BG: left edge, middle, right edge
 
-				//      x                    y    w         h    u  v
 				drawTexture(matrices, left, top, 0, 0, 1, 5);
 				drawTexture(matrices, left + 1, top, 1, 0, barWidth, 5);
 				drawTexture(matrices, left + barWidth + 1, top, 63, 0, 1, 5);

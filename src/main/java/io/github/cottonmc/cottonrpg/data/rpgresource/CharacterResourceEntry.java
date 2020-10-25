@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.resource;
+package io.github.cottonmc.cottonrpg.data.rpgresource;
 
 import io.github.cottonmc.cottonrpg.data.RpgDataEntry;
 import net.minecraft.nbt.CompoundTag;
@@ -11,8 +11,8 @@ public class CharacterResourceEntry implements RpgDataEntry<CharacterResource> {
 
 	private final Identifier id;
 	private final CharacterResource res;
-	private long current;
-	private long max;
+	private int current;
+	private int max;
 	private Ticker ticker;
 	private transient boolean dirty = false;
 	private transient double scramble;
@@ -46,8 +46,8 @@ public class CharacterResourceEntry implements RpgDataEntry<CharacterResource> {
 
 	@Override
 	public void fromTag(CompoundTag tag) {
-		this.current = tag.getLong("CurrentLevel");
-		this.max = tag.getLong("MaxLevel");
+		this.current = tag.getInt("CurrentLevel");
+		this.max = tag.getInt("MaxLevel");
 		this.ticker = getType().makeTicker(this).fromTag(tag.getCompound("Ticker"));
 		markDirty();
 	}
@@ -60,20 +60,20 @@ public class CharacterResourceEntry implements RpgDataEntry<CharacterResource> {
 		this.scramble = scramble;
 	}
 
-	public long getCurrent() {
+	public int getCurrent() {
 		return current;
 	}
 
-	public void setCurrent(long l) {
+	public void setCurrent(int l) {
 		markDirty();
 		this.current = Math.min(l, getMax());
 	}
 
-	public long getMax() {
+	public int getMax() {
 		return max;
 	}
 
-	public void setMax(long l) {
+	public void setMax(int l) {
 		markDirty();
 		this.max = l;
 	}
@@ -112,14 +112,14 @@ public class CharacterResourceEntry implements RpgDataEntry<CharacterResource> {
 
 	@Override
 	public void writeToPacket(PacketByteBuf buf) {
-		buf.writeLong(this.getCurrent());
-		buf.writeLong(this.getMax());
+		buf.writeVarInt(this.getCurrent());
+		buf.writeVarInt(this.getMax());
 	}
 
 	@Override
 	public void readFromPacket(PacketByteBuf buf) {
-		this.setCurrent(buf.readLong());
-		this.setMax(buf.readLong());
+		this.setCurrent(buf.readVarInt());
+		this.setMax(buf.readVarInt());
 	}
 
 	@Override

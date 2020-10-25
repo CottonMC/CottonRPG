@@ -1,6 +1,5 @@
 package io.github.cottonmc.cottonrpg.commands;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -10,13 +9,12 @@ import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.concurrent.CompletableFuture;
 
 public class CottonRPGCommands {
 	public static void init() {
-		CommandRegistrationCallback.EVENT.register((CommandDispatcher<ServerCommandSource> cmd, boolean dedicated) -> cmd.register(CommandManager.literal("cottonrpg")
+		CommandRegistrationCallback.EVENT.register((cmd, dedicated) -> cmd.register(CommandManager.literal("cottonrpg")
 			.executes(new MainCommand())
 			.then(
 				CommandManager.literal("classes")

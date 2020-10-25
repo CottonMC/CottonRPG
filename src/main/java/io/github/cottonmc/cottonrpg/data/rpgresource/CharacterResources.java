@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.resource;
+package io.github.cottonmc.cottonrpg.data.rpgresource;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.BaseRpgDataContainer;
