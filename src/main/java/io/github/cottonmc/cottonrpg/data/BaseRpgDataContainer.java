@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -41,7 +42,7 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 	}
 
 	@Override
-	public Iterator<E> iterator() {
+	public @NotNull Iterator<E> iterator() {
 		return underlying.values().iterator();
 	}
 

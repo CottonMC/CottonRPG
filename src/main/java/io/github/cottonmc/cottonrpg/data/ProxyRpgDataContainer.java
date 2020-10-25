@@ -3,6 +3,7 @@ package io.github.cottonmc.cottonrpg.data;
 import com.google.common.collect.Iterators;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	}
 
 	@Override
-	public Iterator<E> iterator() {
+	public @NotNull Iterator<E> iterator() {
 		if (child != null) return Iterators.concat(child.iterator(), parent.iterator());
 		return parent.iterator();
 	}
