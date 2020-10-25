@@ -10,15 +10,15 @@ public interface RpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<
 
 	void clear();
 
-	boolean has(T skill);
+	boolean has(T type);
 
-	E get(T skill);
+	E get(T type);
 
 	E giveIfAbsent(Identifier id);
 
 	E giveIfAbsent(T type);
 
-	E remove(T skill);
+	E remove(T type);
 
 	void fromTag(CompoundTag tag);
 

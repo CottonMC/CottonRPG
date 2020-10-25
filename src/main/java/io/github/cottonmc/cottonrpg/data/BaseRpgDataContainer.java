@@ -24,19 +24,19 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 	}
 
 	@Override
-	public boolean has(T skill) {
-		return underlying.containsKey(skill);
+	public boolean has(T type) {
+		return underlying.containsKey(type);
 	}
 
 	@Override
-	public E get(T skill) {
-		return underlying.get(skill);
+	public E get(T type) {
+		return underlying.get(type);
 	}
 
 	@Override
-	public E remove(T skill) {
-		E entry = underlying.remove(skill);
-		if (entry != null) removed.add(skill);
+	public E remove(T type) {
+		E entry = underlying.remove(type);
+		if (entry != null) removed.add(type);
 		return entry;
 	}
 

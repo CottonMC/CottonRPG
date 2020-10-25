@@ -23,13 +23,13 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	}
 
 	@Override
-	public boolean has(T skill) {
-		return super.has(skill);
+	public boolean has(T type) {
+		return super.has(type);
 	}
 
 	@Override
-	public E get(T skill) {
-		return super.get(skill);
+	public E get(T type) {
+		return super.get(type);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	}
 
 	@Override
-	public E remove(T skill) {
+	public E remove(T type) {
 		throw new UnsupportedOperationException("Can't remove data from the proxy! Get the parent or child instead!");
 	}
 
