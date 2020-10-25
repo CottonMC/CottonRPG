@@ -34,7 +34,7 @@ public class ResourceGiveCommand implements Command<ServerCommandSource> {
 				return 2;
 			}
 
-			CharacterData.get(player).getResources().giveIfAbsent(new CharacterResourceEntry(id));
+			CharacterData.get(player).getResources().giveIfAbsent(id);
 
 			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}

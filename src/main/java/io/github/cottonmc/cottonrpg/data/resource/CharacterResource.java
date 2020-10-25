@@ -1,16 +1,18 @@
 package io.github.cottonmc.cottonrpg.data.resource;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.RpgDataType;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A type of resource, like mana, rage, blood, etc.
  */
-public interface CharacterResource {
+public interface CharacterResource extends RpgDataType {
 
 	/**
 	 * How the resource should be displayed/synced to the user
@@ -18,10 +20,15 @@ public interface CharacterResource {
 	 * HIDDEN: Synced to client, but not displayed in Cotton RPG's HUD.
 	 * HUD: Synced to client, and displayed in the HUD.
 	 */
-	public enum ResourceVisibility {
+	enum ResourceVisibility {
 		INVISIBLE,
 		HIDDEN,
 		HUD
+	}
+
+	@Override
+	default Identifier getId() {
+		return Objects.requireNonNull(CottonRPG.RESOURCES.getId(this), this + " is not a registered resource");
 	}
 
 	/**
@@ -59,7 +66,7 @@ public interface CharacterResource {
 	 * @return The translation key for this resource. Typically at `resource.<namespace>.<path>`.
 	 */
 	default String getTranslationKey() {
-		Identifier id = CottonRPG.RESOURCES.getId(this);
+		Identifier id = this.getId();
 		return "resource." + id.getNamespace() + "." + id.getPath();
 	}
 

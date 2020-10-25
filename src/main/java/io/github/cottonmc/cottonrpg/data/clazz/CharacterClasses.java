@@ -1,94 +1,31 @@
 package io.github.cottonmc.cottonrpg.data.clazz;
 
-import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
+import io.github.cottonmc.cottonrpg.data.BaseRpgDataContainer;
+import io.github.cottonmc.cottonrpg.data.ProxyRpgDataContainer;
+import io.github.cottonmc.cottonrpg.data.RpgDataContainer;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
+import javax.annotation.Nullable;
 
-public class CharacterClasses {
-	private final ArrayList<Identifier> removed = new ArrayList<>();
+public interface CharacterClasses extends RpgDataContainer<CharacterClass, CharacterClassEntry> {
+	int SYNC_FLAG = 0b1;
 
-	private final Map<Identifier, CharacterClassEntry> underlying = new HashMap<>();
+	@Override
+	default int getSyncFlag() {
+		return SYNC_FLAG;
+	}
 
-	public int getSize() {
-		synchronized(underlying) {
-			return underlying.size();
+	class Impl extends BaseRpgDataContainer<CharacterClass, CharacterClassEntry> implements CharacterClasses {
+		@Override
+		public CharacterClassEntry giveIfAbsent(Identifier id) {
+			return this.underlying.computeIfAbsent(id, CharacterClassEntry::new);
 		}
 	}
 
-	public void clear() {
-		synchronized(underlying) {
-			underlying.clear();
+
+	class Proxy extends ProxyRpgDataContainer<CharacterClass, CharacterClassEntry> implements CharacterClasses {
+		public Proxy(CharacterClasses parent, @Nullable CharacterClasses child) {
+			super(parent, child);
 		}
 	}
-
-	public boolean has(CharacterClass clazz) {
-		return has(CottonRPG.CLASSES.getId(clazz));
-	}
-
-	public boolean has(Identifier id) {
-		synchronized(underlying) {
-			return underlying.containsKey(id);
-		}
-	}
-
-	public CharacterClassEntry get(CharacterClass clazz) {
-		return get(CottonRPG.CLASSES.getId(clazz));
-	}
-
-	public CharacterClassEntry get(Identifier id) {
-		synchronized(underlying) {
-			return underlying.get(id);
-		}
-	}
-
-	public void giveIfAbsent(CharacterClassEntry clazz) {
-		synchronized(underlying) {
-			underlying.putIfAbsent(clazz.id, clazz);
-		}
-		clazz.markDirty();
-	}
-
-	public CharacterClassEntry remove(CharacterClass clazz) {
-		return remove(CottonRPG.CLASSES.getId(clazz));
-	}
-
-	public CharacterClassEntry remove(Identifier id) {
-		CharacterClassEntry entry = underlying.remove(id);
-		if (entry!=null) removed.add(id);
-		return entry;
-	}
-
-	public void forEach(BiConsumer<Identifier, CharacterClassEntry> consumer) {
-		synchronized(underlying) {
-			underlying.forEach(consumer);
-		}
-	}
-
-	public boolean isDirty() {
-		if (!removed.isEmpty()) return true;
-
-		for(CharacterClassEntry entry : underlying.values()) {
-			if (entry.isDirty()) return true;
-		}
-
-		return false;
-	}
-
-	public void sync(ServerPlayerEntity player) {
-		if (!isDirty()) return;
-
-		if (!removed.isEmpty()) {
-			CottonRPGNetworking.batchSyncClasses(player, this, true);
-			removed.clear();
-		} else {
-			CottonRPGNetworking.batchSyncClasses(player, this, false);
-		}
-	}
-
 }

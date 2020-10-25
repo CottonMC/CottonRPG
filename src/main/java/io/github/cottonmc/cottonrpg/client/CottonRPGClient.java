@@ -9,6 +9,10 @@ public class CottonRPGClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(new RpgHud());
-        ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> CharacterData.get(minecraftClient.player).getResources().forEach((id, res) -> res.clientTick()));
+        ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> {
+            if (minecraftClient.player != null) {
+                CharacterData.get(minecraftClient.player).getResources().forEach((id, res) -> res.clientTick());
+            }
+        });
     }
 }

@@ -26,7 +26,7 @@ public class CharacterData implements Component {
 	private final CharacterResources resources;
 
 	public CharacterData() {
-		this(new CharacterClasses(), new CharacterSkills(), new CharacterResources());
+		this(new CharacterClasses.Impl(), new CharacterSkills.Impl(), new CharacterResources.Impl());
 	}
 
 	protected CharacterData(CharacterClasses classes, CharacterSkills skills, CharacterResources resources) {
@@ -47,7 +47,7 @@ public class CharacterData implements Component {
 	/**
 	 * Get a stack's data.
 	 * @param stack The stack to get for.
-	 * @return
+	 * @return The classes, resources, and skills of the item.
 	 */
 	@Nullable
 	public static CharacterData get(ItemStack stack) {
@@ -58,7 +58,11 @@ public class CharacterData implements Component {
 	}
 
 	public static CharacterData get(PlayerEntity player, ItemStack stack) {
-		return new ProxyCharacterData(CharacterData.get(player), CharacterData.get(stack));
+		return mergedView(CharacterData.get(player), CharacterData.get(stack));
+	}
+
+	public static ProxyCharacterData mergedView(CharacterData parent, CharacterData child) {
+		return new ProxyCharacterData(parent, child);
 	}
 
 	public CharacterClasses getClasses() {
@@ -76,72 +80,22 @@ public class CharacterData implements Component {
 	@Override
 	public void readFromNbt(CompoundTag crpg) {
 		if (crpg.contains("Classes")) {
-			CompoundTag cclasses = crpg.getCompound("Classes");
-			for (String key : cclasses.getKeys()) {
-				if (cclasses.getType(key) == NbtType.COMPOUND) try {
-					Identifier id = new Identifier(key);
-					this.classes.giveIfAbsent(new CharacterClassEntry(id));
-					CharacterClassEntry entry = this.classes.get(id);
-					CompoundTag cclass = cclasses.getCompound(key);
-					entry.fromTag(cclass);
-				} catch (Exception e) {
-					CottonRPG.LOGGER.error("[CottonRPG] Couldn't read class!", e);
-				}
-			}
+			this.classes.fromTag(crpg.getCompound("Classes"));
 		}
 
 		if (crpg.contains("Resources")) {
-			CompoundTag cresources = crpg.getCompound("Resources");
-			for (String key : cresources.getKeys()) {
-				if (cresources.getType(key) == NbtType.COMPOUND) try {
-					Identifier id = new Identifier(key);
-					this.resources.giveIfAbsent(new CharacterResourceEntry(id));
-					CharacterResourceEntry entry = this.resources.get(id);
-					CompoundTag cresourceBar = cresources.getCompound(key);
-					entry.fromTag(cresourceBar);
-				} catch (Exception e) {
-					CottonRPG.LOGGER.error("[CottonRPG] Couldn't read resource!", e);
-				}
-			}
+			this.resources.fromTag(crpg.getCompound("Resources"));
 		}
 
 		if (crpg.contains("Skills")) {
-			CompoundTag cskills = crpg.getCompound("Skills");
-			for (String key : cskills.getKeys()) {
-				if (cskills.getType(key) == NbtType.COMPOUND) try {
-					Identifier id = new Identifier(key);
-					this.skills.giveIfAbsent(new CharacterSkillEntry(id));
-					CharacterSkillEntry entry = this.skills.get(id);
-					CompoundTag cskill = cskills.getCompound(key);
-					entry.fromTag(cskill);
-				} catch (Exception e) {
-					CottonRPG.LOGGER.error("[CottonRPG] Couldn't read skill!", e);
-				}
-			}
+			this.skills.fromTag(crpg.getCompound("Skills"));
 		}
 	}
 
 	@Override
 	public void writeToNbt(CompoundTag crpg) {
-		CompoundTag cclasses = new CompoundTag();
-		classes.forEach((id, entry) -> {
-			CompoundTag cclass = entry.toTag();
-			cclasses.put(id.toString(), cclass);
-		});
-		crpg.put("Classes", cclasses);
-
-		CompoundTag cresourceBars = new CompoundTag();
-		resources.forEach((id, entry) -> {
-			CompoundTag cresourceBar = entry.toTag();
-			cresourceBars.put(id.toString(), cresourceBar);
-		});
-		crpg.put("Resources", cresourceBars);
-
-		CompoundTag cskills = new CompoundTag();
-		skills.forEach((id, entry) -> {
-			CompoundTag cskill = entry.toTag();
-			cskills.put(id.toString(), cskill);
-		});
-		crpg.put("Skills", cskills);
+		crpg.put("Classes", classes.toTag());
+		crpg.put("Resources", resources.toTag());
+		crpg.put("Skills", skills.toTag());
 	}
 }

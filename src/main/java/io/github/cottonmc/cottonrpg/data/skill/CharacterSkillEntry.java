@@ -1,12 +1,14 @@
 package io.github.cottonmc.cottonrpg.data.skill;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.RpgDataEntry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public class CharacterSkillEntry {
+public class CharacterSkillEntry implements RpgDataEntry<CharacterSkill> {
 	public final Identifier id;
-	private CharacterSkill skill;
+	private final CharacterSkill skill;
 	private int cooldown = 0;
 	private transient boolean dirty = false;
 
@@ -15,16 +17,27 @@ public class CharacterSkillEntry {
 		this.skill = CottonRPG.SKILLS.get(id);
 	}
 
+	@Override
+	public Identifier getId() {
+		return id;
+	}
+
+	@Override
+	public CharacterSkill getType() {
+		return this.skill;
+	}
+
+	@Override
 	public CompoundTag toTag() {
 		CompoundTag tag = new CompoundTag();
 		tag.putInt("cooldown", this.cooldown);
 		return tag;
 	}
 
-	public CharacterSkillEntry fromTag(CompoundTag tag) {
+	@Override
+	public void fromTag(CompoundTag tag) {
 		this.cooldown = tag.getInt("cooldown");
 		markDirty();
-		return this;
 	}
 
 	public int getCooldown() {
@@ -44,15 +57,28 @@ public class CharacterSkillEntry {
 		skill.tick(this);
 	}
 
+	@Override
 	public void markDirty() {
 		dirty = true;
 	}
 
+	@Override
 	public boolean isDirty() {
 		return dirty;
 	}
 
+	@Override
 	public void clearDirty() {
 		dirty = false;
+	}
+
+	@Override
+	public void writeToPacket(PacketByteBuf buf) {
+		buf.writeInt(this.getCooldown());
+	}
+
+	@Override
+	public void readFromPacket(PacketByteBuf buf) {
+		this.setCooldown(buf.readInt());
 	}
 }

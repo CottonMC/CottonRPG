@@ -34,7 +34,7 @@ public class ClassGiveCommand implements Command<ServerCommandSource> {
 				return 2;
 			}
 
-			CharacterData.get(player).getClasses().giveIfAbsent(new CharacterClassEntry(id));
+			CharacterData.get(player).getClasses().giveIfAbsent(id);
 
 			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}

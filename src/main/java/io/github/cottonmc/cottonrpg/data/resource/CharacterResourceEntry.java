@@ -1,10 +1,12 @@
 package io.github.cottonmc.cottonrpg.data.resource;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.RpgDataEntry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public class CharacterResourceEntry {
+public class CharacterResourceEntry implements RpgDataEntry<CharacterResource> {
 	private static final double SCRAMBLE_CAP = 200d;
 	private static final double SCRAMBLE_FLOOR = 0.01d;
 	
@@ -24,6 +26,17 @@ public class CharacterResourceEntry {
 		this.ticker = res.makeTicker(this);
 	}
 
+	@Override
+	public Identifier getId() {
+		return id;
+	}
+
+	@Override
+	public CharacterResource getType() {
+		return res;
+	}
+
+	@Override
 	public CompoundTag toTag() {
 		CompoundTag tag = new CompoundTag();
 		tag.putLong("CurrentLevel", current);
@@ -32,12 +45,12 @@ public class CharacterResourceEntry {
 		return tag;
 	}
 
-	public CharacterResourceEntry fromTag(CompoundTag tag) {
+	@Override
+	public void fromTag(CompoundTag tag) {
 		this.current = tag.getLong("CurrentLevel");
 		this.max = tag.getLong("MaxLevel");
-		this.ticker = res.makeTicker(this).fromTag(tag.getCompound("Ticker"));
+		this.ticker = getType().makeTicker(this).fromTag(tag.getCompound("Ticker"));
 		markDirty();
-		return this;
 	}
 
 	public double getCurrentForRender() {
@@ -98,14 +111,29 @@ public class CharacterResourceEntry {
 		}
 	}
 
+	@Override
+	public void writeToPacket(PacketByteBuf buf) {
+		buf.writeLong(this.getCurrent());
+		buf.writeLong(this.getMax());
+	}
+
+	@Override
+	public void readFromPacket(PacketByteBuf buf) {
+		this.setCurrent(buf.readLong());
+		this.setMax(buf.readLong());
+	}
+
+	@Override
 	public void markDirty() {
 		dirty = true;
 	}
 
+	@Override
 	public boolean isDirty() {
 		return dirty;
 	}
 
+	@Override
 	public void clearDirty() {
 		dirty = false;
 	}

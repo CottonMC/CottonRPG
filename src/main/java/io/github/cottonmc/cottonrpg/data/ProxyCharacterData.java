@@ -1,15 +1,16 @@
 package io.github.cottonmc.cottonrpg.data;
 
 import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
-import io.github.cottonmc.cottonrpg.data.clazz.ProxyCharClasses;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
-import io.github.cottonmc.cottonrpg.data.resource.ProxyCharResources;
 import io.github.cottonmc.cottonrpg.data.skill.CharacterSkills;
-import io.github.cottonmc.cottonrpg.data.skill.ProxyCharSkills;
 
 public class ProxyCharacterData extends CharacterData {
 	private final CharacterData parent;
 	private final CharacterData child;
+
+	private CharacterClasses.Proxy proxyClasses;
+	private CharacterResources.Proxy proxyResources;
+	private CharacterSkills.Proxy proxySkills;
 
 	/**
 	 * Create a proxy for interacting with multiple sets of data at once.
@@ -27,7 +28,10 @@ public class ProxyCharacterData extends CharacterData {
 	 */
 	@Override
 	public CharacterClasses getClasses() {
-		return new ProxyCharClasses(parent.getClasses(), child.getClasses());
+		if (proxyClasses == null) {
+			proxyClasses = new CharacterClasses.Proxy(parent.getClasses(), child.getClasses());
+		}
+		return proxyClasses;
 	}
 
 	/**
@@ -35,7 +39,10 @@ public class ProxyCharacterData extends CharacterData {
 	 */
 	@Override
 	public CharacterResources getResources() {
-		return new ProxyCharResources(parent.getResources(), child.getResources());
+		if (proxyResources == null) {
+			proxyResources = new CharacterResources.Proxy(parent.getResources(), child.getResources());
+		}
+		return proxyResources;
 	}
 
 	/**
@@ -43,7 +50,10 @@ public class ProxyCharacterData extends CharacterData {
 	 */
 	@Override
 	public CharacterSkills getSkills() {
-		return new ProxyCharSkills(parent.getSkills(), child.getSkills());
+		if (proxySkills == null) {
+			proxySkills = new CharacterSkills.Proxy(parent.getSkills(), child.getSkills());
+		}
+		return proxySkills;
 	}
 
 	/**

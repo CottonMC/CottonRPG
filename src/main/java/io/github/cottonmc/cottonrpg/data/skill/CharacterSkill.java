@@ -2,6 +2,7 @@ package io.github.cottonmc.cottonrpg.data.skill;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
+import io.github.cottonmc.cottonrpg.data.RpgDataType;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,8 +12,14 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.Objects;
 
-public interface CharacterSkill {
+public interface CharacterSkill extends RpgDataType {
+	@Override
+	default Identifier getId() {
+		return Objects.requireNonNull(CottonRPG.SKILLS.getId(this), this + " is not a registered skill");
+	}
+
 	/**
 	 * @return How many ticks this skill takes to cool down after using.
 	 */
@@ -53,7 +60,7 @@ public interface CharacterSkill {
 	boolean perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target);
 
 	default String getTranslationKey() {
-		Identifier id = CottonRPG.SKILLS.getId(this);
+		Identifier id = this.getId();
 		return "skill." + id.getNamespace() + "." + id.getPath();
 	}
 

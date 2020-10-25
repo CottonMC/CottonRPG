@@ -1,93 +1,30 @@
 package io.github.cottonmc.cottonrpg.data.skill;
 
-import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
+import io.github.cottonmc.cottonrpg.data.BaseRpgDataContainer;
+import io.github.cottonmc.cottonrpg.data.ProxyRpgDataContainer;
+import io.github.cottonmc.cottonrpg.data.RpgDataContainer;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
+import javax.annotation.Nullable;
 
-public class CharacterSkills {
-	private ArrayList<Identifier> removed = new ArrayList<>();
+public interface CharacterSkills extends RpgDataContainer<CharacterSkill, CharacterSkillEntry> {
+    int SYNC_FLAG = 0b100;
 
-	private final Map<Identifier, CharacterSkillEntry> underlying = new HashMap<>();
+    @Override
+    default int getSyncFlag() {
+        return SYNC_FLAG;
+    }
 
-	public int getSize() {
-		synchronized(underlying) {
-			return underlying.size();
-		}
-	}
+    class Impl extends BaseRpgDataContainer<CharacterSkill, CharacterSkillEntry> implements CharacterSkills {
+        @Override
+        public CharacterSkillEntry giveIfAbsent(Identifier id) {
+            return this.underlying.computeIfAbsent(id, CharacterSkillEntry::new);
+        }
+    }
 
-	public void clear() {
-		synchronized(underlying) {
-			underlying.clear();
-		}
-	}
-
-	public boolean has(CharacterSkill skill) {
-		return has(CottonRPG.SKILLS.getId(skill));
-	}
-
-	public boolean has(Identifier id) {
-		synchronized(underlying) {
-			return underlying.containsKey(id);
-		}
-	}
-
-	public CharacterSkillEntry get(CharacterSkill skill) {
-		return get(CottonRPG.SKILLS.getId(skill));
-	}
-
-	public CharacterSkillEntry get(Identifier id) {
-		synchronized(underlying) {
-			return underlying.get(id);
-		}
-	}
-
-	public void giveIfAbsent(CharacterSkillEntry skill) {
-		synchronized(underlying) {
-			underlying.putIfAbsent(skill.id, skill);
-		}
-		skill.markDirty();
-	}
-
-	public CharacterSkillEntry remove(CharacterSkill skill) {
-		return remove(CottonRPG.SKILLS.getId(skill));
-	}
-
-	public CharacterSkillEntry remove(Identifier id) {
-		CharacterSkillEntry entry = underlying.remove(id);
-		if (entry!=null) removed.add(id);
-		return entry;
-	}
-
-	public void forEach(BiConsumer<Identifier, CharacterSkillEntry> consumer) {
-		synchronized(underlying) {
-			underlying.forEach(consumer);
-		}
-	}
-
-	public boolean isDirty() {
-		if (!removed.isEmpty()) return true;
-
-		for(CharacterSkillEntry entry : underlying.values()) {
-			if (entry.isDirty()) return true;
-		}
-
-		return false;
-	}
-
-	public void sync(ServerPlayerEntity player) {
-		if (!isDirty()) return;
-
-		if (!removed.isEmpty()) {
-			CottonRPGNetworking.batchSyncSkills(player, this, true);
-			removed.clear();
-		} else {
-			CottonRPGNetworking.batchSyncSkills(player, this, false);
-		}
-	}
+    class Proxy extends ProxyRpgDataContainer<CharacterSkill, CharacterSkillEntry> implements CharacterSkills {
+        public Proxy(CharacterSkills parent, @Nullable CharacterSkills child) {
+            super(parent, child);
+        }
+    }
 }

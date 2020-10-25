@@ -1,8 +1,10 @@
 package io.github.cottonmc.cottonrpg.data.clazz;
 
 import java.util.List;
+import java.util.Objects;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.RpgDataType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,7 +12,12 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-public interface CharacterClass {
+public interface CharacterClass extends RpgDataType {
+
+	@Override
+	default Identifier getId() {
+		return Objects.requireNonNull(CottonRPG.CLASSES.getId(this), this + " is not a registered class");
+	}
 
 	/**
 	 * @return The max level you can obtain with this class.
@@ -32,7 +39,7 @@ public interface CharacterClass {
 	void applyLevelUp(int previousLevel, PlayerEntity player);
 
 	default String getTranslationKey() {
-		Identifier id = CottonRPG.CLASSES.getId(this);
+		Identifier id = this.getId();
 		return "class." + id.getNamespace() + "." + id.getPath();
 	}
 

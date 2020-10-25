@@ -10,14 +10,12 @@ import io.github.cottonmc.cottonrpg.data.skill.CharacterSkill;
 import io.github.cottonmc.cottonrpg.data.skill.SimpleCharacterSkill;
 import io.github.cottonmc.cottonrpg.mixin.RegistryAccessor;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
-import io.github.cottonmc.cottonrpg.util.CottonRPGNetworking;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +41,6 @@ public class CottonRPG implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		CottonRPGNetworking.init();
 		CottonRPGCommands.init();
 
 		//only have these in for testing / sample purposes

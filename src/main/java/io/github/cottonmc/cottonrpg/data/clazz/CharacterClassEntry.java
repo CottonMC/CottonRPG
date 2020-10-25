@@ -1,6 +1,9 @@
 package io.github.cottonmc.cottonrpg.data.clazz;
 
+import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.data.RpgDataEntry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 /**
@@ -9,7 +12,7 @@ import net.minecraft.util.Identifier;
  * Class XP is separate from a player's XP, and the XP in other classes.
  * However, you may want to implement experience on your classes, so feel free to access this then.
  */
-public class CharacterClassEntry {
+public class CharacterClassEntry implements RpgDataEntry<CharacterClass> {
 	public final Identifier id;
 	private int level = 0;
 	private int experience = 0;
@@ -19,6 +22,17 @@ public class CharacterClassEntry {
 		this.id = id;
 	}
 
+	@Override
+	public Identifier getId() {
+		return id;
+	}
+
+	@Override
+	public CharacterClass getType() {
+		return CottonRPG.CLASSES.get(this.id);
+	}
+
+	@Override
 	public CompoundTag toTag() {
 		CompoundTag tag = new CompoundTag();
 		tag.putInt("level", this.level);
@@ -26,11 +40,23 @@ public class CharacterClassEntry {
 		return tag;
 	}
 
-	public CharacterClassEntry fromTag(CompoundTag tag) {
+	@Override
+	public void fromTag(CompoundTag tag) {
 		this.level = tag.getInt("level");
 		this.experience = tag.getInt("experience");
 		markDirty();
-		return this;
+	}
+
+	@Override
+	public void writeToPacket(PacketByteBuf buf) {
+		buf.writeInt(this.getLevel());
+		buf.writeInt(this.getExperience());
+	}
+
+	@Override
+	public void readFromPacket(PacketByteBuf buf) {
+		this.setLevel(buf.readInt());
+		this.setExperience(buf.readInt());
 	}
 
 	public int getLevel() {
@@ -51,14 +77,17 @@ public class CharacterClassEntry {
 		this.experience = i;
 	}
 
+	@Override
 	public void markDirty() {
 		dirty = true;
 	}
 
+	@Override
 	public boolean isDirty() {
 		return dirty;
 	}
 
+	@Override
 	public void clearDirty() {
 		dirty = false;
 	}
