@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.function.BiConsumer;
 
-public interface RpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> {
+public interface RpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> extends Iterable<E> {
 
     int size();
 
@@ -21,8 +21,6 @@ public interface RpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<
     E giveIfAbsent(T type);
 
     E remove(T skill);
-
-    void forEach(BiConsumer<T, E> consumer);
 
     void fromTag(CompoundTag tag);
 

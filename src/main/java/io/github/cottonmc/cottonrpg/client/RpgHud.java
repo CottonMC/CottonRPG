@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
@@ -23,20 +24,18 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 		RenderSystem.enableBlend();
 		RenderSystem.enableAlphaTest();
 
-		final int[] height = new int[1];
-		height[0] = CottonRPG.config.barsY;
 		CharacterData data =  CharacterData.get(client.player);
 
-		data.getResources().forEach((res, entry) -> {
-			CharacterResource resource = entry.getType();
-			Identifier id = resource.getId();
-			
-			if (resource.getVisibility() != CharacterResource.ResourceVisibility.HUD) return;
-			int color = resource.getColor();
+		//coords for each bar
+		int left = CottonRPG.config.barsX;
+		int top = CottonRPG.config.barsY;
 
-			//coords for this bar
-			int left = CottonRPG.config.barsX;
-			int top = height[0];
+		for (CharacterResourceEntry entry : data.getResources()) {
+			CharacterResource resource = entry.getType();
+			Identifier id = entry.getId();
+
+			if (resource.getVisibility() != CharacterResource.ResourceVisibility.HUD) continue;
+			int color = resource.getColor();
 
 			//draw icon
 			Identifier icon = new Identifier(id.getNamespace(), "textures/rpg_resource/" + id.getPath() + ".png");
@@ -50,45 +49,45 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 			float g = (color >> 8 & 255) / 255f;
 			float b = (color & 255) / 255f;
 			client.getTextureManager().bindTexture(CRPG_BAR_TEX);
-			
+
 			long rows = 1;
-			
+
 			if (!CottonRPG.config.bigResourceBars) {
 
-				int boxes = (int)(entry.getMax() / resource.getUnitsPerBar()) - 1;
+				int boxes = (int) (entry.getMax() / resource.getUnitsPerBar()) - 1;
 				rows += (Math.min(boxes, 35) / 12);
 
 				double toDistribute = entry.getCurrentForRender();
-				long fullBoxes = (long)toDistribute / resource.getUnitsPerBar();
-				if (fullBoxes>boxes) fullBoxes = boxes;
-				
+				long fullBoxes = (long) toDistribute / resource.getUnitsPerBar();
+				if (fullBoxes > boxes) fullBoxes = boxes;
+
 				long barMaxAmount = resource.getUnitsPerBar();
-				if (fullBoxes==boxes) {
-					barMaxAmount = entry.getMax() - (fullBoxes*resource.getUnitsPerBar());
-					if (barMaxAmount==0) {
+				if (fullBoxes == boxes) {
+					barMaxAmount = entry.getMax() - (fullBoxes * resource.getUnitsPerBar());
+					if (barMaxAmount == 0) {
 						fullBoxes--;
 						barMaxAmount = resource.getUnitsPerBar(); //One full bar retrieved back from boxes
 					}
-					if (barMaxAmount>resource.getUnitsPerBar()) barMaxAmount -=resource.getUnitsPerBar();
+					if (barMaxAmount > resource.getUnitsPerBar()) barMaxAmount -= resource.getUnitsPerBar();
 				}
-				
-				toDistribute -= fullBoxes*resource.getUnitsPerBar(); //toDistribute is now the amount of the resource in the bar. all we need is the max now
-				if (toDistribute>barMaxAmount) toDistribute -= resource.getUnitsPerBar();
-				
+
+				toDistribute -= fullBoxes * resource.getUnitsPerBar(); //toDistribute is now the amount of the resource in the bar. all we need is the max now
+				if (toDistribute > barMaxAmount) toDistribute -= resource.getUnitsPerBar();
+
 				boolean needsPlus = boxes > 36;
 				boolean plusOn = fullBoxes > 36;
-				
-				
-				int barWidth = (int)((barMaxAmount / (float)resource.getUnitsPerBar()) * CRPG_FULL_BAR_WIDTH);
-				if (barWidth<1) barWidth=1; //Never display a bar with length 0
-				
-				int fgWidth = (int)((toDistribute / (float)resource.getUnitsPerBar()) * CRPG_FULL_BAR_WIDTH);
-				if (toDistribute>0 && fgWidth<=0) fgWidth=1; //never display an empty bar for *some* health
-				
+
+
+				int barWidth = (int) ((barMaxAmount / (float) resource.getUnitsPerBar()) * CRPG_FULL_BAR_WIDTH);
+				if (barWidth < 1) barWidth = 1; //Never display a bar with length 0
+
+				int fgWidth = (int) ((toDistribute / (float) resource.getUnitsPerBar()) * CRPG_FULL_BAR_WIDTH);
+				if (toDistribute > 0 && fgWidth <= 0) fgWidth = 1; //never display an empty bar for *some* health
+
 				//System.out.println("bar: "+toDistribute+"/"+barMaxAmount+" boxes: "+fullBoxes+"/"+boxes);
-				
+
 				//bar BG: left edge, middle, right edge
-				
+
 				//      x                    y    w         h    u  v
 				drawTexture(matrices, left, top, 0, 0, 1, 5);
 				drawTexture(matrices, left + 1, top, 1, 0, barWidth, 5);
@@ -136,7 +135,7 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 				//blit(left + 1, top, fgWidth, 5, texUV(1), texUV(10), texUV(fgWidth + 1), texUV(15));
 				//blit(left + fgWidth + 1, top, 1, 5, texUV(63), texUV(10), texUV(64), texUV(15));
 				if (fullBoxes > 0) {
-					int boxesLeft = (int)fullBoxes;
+					int boxesLeft = (int) fullBoxes;
 					int newTop = top + 4;
 					for (int i = 0; i < rows; i++) {
 						int toDraw = 12;
@@ -173,8 +172,8 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 				double toRender = entry.getCurrentForRender();
 
 				RenderSystem.color4f(r, g, b, 1.0f);
-				int fgWidth = (int)((toRender / (float)entry.getMax()) * CRPG_FULL_BAR_WIDTH);
-				if (toRender>0 && fgWidth<=0) fgWidth=1; //never display an empty bar for *some* health
+				int fgWidth = (int) ((toRender / (float) entry.getMax()) * CRPG_FULL_BAR_WIDTH);
+				if (toRender > 0 && fgWidth <= 0) fgWidth = 1; //never display an empty bar for *some* health
 				//bar FG: left edge, middle, right edge
 				drawTexture(matrices, left, top, 0, 29, 1, 9);
 				drawTexture(matrices, left + 1, top, 1, 29, fgWidth, 9);
@@ -182,9 +181,9 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 			}
 
 			// Increment
-			height[0] += (12 + (4 * (rows - 1)));
+			top += (12 + (4 * (rows - 1)));
 			RenderSystem.color4f(1f, 1f, 1f, 1f);
-		});
+		}
 
 		RenderSystem.disableAlphaTest();
 		RenderSystem.disableBlend();

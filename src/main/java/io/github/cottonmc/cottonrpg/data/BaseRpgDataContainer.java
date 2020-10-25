@@ -7,7 +7,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> implements RpgDataContainer<T, E> {
     protected final Map<T, E> underlying = new HashMap<>();
@@ -41,8 +41,13 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
     }
 
     @Override
-    public void forEach(BiConsumer<T, E> consumer) {
-        underlying.forEach(consumer);
+    public Iterator<E> iterator() {
+        return underlying.values().iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super E> action) {
+        underlying.values().forEach(action);
     }
 
     @Override
@@ -60,7 +65,11 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
-        this.forEach((type, entry) -> tag.put(entry.getId().toString(), entry.toTag()));
+
+        for (E entry : this) {
+            tag.put(entry.getId().toString(), entry.toTag());
+        }
+
         return tag;
     }
 
@@ -114,9 +123,11 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 
     private List<E> gatherDirtyEntries() {
         List<E> entries = new ArrayList<>();
-        this.forEach((id, entry) -> {
+
+        for (E entry : this) {
             if (entry.isDirty()) entries.add(entry);
-        });
+        }
+
         return entries;
     }
 }

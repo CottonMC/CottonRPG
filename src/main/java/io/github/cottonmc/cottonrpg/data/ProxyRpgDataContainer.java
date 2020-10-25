@@ -1,10 +1,12 @@
 package io.github.cottonmc.cottonrpg.data;
 
+import com.google.common.collect.Iterators;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import javax.annotation.Nullable;
-import java.util.function.BiConsumer;
+import java.util.Iterator;
+import java.util.function.Consumer;
 
 public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> extends BaseRpgDataContainer<T, E> {
 	private final RpgDataContainer<T, E> parent;
@@ -31,9 +33,15 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	}
 
 	@Override
-	public void forEach(BiConsumer<T, E> consumer) {
-		if (child != null) child.forEach(consumer);
-		parent.forEach(consumer);
+	public Iterator<E> iterator() {
+		if (child != null) return Iterators.concat(child.iterator(), parent.iterator());
+		return parent.iterator();
+	}
+
+	@Override
+	public void forEach(Consumer<? super E> action) {
+		if (child != null) child.forEach(action);
+		parent.forEach(action);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClassEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -22,11 +23,12 @@ public class ClassesCommand implements Command<ServerCommandSource> {
 			PlayerEntity player = (PlayerEntity) entity;
 			Text header = new TranslatableText("cmd.cottonrpg.classes.yourclasses").formatted(Formatting.AQUA);
 			player.sendMessage(header, false);
-			CharacterData.get(player).getClasses().forEach((type, entry) -> {
+
+			for (CharacterClassEntry entry : CharacterData.get(player).getClasses()) {
 				String name = entry.getType().getName().asString();
-				Text text = new TranslatableText("cmd.cottonrpg.classes.entry", name, type.toString(), entry.getLevel()).formatted(Formatting.GOLD);
+				Text text = new TranslatableText("cmd.cottonrpg.classes.entry", name, entry.getId().toString(), entry.getLevel()).formatted(Formatting.GOLD);
 				player.sendMessage(text, false);
-			});
+			}
 		}
 		return 1;
 	}
