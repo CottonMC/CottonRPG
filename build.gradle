@@ -28,8 +28,8 @@ repositories {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
 	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
@@ -39,7 +39,7 @@ dependencies {
 //    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
 
 	// mod menu
-	modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
+	modRuntime("io.github.prospector:modmenu:1.14.6+build.31") {
 		transitive = false
 	}
 
