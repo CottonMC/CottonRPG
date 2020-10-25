@@ -21,11 +21,11 @@ public class ClassesCommand implements Command<ServerCommandSource> {
 		if (entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) entity;
 			Text header = new TranslatableText("cmd.cottonrpg.clazz.yourclasses").formatted(Formatting.AQUA);
-			player.addChatMessage(header, false);
+			player.sendMessage(header, false);
 			CharacterData.get(player).getClasses().forEach((id, entry) -> {
 				String name = CottonRPG.CLASSES.get(id).getName().asString();
 				Text text = new TranslatableText("cmd.cottonrpg.clazz.entry", name, id.toString(), entry.getLevel()).formatted(Formatting.GOLD);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 			});
 		}
 		return 1;

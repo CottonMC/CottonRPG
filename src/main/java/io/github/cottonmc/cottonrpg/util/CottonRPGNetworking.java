@@ -1,6 +1,6 @@
 package io.github.cottonmc.cottonrpg.util;
 
-import io.github.cottonmc.cottonrpg.data.*;
+import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.clazz.CharacterClassEntry;
 import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResourceEntry;
@@ -12,11 +12,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.PacketByteBuf;
 
 import java.util.ArrayList;
 import java.util.List;

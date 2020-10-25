@@ -21,7 +21,7 @@ public class MainCommand implements Command<ServerCommandSource> {
 
 			Text text = new net.minecraft.text.TranslatableText("Hello! Actual help should be provided here, but handi is too lazy ;(");
 
-			player.addChatMessage(text, false);
+			player.sendMessage(text, false);
 		}
 		return 1;
 	}

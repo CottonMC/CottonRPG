@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class SimpeTicker implements Ticker {
+public class SimpleTicker implements Ticker {
 
 	private long ticker = 0;
 	private long tickTo;
@@ -13,7 +13,7 @@ public class SimpeTicker implements Ticker {
 	private Predicate<CharacterResourceEntry> shouldTick;
 	private transient boolean dirty = false;
 
-	public SimpeTicker(long tickTo, Consumer<CharacterResourceEntry> handler, Predicate<CharacterResourceEntry> shouldTick) {
+	public SimpleTicker(long tickTo, Consumer<CharacterResourceEntry> handler, Predicate<CharacterResourceEntry> shouldTick) {
 		this.tickTo = tickTo;
 		this.handler = handler;
 		this.shouldTick = shouldTick;
@@ -38,7 +38,7 @@ public class SimpeTicker implements Ticker {
 	}
 
 	@Override
-	public SimpeTicker fromTag(CompoundTag tag) {
+	public SimpleTicker fromTag(CompoundTag tag) {
 		ticker = tag.getLong("Ticks");
 		return this;
 	}

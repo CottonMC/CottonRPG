@@ -2,22 +2,21 @@ package io.github.cottonmc.cottonrpg.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import net.fabricmc.fabric.api.registry.CommandRegistry;
-import net.minecraft.command.arguments.IdentifierArgumentType;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.concurrent.CompletableFuture;
 
 public class CottonRPGCommands {
 	public static void init() {
-		CommandRegistry.INSTANCE.register(false, (CommandDispatcher<ServerCommandSource> cmd) -> cmd.register(CommandManager.literal("cottonrpg")
+		CommandRegistrationCallback.EVENT.register((CommandDispatcher<ServerCommandSource> cmd, boolean dedicated) -> cmd.register(CommandManager.literal("cottonrpg")
 				.executes(new MainCommand())
 				.then(
 						CommandManager.literal("classes")

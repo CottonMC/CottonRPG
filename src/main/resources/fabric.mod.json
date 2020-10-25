@@ -23,11 +23,22 @@
   "entrypoints": {
     "main": [
       "io.github.cottonmc.cottonrpg.CottonRPG"
+    ],
+    "client": [
+      "io.github.cottonmc.cottonrpg.client.CottonRPGClient"
+    ],
+    "cardinal-components-entity": [
+      "io.github.cottonmc.cottonrpg.RpgComponents"
     ]
   },
   "mixins": [
     "cottonrpg.mixins.json"
   ],
+  "custom": {
+    "cardinal-components": [
+      "cottonrpg:character_data"
+    ]
+  },
 
   "depends": {
     "fabricloader": ">=0.4.0",

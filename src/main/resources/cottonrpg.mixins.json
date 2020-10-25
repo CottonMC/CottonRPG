@@ -3,12 +3,9 @@
   "package": "io.github.cottonmc.cottonrpg.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-	"PlayerEntityMixin",
-    "ServerPlayerEntityMixin",
-    "ItemStackMixin"
+    "RegistryAccessor"
   ],
   "client": [
-  	"HUDMixin"
   ],
   "injectors": {
     "defaultRequire": 1

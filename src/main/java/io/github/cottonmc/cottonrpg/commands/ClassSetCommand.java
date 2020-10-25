@@ -23,7 +23,7 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
 		Entity entity = context.getSource().getEntity();
 		if (entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) entity;
-			if (!player.allowsPermissionLevel(4)) { return 2; }
+			if (!player.hasPermissionLevel(4)) { return 2; }
 
 			Identifier id = context.getArgument("classname", Identifier.class);
 
@@ -31,7 +31,7 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
 
 			if (clazz == null) {
 				Text text = new TranslatableText("No such class").formatted(Formatting.RED);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
@@ -39,7 +39,7 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
 
 			if (entry == null) {
 				Text text = new TranslatableText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
@@ -49,7 +49,7 @@ public class ClassSetCommand implements Command<ServerCommandSource> {
 
 			Text text = new TranslatableText(id.toString() + " <- " + level).formatted(Formatting.GOLD);
 
-			player.addChatMessage(text, false);
+			player.sendMessage(text, false);
 		}
 		return 1;
 	}

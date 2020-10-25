@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
+import io.github.cottonmc.cottonrpg.data.clazz.CharacterClasses;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;

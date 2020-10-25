@@ -1,43 +1,32 @@
-package io.github.cottonmc.cottonrpg.mixin;
+package io.github.cottonmc.cottonrpg.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameHud.class)
-public class HUDMixin {
+public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 	private static final Identifier CRPG_BAR_TEX = new Identifier("cottonrpg", "textures/gui/rpg_bars.png");
 	private static final int CRPG_FULL_BAR_WIDTH = 62;
 	private static final float CRPG_DELTA_PER_TICK = 1f;
-	private float crpg_tick_timer = 0;
-	
-	@Shadow
-	private MinecraftClient client;
+	private float ticktimer = 0;
+	private final MinecraftClient client = MinecraftClient.getInstance();
 
-	
-
-	@Inject(at = @At("RETURN"), method = "renderHotbar(F)V")
-	void render(float f, CallbackInfo ci) {
+	@Override
+	public void onHudRender(MatrixStack matrices, float tickDelta) {
 		if (client.options.hudHidden) return;
-		GlStateManager.enableBlend();
-		GlStateManager.enableAlphaTest();
+		RenderSystem.enableBlend();
+		RenderSystem.enableAlphaTest();
 		
-		crpg_tick_timer += f;
-		int ticks = (int)(crpg_tick_timer/CRPG_DELTA_PER_TICK);
-		crpg_tick_timer -= ticks*CRPG_DELTA_PER_TICK;
+		ticktimer += tickDelta;
+		int ticks = (int)(ticktimer /CRPG_DELTA_PER_TICK);
+		ticktimer -= ticks*CRPG_DELTA_PER_TICK;
 		
 		final int[] height = new int[1];
 		height[0] = CottonRPG.config.barsY;
@@ -57,7 +46,7 @@ public class HUDMixin {
 			//draw icon
 			Identifier icon = new Identifier(id.getNamespace(), "textures/rpg_resource/" + id.getPath() + ".png");
 			client.getTextureManager().bindTexture(icon);
-			blit(left, top, 9, 9);
+			drawTexture(matrices, left, top, 9, 9, 0, 0, 1, 1, 1, 1);
 
 			left += 10;
 
@@ -106,10 +95,10 @@ public class HUDMixin {
 				//bar BG: left edge, middle, right edge
 				
 				//      x                    y    w         h    u  v
-				guiRect(left,                top, 1,        5);
-				guiRect(left + 1,            top, barWidth, 5,   1, 0);
-				guiRect(left + barWidth + 1, top, 1,        5,  63, 0);
-				
+				drawTexture(matrices, left, top, 0, 0, 1, 5);
+				drawTexture(matrices, left + 1, top, 1, 0, barWidth, 5);
+				drawTexture(matrices, left + barWidth + 1, top, 63, 0, 1, 5);
+
 				if (boxes > 0) {
 					int boxesLeft = boxes;
 					int newTop = top + 4;
@@ -121,21 +110,21 @@ public class HUDMixin {
 							toDraw = boxesLeft;
 						}
 						//first box
-						guiRect(left, newTop, 6, 5, 0, 5);
+						drawTexture(matrices, left, newTop, 0, 5, 6, 5);
 						//blit(left, newTop, 6, 5, texUV(0), texUV(5), texUV(6), texUV(10));
 						int newLeft = left + 5;
 						//the rest of the boxes
 						for (int j = 1; j < toDraw; j++) {
-							guiRect(newLeft, newTop, 6, 5, 6, 5);
+							drawTexture(matrices, newLeft, newTop, 6, 5, 6, 5);
 							//blit(newLeft, newTop, 6, 5, texUV(6), texUV(5), texUV(12), texUV(10));
 							newLeft += 5;
 						}
 						if (needsPlus) {
 							if (i < 2) {
-								guiRect(newLeft, newTop, 3, 5, 19, 5);
+								drawTexture(matrices, newLeft, newTop, 19, 5, 3, 5);
 								//blit(newLeft, newTop, 3, 5, texUV(19), texUV(5), texUV(22), texUV(10));
 							} else {
-								guiRect(newLeft, newTop, 5, 5, 22, 5);
+								drawTexture(matrices, newLeft, newTop, 22, 5, 5, 5);
 								//blit(newLeft, newTop, 5, 5, texUV(22), texUV(5), texUV(27), texUV(10));
 							}
 						}
@@ -143,11 +132,11 @@ public class HUDMixin {
 					}
 				}
 
-				if (!CottonRPG.config.disableResourceColors) GlStateManager.color4f(r, g, b, 1.0f);
+				if (!CottonRPG.config.disableResourceColors) RenderSystem.color4f(r, g, b, 1.0f);
 				//bar FG: left edge, middle, right edge
-				guiRect(left, top, 1, 5, 0, 10);
-				guiRect(left + 1, top, fgWidth, 5, 1, 10);
-				guiRect(left + fgWidth + 1, top, 1, 5, 63, 10);
+				drawTexture(matrices, left, top, 0, 10, 1, 5);
+				drawTexture(matrices, left + 1, top, 1, 10, fgWidth, 5);
+				drawTexture(matrices, left + fgWidth + 1, top, 63, 10, 1, 5);
 				//blit(left, top, 1, 5, texUV(0), texUV(10), texUV(1), texUV(15));
 				//blit(left + 1, top, fgWidth, 5, texUV(1), texUV(10), texUV(fgWidth + 1), texUV(15));
 				//blit(left + fgWidth + 1, top, 1, 5, texUV(63), texUV(10), texUV(64), texUV(15));
@@ -163,18 +152,18 @@ public class HUDMixin {
 						}
 
 						//first box
-						guiRect(left, newTop, 6, 5, 0, 15);
+						drawTexture(matrices, left, newTop, 0, 15, 6, 5);
 						int newLeft = left + 5;
 						//the rest of the boxes
 						for (int j = 1; j < toDraw; j++) {
-							guiRect(newLeft, newTop, 6, 5, 6, 15);
+							drawTexture(matrices, newLeft, newTop, 6, 15, 6, 5);
 							newLeft += 5;
 						}
 						if (plusOn) {
 							if (i < 2) {
-								guiRect(newLeft, newTop, 3, 5, 19, 15);
+								drawTexture(matrices, newLeft, newTop, 19, 15, 3, 5);
 							} else {
-								guiRect(newLeft, newTop, 5, 5, 22, 15);
+								drawTexture(matrices, newLeft, newTop, 22, 15, 5, 5);
 							}
 						}
 						newTop += 4;
@@ -182,64 +171,28 @@ public class HUDMixin {
 				}
 			} else {
 				//bar BG: left edge, middle, right edge
-				guiRect(left, top, 1, 9, 0, 20);
-				guiRect(left + 1, top, CRPG_FULL_BAR_WIDTH, 9, 1, 20);
-				guiRect(left + 63, top, 1, 9, 63, 20);
+				drawTexture(matrices, left, top, 0, 20, 1, 9);
+				drawTexture(matrices, left + 1, top, 1, 20, CRPG_FULL_BAR_WIDTH, 9);
+				drawTexture(matrices, left + 63, top, 63, 20, 1, 9);
 
 				double toRender = entry.getCurrentForRender();
 
-				GlStateManager.color4f(r, g, b, 1.0f);
+				RenderSystem.color4f(r, g, b, 1.0f);
 				int fgWidth = (int)((toRender / (float)entry.getMax()) * CRPG_FULL_BAR_WIDTH);
 				if (toRender>0 && fgWidth<=0) fgWidth=1; //never display an empty bar for *some* health
 				//bar FG: left edge, middle, right edge
-				guiRect(left, top, 1, 9, 0, 29);
-				guiRect(left + 1, top, fgWidth, 9, 1, 29);
-				guiRect(left + fgWidth + 1, top, 1, 9, 63, 29);
+				drawTexture(matrices, left, top, 0, 29, 1, 9);
+				drawTexture(matrices, left + 1, top, 1, 29, fgWidth, 9);
+				drawTexture(matrices, left + fgWidth + 1, top, 63, 29, 1, 9);
 			}
 
 			// Increment
 			height[0] += (12 + (4 * (rows - 1)));
-			GlStateManager.color4f(1f, 1f, 1f, 1f);
+			RenderSystem.color4f(1f, 1f, 1f, 1f);
 		});
 
-		GlStateManager.disableAlphaTest();
-		GlStateManager.disableBlend();
+		RenderSystem.disableAlphaTest();
+		RenderSystem.disableBlend();
 	}
 
-	private static final double PX = 1/256d;
-
-	/** Draws a rectangle assuming a 256x texture bound, at one texel per gui pixel */
-	private static void guiRect(int x, int y, int width, int height) {
-		innerBlit(x, y, x+width, y+height, 0, 0, 0, width*PX, height*PX);
-	}
-
-	/** Draws a rectangle assuming a 256x texture bound, at one texel per gui pixel and at the given texture offset */
-	private static void guiRect(int x, int y, int width, int height, int texX, int texY) {
-		double u1 = texX*PX;
-		double v1 = texY*PX;
-		innerBlit(x, y, x+width, y+height, 0, u1, v1, u1+(width*PX), v1+(height*PX));
-	}
-
-	private static void blit(int x, int y, int width, int height) {
-		blit(x, y, width, height, 0d, 0d, 1d, 1d);
-	}
-
-	private static void blit(int x, int y, int width, int height, double u1, double v1, double u2, double v2) {
-		innerBlit(x, y, x+width, y+height, 0d, u1, v1, u2, v2);
-	}
-
-	private static void innerBlit(double x1, double y1, double x2, double y2, double z, double u1, double v1, double u2, double v2) {
-		Tessellator tess = Tessellator.getInstance();
-		BufferBuilder buffer = tess.getBufferBuilder();
-		buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_UV);
-		buffer.vertex(x1, y2, z).texture(u1, v2).next();
-		buffer.vertex(x2, y2, z).texture(u2, v2).next();
-		buffer.vertex(x2, y1, z).texture(u2, v1).next();
-		buffer.vertex(x1, y1, z).texture(u1, v1).next();
-		tess.draw();
-	}
-
-	private static double texUV(int orig) {
-		return ((double)orig) / 256d;
-	}
 }

@@ -30,7 +30,7 @@ public class ClassGetCommand implements Command<ServerCommandSource> {
 
 			if (clazz == null) {
 				Text text = new LiteralText("No such class").formatted(Formatting.RED);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
@@ -38,13 +38,13 @@ public class ClassGetCommand implements Command<ServerCommandSource> {
 
 			if (entry == null) {
 				Text text = new LiteralText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
 			Text text = new LiteralText(id.toString() + " == " + entry.getLevel()).formatted(Formatting.GOLD);
 
-			player.addChatMessage(text, false);
+			player.sendMessage(text, false);
 		}
 		return 1;
 	}

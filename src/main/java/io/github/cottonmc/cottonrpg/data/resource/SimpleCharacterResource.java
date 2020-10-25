@@ -54,7 +54,7 @@ public class SimpleCharacterResource implements CharacterResource {
 	@Override
 	public Ticker makeTicker(CharacterResourceEntry entry) {
 		//regen by one every <ticksPerUnit> ticks.
-		return new SimpeTicker(ticksPerUnit, e -> e.setCurrent(e.getCurrent() + 1), e -> e.getCurrent() < e.getMax());
+		return new SimpleTicker(ticksPerUnit, e -> e.setCurrent(e.getCurrent() + 1), e -> e.getCurrent() < e.getMax());
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package io.github.cottonmc.cottonrpg.data.clazz;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 

@@ -29,13 +29,13 @@ public class ResourceRemoveCommand implements Command<ServerCommandSource> {
 
 			if (resource == null) {
 				Text text = new LiteralText("No such resource").formatted(Formatting.RED);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
 			CharacterData.get(player).getResources().remove(id);
 
-			player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
+			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}
 		return 1;
 	}

@@ -30,13 +30,13 @@ public class ClassGiveCommand implements Command<ServerCommandSource> {
 
 			if (clazz == null) {
 				Text text = new LiteralText("No such class").formatted(Formatting.RED);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
 			CharacterData.get(player).getClasses().giveIfAbsent(new CharacterClassEntry(id));
 
-			player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
+			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}
 		return 1;
 	}

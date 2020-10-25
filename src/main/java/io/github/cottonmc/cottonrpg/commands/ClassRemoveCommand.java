@@ -29,13 +29,13 @@ public class ClassRemoveCommand implements Command<ServerCommandSource> {
 
 			if (entry == null) {
 				Text text = new LiteralText("No such class").formatted(Formatting.RED);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
 			CharacterData.get(player).getClasses().remove(id);
 
-			player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
+			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}
 		return 1;
 	}
