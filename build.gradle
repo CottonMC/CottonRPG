@@ -35,8 +35,8 @@ dependencies {
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
-    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${cca_version}"
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
+//    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${cca_version}"
+//    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
 
     // mod menu
     modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
