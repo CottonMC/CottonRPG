@@ -27,17 +27,17 @@ public interface CharacterResource {
 	/**
 	 * @return How many units can be displayed in a bar before they get boxed.
 	 */
-	long getUnitsPerBar();
+	int getUnitsPerBar();
 
 	/**
 	 * @return The max amount of this resource you can hold at a time when you first obtain the resource.
 	 */
-	long getDefaultMaxLevel();
+	int getDefaultMaxLevel();
 
 	/**
-	 * @return How much of this resourse you start with when you spawn.
+	 * @return How much of this resource you start with when you spawn.
 	 */
-	long getDefaultLevel();
+	int getDefaultLevel();
 
 	/**
 	 * @return the color of the bar to display, in RGB format.

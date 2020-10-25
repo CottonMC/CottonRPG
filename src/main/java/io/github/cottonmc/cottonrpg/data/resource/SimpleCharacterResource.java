@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleCharacterResource implements CharacterResource {
-	private final long def;
-	private final long max;
-	private final long unitsPerBar;
+	private final int def;
+	private final int max;
+	private final int unitsPerBar;
 	private final int ticksPerUnit;
 	private final int color;
 	private final ResourceVisibility vis;
 
-	public SimpleCharacterResource(long defaultValue, long maxValue, long unitsPerBar, int ticksPerUnit, int color, ResourceVisibility vis) {
+	public SimpleCharacterResource(int defaultValue, int maxValue, int unitsPerBar, int ticksPerUnit, int color, ResourceVisibility vis) {
 		this.def = defaultValue;
 		this.max = maxValue;
 		this.unitsPerBar = unitsPerBar;
@@ -27,17 +27,17 @@ public class SimpleCharacterResource implements CharacterResource {
 	}
 
 	@Override
-	public long getUnitsPerBar() {
+	public int getUnitsPerBar() {
 		return unitsPerBar;
 	}
 
 	@Override
-	public long getDefaultMaxLevel() {
+	public int getDefaultMaxLevel() {
 		return max;
 	}
 
 	@Override
-	public long getDefaultLevel() {
+	public int getDefaultLevel() {
 		return def;
 	}
 
