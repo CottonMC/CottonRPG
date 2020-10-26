@@ -1,7 +1,6 @@
 package io.github.cottonmc.cottonrpg.prereq;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClass;
 import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClasses;
 import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResource;
@@ -72,8 +71,8 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 		text.add(getDescription());
 		Prerequisite[] children = getChildren();
 		if (children != null) {
-			for (int i = 0; i < children.length; ++i) {
-				List<Text> lines = children[i].describe();
+			for (Prerequisite child : children) {
+				List<Text> lines = child.describe();
 				for (Text line : lines) {
 					text.add(new LiteralText("  ").append(line));
 				}
@@ -116,8 +115,8 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 
 		@Override
 		public boolean test(PlayerEntity player) {
-			for (int i = 0; i < prereqs.length; i++) {
-				if (!prereqs[i].test(player)) {
+			for (Prerequisite prereq : prereqs) {
+				if (!prereq.test(player)) {
 					return false;
 				}
 			}
@@ -206,7 +205,7 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 
 		@Override
 		public boolean test(PlayerEntity player) {
-			CharacterClasses classes = CharacterData.get(player).getClasses();
+			CharacterClasses classes = CharacterClasses.get(player);
 			if (!classes.has(classId.get())) return false;
 			return classes.get(classId.get()).getLevel() >= level;
 		}
@@ -240,7 +239,7 @@ public interface Prerequisite extends Predicate<PlayerEntity> {
 
 		@Override
 		public boolean test(PlayerEntity player) {
-			CharacterResources resources = CharacterData.get(player).getResources();
+			CharacterResources resources = CharacterResources.get(player);
 			if (!resources.has(resourceId.get())) return false;
 			return resources.get(resourceId.get()).getCurrent() >= amount;
 		}

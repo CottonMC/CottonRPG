@@ -4,8 +4,8 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -32,7 +32,7 @@ public class ResourceGiveCommand implements Command<ServerCommandSource> {
 				return 2;
 			}
 
-			CharacterData.get(player).getResources().giveIfAbsent(id);
+			CharacterResources.get(player).giveIfAbsent(id);
 
 			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}

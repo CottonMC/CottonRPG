@@ -4,9 +4,9 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClass;
 import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClassEntry;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClasses;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -33,7 +33,7 @@ public class ClassGetCommand implements Command<ServerCommandSource> {
 				return 2;
 			}
 
-			CharacterClassEntry entry = CharacterData.get(player).getClasses().get(clazz);
+			CharacterClassEntry entry = CharacterClasses.get(player).get(clazz);
 
 			if (entry == null) {
 				Text text = new LiteralText("Class is not enabled").formatted(Formatting.LIGHT_PURPLE);

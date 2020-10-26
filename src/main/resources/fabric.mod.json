@@ -33,7 +33,9 @@
 	],
 	"custom": {
 		"cardinal-components": [
-			"cottonrpg:character_data"
+			"cottonrpg:classes",
+			"cottonrpg:resources",
+			"cottonrpg:skills"
 		]
 	},
 	"depends": {

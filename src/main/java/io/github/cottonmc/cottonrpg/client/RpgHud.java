@@ -2,9 +2,9 @@ package io.github.cottonmc.cottonrpg.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResource;
 import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResourceEntry;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResources;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -22,13 +22,13 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 		RenderSystem.enableBlend();
 		RenderSystem.enableAlphaTest();
 
-		CharacterData data = CharacterData.get(client.player);
+		CharacterResources resources = CharacterResources.get(client.player);
 
 		//coords for each bar
 		int left = CottonRPG.config.barsX;
 		int top = CottonRPG.config.barsY;
 
-		for (CharacterResourceEntry entry : data.getResources()) {
+		for (CharacterResourceEntry entry : resources) {
 			CharacterResource resource = entry.getType();
 			Identifier id = entry.getId();
 
@@ -52,7 +52,7 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 
 			if (!CottonRPG.config.bigResourceBars) {
 
-				int boxes = (int) (entry.getMax() / resource.getUnitsPerBar()) - 1;
+				int boxes = (entry.getMax() / resource.getUnitsPerBar()) - 1;
 				rows += (Math.min(boxes, 35) / 12);
 
 				double toDistribute = entry.getCurrentForRender();

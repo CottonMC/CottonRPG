@@ -1,9 +1,13 @@
 package io.github.cottonmc.cottonrpg.data;
 
+import dev.onyxstudios.cca.api.v3.component.ComponentKey;
+import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import io.github.cottonmc.cottonrpg.CottonRPG;
+import io.github.cottonmc.cottonrpg.RpgComponents;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +17,11 @@ import java.util.function.Consumer;
 public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgDataEntry<T>> implements RpgDataContainer<T, E> {
 	protected final Map<T, E> underlying = new HashMap<>();
 	private final List<T> removed = new ArrayList<>();
+	protected final Object holder;
+
+	public BaseRpgDataContainer(Object holder) {
+		this.holder = holder;
+	}
 
 	@Override
 	public int size() {
@@ -52,7 +61,7 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 	}
 
 	@Override
-	public void fromTag(CompoundTag entries) {
+	public void readFromNbt(CompoundTag entries) {
 		for (String key : entries.getKeys()) {
 			if (entries.getType(key) == NbtType.COMPOUND) try {
 				Identifier id = new Identifier(key);
@@ -64,14 +73,10 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 	}
 
 	@Override
-	public CompoundTag toTag() {
-		CompoundTag tag = new CompoundTag();
-
+	public void writeToNbt(CompoundTag tag) {
 		for (E entry : this) {
 			tag.put(entry.getId().toString(), entry.toTag());
 		}
-
-		return tag;
 	}
 
 	@Override
@@ -91,14 +96,35 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 	}
 
 	@Override
-	public void writeSyncPacket(PacketByteBuf buf) {
-		if (!removed.isEmpty()) {
-			writeSyncPacket(buf, this.underlying.values(), true);
-			removed.clear();
-		} else {
-			writeSyncPacket(buf, gatherDirtyEntries(), false);
+	public boolean shouldSyncWith(ServerPlayerEntity player) {
+		// Default implementation, assume the holder is a player and that we need only to sync with that player
+		return this.holder == player;
+	}
+
+	protected void trySync(ComponentKey<? extends RpgDataContainer<T, E>> key) {
+		if (this.isDirty()) {
+			if (!removed.isEmpty()) {
+				key.sync(this.holder, (buf, p) -> writeSyncPacket(buf, this.underlying.values(), true));
+				removed.clear();
+			} else {
+				key.sync(this.holder, (buf, p) -> writeSyncPacket(buf, gatherDirtyEntries(), false));
+			}
+			this.clearDirty();
 		}
-		clearDirty();
+	}
+
+	@Override
+	public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity player) {
+		writeSyncPacket(buf, this.underlying.values(), true);
+	}
+
+	private void writeSyncPacket(PacketByteBuf buf, Collection<E> entries, boolean clear) {
+		buf.writeBoolean(clear);
+		buf.writeInt(entries.size());
+		for (E entry : entries) {
+			buf.writeIdentifier(entry.getId());
+			entry.writeToPacket(buf);
+		}
 	}
 
 	@Override
@@ -110,15 +136,6 @@ public abstract class BaseRpgDataContainer<T extends RpgDataType, E extends RpgD
 
 		for (int i = 0; i < count; i++) {
 			this.giveIfAbsent(buf.readIdentifier()).readFromPacket(buf);
-		}
-	}
-
-	private void writeSyncPacket(PacketByteBuf buf, Collection<E> entries, boolean clear) {
-		buf.writeBoolean(clear);
-		buf.writeInt(entries.size());
-		for (E entry : entries) {
-			buf.writeIdentifier(entry.getId());
-			entry.writeToPacket(buf);
 		}
 	}
 

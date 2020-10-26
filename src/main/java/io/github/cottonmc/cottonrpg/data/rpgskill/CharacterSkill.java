@@ -1,7 +1,6 @@
 package io.github.cottonmc.cottonrpg.data.rpgskill;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
 import io.github.cottonmc.cottonrpg.data.RpgDataType;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import net.fabricmc.api.EnvType;
@@ -36,7 +35,7 @@ public interface CharacterSkill extends RpgDataType {
 	 * @return Whether the player can currently perform the skill.
 	 */
 	default boolean canPerform(PlayerEntity player, Target<?> target) {
-		CharacterSkills skills = CharacterData.get(player).getSkills();
+		CharacterSkills skills = CharacterSkills.get(player);
 		if (!skills.has(this)) return false;
 		CharacterSkillEntry entry = skills.get(this);
 		return entry.getCooldown() <= 0;

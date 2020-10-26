@@ -2,6 +2,7 @@ package io.github.cottonmc.cottonrpg.data;
 
 import com.google.common.collect.Iterators;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,7 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	private final RpgDataContainer<T, E> child;
 
 	public ProxyRpgDataContainer(RpgDataContainer<T, E> parent, @Nullable RpgDataContainer<T, E> child) {
+		super(null);
 		this.parent = parent;
 		this.child = child;
 	}
@@ -71,13 +73,18 @@ public abstract class ProxyRpgDataContainer<T extends RpgDataType, E extends Rpg
 	}
 
 	@Override
-	public void writeSyncPacket(PacketByteBuf buf) {
+	public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity player) {
 		throw new UnsupportedOperationException("Can't sync a proxy! Get the parent or child instead!");
 	}
 
 	@Override
 	public void applySyncPacket(PacketByteBuf buf) {
 		throw new UnsupportedOperationException("Can't sync a proxy! Get the parent or child instead!");
+	}
+
+	@Override
+	public void serverTick() {
+		// NO-OP
 	}
 
 	public RpgDataContainer<T, E> getParent() {
