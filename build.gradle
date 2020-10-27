@@ -101,7 +101,7 @@ publishing {
 
 artifactory {
 	if (project.hasProperty("artifactoryUsername")) {
-		contextUrl = "http://server.bbkr.space:8081/artifactory/"
+		contextUrl = "http://server.bbkr.space/artifactory/"
 		publish {
 			repository {
 				if (version.contains("SNAPSHOT")) {
