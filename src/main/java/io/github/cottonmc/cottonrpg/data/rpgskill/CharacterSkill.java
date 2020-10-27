@@ -1,7 +1,7 @@
-package io.github.cottonmc.cottonrpg.data.skill;
+package io.github.cottonmc.cottonrpg.data.rpgskill;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
+import io.github.cottonmc.cottonrpg.data.RpgDataType;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,8 +11,14 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.Objects;
 
-public interface CharacterSkill {
+public interface CharacterSkill extends RpgDataType {
+	@Override
+	default Identifier getId() {
+		return Objects.requireNonNull(CottonRPG.SKILLS.getId(this), this + " is not a registered skill");
+	}
+
 	/**
 	 * @return How many ticks this skill takes to cool down after using.
 	 */
@@ -29,15 +35,15 @@ public interface CharacterSkill {
 	 * @return Whether the player can currently perform the skill.
 	 */
 	default boolean canPerform(PlayerEntity player, Target<?> target) {
-		Identifier id = CottonRPG.SKILLS.getId(this);
-		CharacterSkills skills = CharacterData.get(player).getSkills();
-		if (!skills.has(id)) return false;
-		CharacterSkillEntry entry = skills.get(id);
+		CharacterSkills skills = CharacterSkills.get(player);
+		if (!skills.has(this)) return false;
+		CharacterSkillEntry entry = skills.get(this);
 		return entry.getCooldown() <= 0;
 	}
 
 	/**
 	 * Ticks the cooldown of this skill.
+	 *
 	 * @param entry The entry form of the skill.
 	 */
 	default void tick(CharacterSkillEntry entry) {
@@ -46,6 +52,7 @@ public interface CharacterSkill {
 
 	/**
 	 * Perform a skill.
+	 *
 	 * @param player The player performing the skill.
 	 * @param target The target being performed on.
 	 * @return Whether the skill succeeded or not.
@@ -53,7 +60,7 @@ public interface CharacterSkill {
 	boolean perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target);
 
 	default String getTranslationKey() {
-		Identifier id = CottonRPG.SKILLS.getId(this);
+		Identifier id = this.getId();
 		return "skill." + id.getNamespace() + "." + id.getPath();
 	}
 
@@ -69,6 +76,7 @@ public interface CharacterSkill {
 
 	/**
 	 * Allow other mods to add description if they use your player class.
+	 *
 	 * @param lines The lines to add.
 	 */
 	void addAdditionalDescription(Text... lines);

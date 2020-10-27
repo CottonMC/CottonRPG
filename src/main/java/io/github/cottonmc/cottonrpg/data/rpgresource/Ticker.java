@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.resource;
+package io.github.cottonmc.cottonrpg.data.rpgresource;
 
 import net.minecraft.nbt.CompoundTag;
 
@@ -10,6 +10,7 @@ public interface Ticker {
 
 	/**
 	 * Called every tick to process logic for affecting a resource over time.
+	 *
 	 * @param entry The entry of this resource.
 	 */
 	void tick(CharacterResourceEntry entry);
@@ -42,21 +43,30 @@ public interface Ticker {
 
 	class EmptyTicker implements Ticker {
 		@Override
-		public void tick(CharacterResourceEntry entry) { }
+		public void tick(CharacterResourceEntry entry) {
+		}
 
 		@Override
-		public CompoundTag toTag() { return new CompoundTag(); }
+		public CompoundTag toTag() {
+			return new CompoundTag();
+		}
 
 		@Override
-		public Ticker fromTag(CompoundTag tag) { return this; }
+		public Ticker fromTag(CompoundTag tag) {
+			return this;
+		}
 
 		@Override
-		public void markDirty() { }
+		public void markDirty() {
+		}
 
 		@Override
-		public boolean isDirty() { return false; }
+		public boolean isDirty() {
+			return false;
+		}
 
 		@Override
-		public void clearDirty() { }
+		public void clearDirty() {
+		}
 	}
 }

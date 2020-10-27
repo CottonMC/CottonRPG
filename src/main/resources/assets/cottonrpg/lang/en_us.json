@@ -1,11 +1,10 @@
 {
-  "prereq.cottonrpg.true": "Always true",
-  "prereq.cottonrpg.all": "All:",
-  "prereq.cottonrpg.any": "Any:",
-  "prereq.cottonrpg.not": "Not:",
-  "prereq.cottonrpg.wants_class": "Class %s >= %d",
-  "prereq.cottonrpg.wants_resource": "Resource %s >= %d",
-  
-  "cmd.cottonrpg.classes.yourclasses": "Your classes:",
-  "cmd.cottonrpg.classes.entry": "  - %s [%s] == %s"
+	"prereq.cottonrpg.true": "Always true",
+	"prereq.cottonrpg.all": "All:",
+	"prereq.cottonrpg.any": "Any:",
+	"prereq.cottonrpg.not": "Not:",
+	"prereq.cottonrpg.wants_class": "Class %s >= %d",
+	"prereq.cottonrpg.wants_resource": "Resource %s >= %d",
+	"cmd.cottonrpg.classes.yourclasses": "Your classes:",
+	"cmd.cottonrpg.classes.entry": "  - %s [%s] == %s"
 }

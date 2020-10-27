@@ -3,10 +3,9 @@ package io.github.cottonmc.cottonrpg.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
-import io.github.cottonmc.cottonrpg.data.resource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResource;
+import io.github.cottonmc.cottonrpg.data.rpgresource.CharacterResources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -29,13 +28,13 @@ public class ResourceRemoveCommand implements Command<ServerCommandSource> {
 
 			if (resource == null) {
 				Text text = new LiteralText("No such resource").formatted(Formatting.RED);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
-			CharacterData.get(player).getResources().remove(id);
+			CharacterResources.get(player).remove(resource);
 
-			player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
+			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}
 		return 1;
 	}

@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.skill;
+package io.github.cottonmc.cottonrpg.data.rpgskill;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -31,8 +31,7 @@ public class PlayerTarget implements Target<PlayerEntity> {
 			if (min == -1) {
 				min = distance;
 				minPlayer = player;
-			}
-			else if (distance < min) {
+			} else if (distance < min) {
 				min = distance;
 				minPlayer = player;
 			}

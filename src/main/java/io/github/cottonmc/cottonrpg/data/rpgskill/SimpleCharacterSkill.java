@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.clazz;
+package io.github.cottonmc.cottonrpg.data.rpgskill;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import io.github.cottonmc.cottonrpg.prereq.Prerequisite;
@@ -11,44 +11,47 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
-public class SimpleCharacterClass implements CharacterClass {
-	private int maxLevel;
-	private Function<Integer, Prerequisite> prereq;
-	private BiConsumer<Integer, PlayerEntity> levelConsumer;
+public class SimpleCharacterSkill implements CharacterSkill {
+
+	private int cooldown;
+	private Prerequisite prereq;
+	private BiFunction<PlayerEntity, Target<?>, Boolean> action;
 	private List<Text> additionalLines = new ArrayList<>();
 
-	public SimpleCharacterClass(int maxLevel, Function<Integer, Prerequisite> prereq, BiConsumer<Integer, PlayerEntity> levelConsumer) {
-		this.maxLevel = maxLevel;
+	public SimpleCharacterSkill(int cooldown, Prerequisite prereq, BiFunction<PlayerEntity, Target<?>, Boolean> action) {
+		this.cooldown = cooldown;
 		this.prereq = prereq;
-		this.levelConsumer = levelConsumer;
+		this.action = action;
 	}
 
 	@Override
-	public int getMaxLevel() {
-		return maxLevel;
+	public int getCooldownTime() {
+		return cooldown;
 	}
 
 	@Override
-	public boolean canLevelUp(int currentLevel, PlayerEntity player) {
-		return prereq.apply(currentLevel).test(player);
+	public Prerequisite getRequirement() {
+		return prereq;
 	}
 
 	@Override
-	public void applyLevelUp(int previousLevel, PlayerEntity player) {
-		levelConsumer.accept(previousLevel, player);
+	public boolean perform(PlayerEntity player, CharacterSkillEntry entry, Target<?> target) {
+		if (canPerform(player, target)) {
+			entry.startCooldown();
+			return action.apply(player, target);
+		}
+		return false;
 	}
 
 	@Override
 	public List<Text> getDescription() {
 		List<Text> lines = new ArrayList<>();
-		Identifier id = CottonRPG.CLASSES.getId(this);
+		Identifier id = CottonRPG.SKILLS.getId(this);
 		if (id != null) {
 			for (int i = 0; i < 10; i++) {
-				String key = "desc.class." + id.getNamespace() + "." + id.getPath() + "." + i;
+				String key = "desc.skill." + id.getNamespace() + "." + id.getPath() + "." + i;
 				if (!I18n.hasTranslation(key)) break;
 				lines.add(new TranslatableText(key));
 			}

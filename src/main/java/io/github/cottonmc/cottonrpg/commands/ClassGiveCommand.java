@@ -3,11 +3,9 @@ package io.github.cottonmc.cottonrpg.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import io.github.cottonmc.cottonrpg.CottonRPG;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClass;
-import io.github.cottonmc.cottonrpg.data.clazz.CharacterClassEntry;
-import io.github.cottonmc.cottonrpg.data.CharacterData;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClass;
+import io.github.cottonmc.cottonrpg.data.rpgclass.CharacterClasses;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -30,13 +28,13 @@ public class ClassGiveCommand implements Command<ServerCommandSource> {
 
 			if (clazz == null) {
 				Text text = new LiteralText("No such class").formatted(Formatting.RED);
-				player.addChatMessage(text, false);
+				player.sendMessage(text, false);
 				return 2;
 			}
 
-			CharacterData.get(player).getClasses().giveIfAbsent(new CharacterClassEntry(id));
+			CharacterClasses.get(player).giveIfAbsent(id);
 
-			player.addChatMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
+			player.sendMessage(new LiteralText("Done!").formatted(Formatting.GOLD), false);
 		}
 		return 1;
 	}

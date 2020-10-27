@@ -1,4 +1,4 @@
-package io.github.cottonmc.cottonrpg.data.resource;
+package io.github.cottonmc.cottonrpg.data.rpgresource;
 
 import io.github.cottonmc.cottonrpg.CottonRPG;
 import net.minecraft.client.resource.language.I18n;
@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleCharacterResource implements CharacterResource {
-	private long def;
-	private long max;
-	private long unitsPerBar;
-	private int ticksPerUnit;
-	private int color;
-	private ResourceVisibility vis;
+	private final int def;
+	private final int max;
+	private final int unitsPerBar;
+	private final int ticksPerUnit;
+	private final int color;
+	private final ResourceVisibility vis;
 
-	public SimpleCharacterResource(long defaultValue, long maxValue, long unitsPerBar, int ticksPerUnit, int color, ResourceVisibility vis) {
+	public SimpleCharacterResource(int defaultValue, int maxValue, int unitsPerBar, int ticksPerUnit, int color, ResourceVisibility vis) {
 		this.def = defaultValue;
 		this.max = maxValue;
 		this.unitsPerBar = unitsPerBar;
@@ -27,17 +27,17 @@ public class SimpleCharacterResource implements CharacterResource {
 	}
 
 	@Override
-	public long getUnitsPerBar() {
+	public int getUnitsPerBar() {
 		return unitsPerBar;
 	}
 
 	@Override
-	public long getDefaultMaxLevel() {
+	public int getDefaultMaxLevel() {
 		return max;
 	}
 
 	@Override
-	public long getDefaultLevel() {
+	public int getDefaultLevel() {
 		return def;
 	}
 
@@ -54,7 +54,7 @@ public class SimpleCharacterResource implements CharacterResource {
 	@Override
 	public Ticker makeTicker(CharacterResourceEntry entry) {
 		//regen by one every <ticksPerUnit> ticks.
-		return new SimpeTicker(ticksPerUnit, e -> e.setCurrent(e.getCurrent() + 1), e -> e.getCurrent() < e.getMax());
+		return new SimpleTicker(ticksPerUnit, e -> e.setCurrent(e.getCurrent() + 1), e -> e.getCurrent() < e.getMax());
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package io.github.cottonmc.cottonrpg.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -21,7 +20,7 @@ public class MainCommand implements Command<ServerCommandSource> {
 
 			Text text = new net.minecraft.text.TranslatableText("Hello! Actual help should be provided here, but handi is too lazy ;(");
 
-			player.addChatMessage(text, false);
+			player.sendMessage(text, false);
 		}
 		return 1;
 	}
