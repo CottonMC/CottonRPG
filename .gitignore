@@ -27,3 +27,4 @@ run/
 # eclipse
 *.launch
 private.gradle
+logs/

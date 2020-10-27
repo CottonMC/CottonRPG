@@ -1,7 +1,7 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
-	id 'maven-publish'
-	id "com.jfrog.artifactory" version "4.9.0"
+	id "fabric-loom" version "0.5-SNAPSHOT"
+	id "maven-publish"
+	id "com.jfrog.artifactory" version "4.15.2"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -46,14 +46,13 @@ dependencies {
 	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 }
 
+
 processResources {
 	inputs.property "version", project.version
-
 	from(sourceSets.main.resources.srcDirs) {
 		include "fabric.mod.json"
-		expand "version": project.version
+		expand version: project.version
 	}
-
 	from(sourceSets.main.resources.srcDirs) {
 		exclude "fabric.mod.json"
 	}
@@ -70,7 +69,7 @@ tasks.withType(JavaCompile) {
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+	archiveClassifier = "sources"
 	from sourceSets.main.allSource
 }
 
@@ -82,26 +81,33 @@ jar {
 publishing {
 	publications {
 		maven(MavenPublication) {
-			artifact("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}.jar") {
+			// add all the jars that should be included when publishing to maven
+			artifact(remapJar) {
 				classifier null
 				builtBy remapJar
 			}
 
-			artifact("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") {
+			/*artifact ("${project.buildDir.absolutePath}/libs/${archivesBaseName}-${project.version}-dev.jar") { //release jar - file location not provided anywhere in loom
 				classifier "dev"
 				builtBy remapJar
-			}
+			}*/
 
 			artifact(sourcesJar) {
 				builtBy remapSourcesJar
 			}
 		}
 	}
+
+	// select the repositories you want to publish to
+	repositories {
+		// uncomment to publish to the local maven
+		// mavenLocal()
+	}
 }
 
 artifactory {
 	if (project.hasProperty("artifactoryUsername")) {
-		contextUrl = "http://server.bbkr.space/artifactory/"
+		contextUrl = "https://server.bbkr.space/artifactory/"
 		publish {
 			repository {
 				if (version.contains("SNAPSHOT")) {
