@@ -10,6 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 	private static final Identifier CRPG_BAR_TEX = new Identifier("cottonrpg", "textures/gui/rpg_bars.png");
@@ -52,7 +53,7 @@ public final class RpgHud extends DrawableHelper implements HudRenderCallback {
 
 			if (!CottonRPG.config.bigResourceBars) {
 
-				int boxes = (entry.getMax() / resource.getUnitsPerBar()) - 1;
+				int boxes = MathHelper.ceil((double) entry.getMax() / resource.getUnitsPerBar()) - 1;
 				rows += (Math.min(boxes, 35) / 12);
 
 				double toDistribute = entry.getCurrentForRender();
